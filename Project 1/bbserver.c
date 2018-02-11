@@ -17,8 +17,17 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	//Declare Variables
 	int sock;
 
+	struct sockaddr_in servAddr;
+	struct sockaddr_in *peerAddrs = (struct sockaddr_in *)malloc(atoi(argv[2]) * sizeof(peerAddrs));
+
+	//Build local server socket address
+	memset(&servAddr, 0, sizeof(servAddr));
+	servAddr.sin_family = AF_INET;
+	servAddr.sin_port = htons(SERVER_PORT);
+	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	return 0;
 }
