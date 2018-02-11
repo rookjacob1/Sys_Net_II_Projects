@@ -95,14 +95,14 @@ void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socket
 
 	for(i = 0; i < numberOfPeers - 1; i++)
 	{
-		if ((sendto(socket, peerAddresses[i + 1], sizeof(peerAddresses[i + 1]), 0,
+		if ((sendto(socket, &peerAddresses[i + 1], sizeof(peerAddresses[i + 1]), 0,
 				(struct sockaddr *)&peerAddresses[i], sizeof(peerAddresses[i]))) < 0 )
 		{
 			perror("Error: Sending Error");
 			exit(1);
 		}
 	}
-	if( (sendto(socket, peerAddresses[0], sizeof(peerAddresses[0]), 0,
+	if( (sendto(socket, &peerAddresses[0], sizeof(peerAddresses[0]), 0,
 			(struct sockaddr *)&peerAddresses[numberOfPeers - 1],
 			sizeof(peerAddresses[numberOfPeers]))) < 0)
 	{
