@@ -1,0 +1,7 @@
+/.metadata/
+*.cproject
+*.project
+*.settings/
+*.gpj
+*.exe
+/RemoteSystemsTempFiles
