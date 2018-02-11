@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	createRing(peerAddrs,numberHosts);
+	createRing(peerAddrs,numberHosts, sock);
 
 
 
