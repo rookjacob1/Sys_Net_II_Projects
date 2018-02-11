@@ -18,7 +18,7 @@
 #include<signal.h>
 #include<unistd.h>
 #include<string.h>
-#include<arpa/innet.h>
+#include<arpa/inet.h>
 #include<sys/wait.h>
 
 #endif /* HEADERFILES_H_ */
