@@ -18,16 +18,49 @@ int main(int argc, char *argv[])
 	}
 
 	//Declare Variables
+	int i;
+
 	int sock;
+	int numberHosts = atoi(argv[2]);
 
 	struct sockaddr_in servAddr;
-	struct sockaddr_in *peerAddrs = (struct sockaddr_in *)malloc(atoi(argv[2]) * sizeof(peerAddrs));
+	struct sockaddr_in *peerAddrs = (struct sockaddr_in *)malloc(numberHosts * sizeof(peerAddrs));
 
 	//Build local server socket address
 	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_port = htons(SERVER_PORT);
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	//Create socket
+	sock = socket(PF_INET,SOCK_DGRAM,0);
+	if(sock < 0)
+	{
+		perror("Error: Socket Failed");
+		exit(1);
+	}
+
+	//Bind socket to local address and port
+	if((bind(sock, (struct sockaddr *)&servAddr, sizeof(servAddr))) < 0 )
+	{
+		perror("Error: Bind Failed");
+		exit(1);
+	}
+
+	//Receive numberHost peer information
+	for(i = 0; i < numberHosts; i++)
+	{
+		//Receive peer information
+		if ((recvfrom(sock, NULL, 0, 0,(struct sockaddr *)&peerAddrs[i], NULL)) < 0)
+		{
+			perror("Error: Received Message Error");
+			exit(1);
+		}
+	}
+
+	createRing(peerAddrs,numberHosts);
+
+
 
 	return 0;
 }
@@ -54,4 +87,9 @@ int validateArgv(int argc, char *argv[])
 	}
 
 	return 1;
+}
+
+void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers)
+{
+
 }
