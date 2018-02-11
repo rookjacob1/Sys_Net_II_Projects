@@ -1,3 +1,7 @@
+make : bbserver.o bbpeer.o
+	gcc -pthread -o bbserver bbserver.o
+	gcc -pthread -o bbpeer bbpeer.o
+
 bbserver : bbserver.o
 	gcc -pthread -o bbserver bbserver.o
 bbserver.o : bbserver.c headerFiles.h
@@ -10,3 +14,8 @@ bbpeer.o : bbpeer.c headerFiles.h
 
 clean :
 	rm bbserver bbserver.o bbpeer bbpeer.o 
+
+clean : bbserver
+	rm bbserver bbserver.o
+clean : bbpeer
+	rm bbpeer bbpeer.o
