@@ -16,5 +16,8 @@
 
 int validateArgv(int argc, char *argv[]);
 
+void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers);
+
+
 
 #endif /* BBSERVER_H_ */
