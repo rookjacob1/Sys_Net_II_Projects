@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 			exit(1);
 		}
 		printf("Peer received with IP address: %lu Port address: %hu \n",
-				peerAddrs[i].sin_addr.s_addr, peerAddrs[i].sin_port);
+				(unsigned long)peerAddrs[i].sin_addr.s_addr, peerAddrs[i].sin_port);
 	}
 
 	createRing(peerAddrs,numberHosts, sock);
