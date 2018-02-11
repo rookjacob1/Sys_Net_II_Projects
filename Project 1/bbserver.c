@@ -47,6 +47,8 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
+	printf("Socket was created and binded to local address and port\n");
+
 	//Receive numberHost peer information
 	for(i = 0; i < numberHosts; i++)
 	{
@@ -56,11 +58,13 @@ int main(int argc, char *argv[])
 			perror("Error: Received Message Error");
 			exit(1);
 		}
+		printf("Peer received with IP address: %lu Port address: %hu \n",
+				peerAddrs[i].sin_addr.s_addr, peerAddrs[i].sin_port);
 	}
 
 	createRing(peerAddrs,numberHosts, sock);
 
-
+	printf("Ring created. Server Terminating.");
 
 	return 0;
 }
