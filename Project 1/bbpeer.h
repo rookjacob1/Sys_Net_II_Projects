@@ -12,5 +12,7 @@
 
 #include"headerFiles.h"
 
+#include"bulletinBoard.h"
+
 
 #endif /* BBPEER_H_ */

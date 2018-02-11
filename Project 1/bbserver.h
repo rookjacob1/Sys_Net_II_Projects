@@ -11,6 +11,8 @@
 #define BBSERVER_H_
 
 #include"headerFiles.h"
+#include"bulletinBoard.h"
+
 
 int validateArgv(int argc, char *argv[]);
 
