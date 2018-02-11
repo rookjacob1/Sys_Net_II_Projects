@@ -16,6 +16,10 @@ struct token_t {
 
 };
 
+struct message_t{
+
+};
+
 
 
 #endif /* BULLETINBOARD_H_ */
