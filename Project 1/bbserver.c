@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
 	//Receive numberHost peer information
 	for(i = 0; i < numberHosts; i++)
 	{
+		printf("Waiting for peers to join.\n");
 		//Receive peer information
 		if ((recvfrom(sock, NULL, 0, 0,(struct sockaddr *)&peerAddrs[i], NULL)) < 0)
 		{
