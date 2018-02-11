@@ -15,7 +15,7 @@ bbpeer.o : bbpeer.c headerFiles.h
 clean :
 	rm bbserver bbserver.o bbpeer bbpeer.o 
 
-clean : bbserver
+clean_bbserver :
 	rm bbserver bbserver.o
-clean : bbpeer
+clean_bbpeer : bbpeer
 	rm bbpeer bbpeer.o
