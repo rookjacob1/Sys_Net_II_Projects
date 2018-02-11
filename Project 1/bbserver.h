@@ -12,4 +12,7 @@
 
 #include"headerFiles.h"
 
+int validateArgv(int argc, char *argv[]);
+
+
 #endif /* BBSERVER_H_ */
