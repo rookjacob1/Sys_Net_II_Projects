@@ -16,7 +16,7 @@
 
 int validateArgv(int argc, char *argv[]);
 
-void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers);
+void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socket);
 
 
 
