@@ -14,5 +14,14 @@
 
 #include"bulletinBoard.h"
 
+/*
+ * @breif	validateArgv
+ *
+ * @param	argc
+ *
+ * @param	argv
+ */
+int validateArgv(int argc, char *argv[]);
+
 
 #endif /* BBPEER_H_ */

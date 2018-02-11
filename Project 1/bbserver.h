@@ -13,9 +13,24 @@
 #include"headerFiles.h"
 #include"bulletinBoard.h"
 
-
+/*
+ * @breif	validateArgv
+ *
+ * @param	argc
+ *
+ * @param	argv
+ */
 int validateArgv(int argc, char *argv[]);
 
+/*
+ * @breif	createRing
+ *
+ * @param	peerAddresses
+ *
+ * @param	numberOfPeers
+ *
+ * @param	socket
+ */
 void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socket);
 
 
