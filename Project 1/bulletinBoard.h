@@ -1,5 +1,5 @@
 /*
- * @file bbserver.h
+ * @file bulletinBoard.h
  *
  * @author Jacob Rook
  * @date 02/10/2018
