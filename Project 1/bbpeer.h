@@ -14,6 +14,12 @@
 
 #include"bulletinBoard.h"
 
+	int READBIT;
+	int WRITEBIT;
+	int LISTBIT;
+	int EXITBIT;
+
+
 /*
  * @breif	validateArgv	The validateArgv() call checks if the arguments passed to the main
  * function are in the correct format and have appropriate values.
