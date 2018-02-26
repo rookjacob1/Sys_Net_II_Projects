@@ -18,8 +18,13 @@ struct token_t {
 
 struct message_t{
 
+struct message_Header_t header;
+
 };
 
+struct message_Header_t{
+
+};
 
 
 #endif /* BULLETINBOARD_H_ */

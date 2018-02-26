@@ -18,10 +18,16 @@ int main(int argc, char *argv[])
 		printf("Program Terminating");
 		exit(1);
 	}
-	else if(i)
+
+	if(argc == 5)
 	{
 
 	}
+	else
+	{
+
+	}
+
 
 	return 0;
 }
@@ -70,3 +76,6 @@ int validateArgv(int argc, char *argv[])
 	}
 	return ret;
 }
+
+
+
