@@ -17,7 +17,7 @@
 int LISTEN_SOCKET_D;
 int SOCKET_D;
 char BUFFER[MAX_BUFFER_SIZE];
-char *BUFF_PRT;
+char *BUFF_PTR;
 int LEN;
 int MAX_LEN = sizeof(BUFFER);
 int RECV_SIZE;
