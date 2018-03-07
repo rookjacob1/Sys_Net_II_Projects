@@ -6,3 +6,15 @@
  * @info Course COP 4635
  * Project 1
  */
+#include"httpClient.h"
+
+int main (void)
+{
+	printf("\n\n\nClient Started\n");
+
+
+
+
+
+	return 0;
+}
