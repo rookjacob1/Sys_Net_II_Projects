@@ -10,6 +10,7 @@
 #ifndef HTTPCLIENT_H_
 #define HTTPCLIENT_H_
 
+#include"headerFiles.h"
 
 
 #endif /* HTTPCLIENT_H_ */
