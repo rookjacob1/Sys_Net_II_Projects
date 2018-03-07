@@ -13,7 +13,27 @@ int main(void)
 {
 	printf("\n\n\nServer Started\n");
 
-	//Define variables
+
 
 	return 0;
+}
+
+void initVariables(void)
+{
+
+}
+
+void createSocket(void)
+{
+
+}
+
+void startServer(void)
+{
+
+}
+
+void processRequest(void)
+{
+
 }
