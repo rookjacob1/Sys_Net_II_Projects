@@ -44,6 +44,7 @@ void createSocket(void)
 
 void startServer(void)
 {
+	char clientName[32];
 	printf("\n\nServer ready.\n");
 	for( ; ; )
 	{
@@ -58,6 +59,8 @@ void startServer(void)
 			perror("Error: Accepting failed.");
 			exit(1);
 		}
+		strcpy(clientName, inet_ntoa(CLIENT_ADDR.sin_addr));
+		printf("Connected to %s\n", clientName);
 
 		while((RECV_SIZE = recv(SOCKET_D, BUFF_PTR, MAX_LEN)) > 0)
 		{
@@ -65,6 +68,10 @@ void startServer(void)
 			MAX_LEN -= RECV_SIZE;
 			LEN += RECV_SIZE;
 		}
+
+		processRequest();
+
+		close(SOCKET_D);
 
 	}
 }
@@ -79,5 +86,6 @@ void initVariables(void)
 
 void processRequest(void)
 {
+
 
 }
