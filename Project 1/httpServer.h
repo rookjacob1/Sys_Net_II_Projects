@@ -19,17 +19,15 @@ int SOCKET_D;
 char BUFFER[MAX_BUFFER_SIZE];
 char *BUFF_PTR;
 int LEN;
-int MAX_LEN = sizeof(BUFFER);
+int MAX_LEN;
 int RECV_SIZE;
-int WAIT_SIZE;
+
+#define WAIT_SIZE 16
+
 struct sockaddrr_in SERVER_ADDR;
 struct sockaddrr_in CLIENT_ADDR;
 int CLNT_ADDR_LEN;
 
-/*
- * @brief initVariables
- */
-void initVariables(void);
 
 /*
  * @brief createSocket
@@ -42,6 +40,11 @@ void createSocket(void);
  */
 
 void startServer(void);
+
+/*
+ * @brief initVariables
+ */
+void initVariables(void);
 
 /*
  * @brief processRequest

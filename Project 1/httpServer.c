@@ -11,23 +11,13 @@
 
 int main(void)
 {
-	printf("\n\n\nServer Started\n");
-
-	initVariables();
+	printf("\n\nServer started.\n");
 
 	createSocket();
 
 	startServer();
 
 	return 0;
-}
-
-void initVariables(void)
-{
-	BUFF_PTR = BUFFER;
-	LEN = 0;
-	RECV_SIZE = 0;
-	WAIT_SIZE = 16;
 }
 
 void createSocket(void)
@@ -54,7 +44,37 @@ void createSocket(void)
 
 void startServer(void)
 {
+	printf("\n\nServer ready.\n");
+	for( ; ; )
+	{
+		printf("Server listening and waiting for client request...\n\n");
 
+		initVariables();
+
+		//Accepting connection requests
+		SOCKET_D = accept(LISTEN_SOCKET_D, &CLIENT_ADDR, &CLNT_ADDR_LEN);
+		if (SOCKET_D < 0)
+		{
+			perror("Error: Accepting failed.");
+			exit(1);
+		}
+
+		while((RECV_SIZE = recv(SOCKET_D, BUFF_PTR, MAX_LEN)) > 0)
+		{
+			BUFF_PTR += RECV_SIZE;
+			MAX_LEN -= RECV_SIZE;
+			LEN += RECV_SIZE;
+		}
+
+	}
+}
+
+void initVariables(void)
+{
+	BUFF_PTR = BUFFER;
+	MAX_LEN = sizeof(BUFFER);
+	LEN = 0;
+	RECV_SIZE = 0;
 }
 
 void processRequest(void)
