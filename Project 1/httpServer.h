@@ -13,6 +13,7 @@
 #include"headerFiles.h"
 
 	//Variables for the server program
+#define SERV_PORT 60073
 #define MAX_BUFFER_SIZE 256
 int LISTEN_SOCKET_D;
 int SOCKET_D;
