@@ -22,6 +22,11 @@ int main(void)
 
 void createSocket(void)
 {
+	memset(&SERVER_ADDR, 0, sizeof(SERVER_ADDR));
+	SERVER_ADDR.sin_family = AF_INET;
+	SERVER_ADDR.sin_addr.s_addr = htonl(INADDR_ANY);
+	SERVER_ADDR.sin_port(SERV_PORT);
+
 	LISTEN_SOCKET_D = socket(PF_INET, SOCK_STREAM, 0);
 	if (LISTEN_SOCKET_D < 0)
 	{
