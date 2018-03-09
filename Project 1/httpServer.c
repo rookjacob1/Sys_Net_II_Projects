@@ -22,6 +22,7 @@ int main(void)
 
 void createSocket(void)
 {
+
 	memset(&SERVER_ADDR, 0, sizeof(SERVER_ADDR));
 	SERVER_ADDR.sin_family = AF_INET;
 	SERVER_ADDR.sin_addr.s_addr = htonl(INADDR_ANY);
