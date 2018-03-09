@@ -34,7 +34,7 @@ void createSocket(void)
 		exit(1);
 	}
 
-	if( bind(LISTEN_SOCKET_D, &SERVER_ADDR, sizeof(struct sockaddr_in)) < 0)
+	if( bind(LISTEN_SOCKET_D, (struct sockaddr *)&SERVER_ADDR, sizeof(struct sockaddr_in)) < 0)
 	{
 		perror("Error: Binding failed.");
 		exit(1);
@@ -58,7 +58,7 @@ void startServer(void)
 		initVariables();
 
 		//Accepting connection requests
-		SOCKET_D = accept(LISTEN_SOCKET_D, &CLIENT_ADDR, &CLNT_ADDR_LEN);
+		SOCKET_D = accept(LISTEN_SOCKET_D, (struct sockaddr *)&CLIENT_ADDR, &CLNT_ADDR_LEN);
 		if (SOCKET_D < 0)
 		{
 			perror("Error: Accepting failed.");
