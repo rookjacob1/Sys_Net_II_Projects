@@ -25,8 +25,8 @@ int RECV_SIZE;
 
 #define WAIT_SIZE 16
 
-struct sockaddrr_in SERVER_ADDR;
-struct sockaddrr_in CLIENT_ADDR;
+struct sockaddr_in SERVER_ADDR;
+struct sockaddr_in CLIENT_ADDR;
 int CLNT_ADDR_LEN;
 
 
