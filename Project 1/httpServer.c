@@ -22,7 +22,7 @@ int main(void)
 
 void createSocket(void)
 {
-	memset(&SERVER_ADDR, 0, sizeof(SERVER_ADDR));
+	memset(&SERVER_ADDR, 0, sizeof(struct sockaddr_in));
 	SERVER_ADDR.sin_family = AF_INET;
 	SERVER_ADDR.sin_addr.s_addr = htonl(INADDR_ANY);
 	SERVER_ADDR.sin_port(SERV_PORT);
@@ -34,7 +34,7 @@ void createSocket(void)
 		exit(1);
 	}
 
-	if( bind(LISTEN_SOCKET_D, &SERVER_ADDR, sizeof(SERVER_ADDR)) < 0)
+	if( bind(LISTEN_SOCKET_D, &SERVER_ADDR, sizeof(struct sockaddr_in)) < 0)
 	{
 		perror("Error: Binding failed.");
 		exit(1);
