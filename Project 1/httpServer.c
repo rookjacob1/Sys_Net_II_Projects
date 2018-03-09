@@ -65,6 +65,7 @@ void startServer(void)
 			perror("Error: Accepting failed.");
 			exit(1);
 		}
+
 		strcpy(clientName, inet_ntoa(CLIENT_ADDR.sin_addr));
 		printf("Connected to %s\n", clientName);
 
