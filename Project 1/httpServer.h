@@ -27,7 +27,7 @@ int RECV_SIZE;
 
 struct sockaddr_in SERVER_ADDR;
 struct sockaddr_in CLIENT_ADDR;
-int CLNT_ADDR_LEN;
+socklen_t CLNT_ADDR_LEN;
 
 
 /*
