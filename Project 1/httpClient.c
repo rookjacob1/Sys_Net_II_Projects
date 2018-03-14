@@ -20,3 +20,23 @@ int main (int argc, char *argv[])
 
 	return 0;
 }
+
+void checkArguements(int argc, char *argv[])
+{
+
+}
+
+void createSocket(void)
+{
+
+}
+
+void connectServer(void)
+{
+
+}
+
+void transferData(void)
+{
+
+}

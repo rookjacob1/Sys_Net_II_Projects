@@ -23,6 +23,24 @@ char BUFFER[MAX_BUFFER_SIZE + 1];
 char *BUFF_PTR;
 struct sockaddr_in SERVER_ADDR;
 
+/*
+ *
+ */
+void checkArguements(int argc, char *argv[]);
 
+/*
+ *
+ */
+void createSocket(void);
+
+/*
+ *
+ */
+void connectServer(void);
+
+/*
+ *
+ */
+void transferData(void);
 
 #endif /* HTTPCLIENT_H_ */
