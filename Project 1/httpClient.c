@@ -69,11 +69,15 @@ void findServer(void)
 		close(SOCKET_D);
 	}
 
+	strcpy(SERVER_IP, rp->ai_addr);
+
 	if(rp == NULL)
 	{
 		perror("Error: Server could not be found");
 		exit(1);
 	}
+
+	freeaddrinfo(result);
 }
 
 void connectServer(void)

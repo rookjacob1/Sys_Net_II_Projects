@@ -15,9 +15,12 @@
 #define SERV_PORT 60073
 #define MAX_BUFFER_SIZE 256
 
+
+
 int SOCKET_D;
 int RECV_SIZE;
 char *SERVER_NAME;
+char SERVER_IP[64];
 int LEN;
 char BUFFER[MAX_BUFFER_SIZE + 1];
 char *BUFF_PTR;
