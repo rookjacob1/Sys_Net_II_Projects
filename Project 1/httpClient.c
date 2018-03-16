@@ -10,12 +10,13 @@
 
 int main (int argc, char *argv[])
 {
+	checkArguements(argc, argv);
 
+	printf("\n\n\nClient Started\n\n");
 
-	printf("\n\n\nClient Started\n");
+	connectServer();
 
-
-
+	transferData();
 
 
 	return 0;
@@ -49,6 +50,7 @@ void connectServer(void)
 
 	sprintf(tmpServerPort, "%d", SERV_PORT);
 
+	printf("Client searching for %s Server\n\n", SERVER_NAME);
 
 	if (getaddrinfo(SERVER_NAME, tmpServerPort, &hints, &result) != 0)
 	{
@@ -67,17 +69,44 @@ void connectServer(void)
 		close(SOCKET_D);
 	}
 
-	SERVER_ADDR = *(struct sockaddr_in *)(rp->ai_addr);
 	if(rp == NULL)
 	{
 		perror("Error: Server could not be found");
 		exit(1);
 	}
 
+	SERVER_ADDR = *(struct sockaddr_in *)(rp->ai_addr);
+
+	printf("Client connected to Server.\n\n");
+
 	freeaddrinfo(result);
 }
 
 void transferData(void)
 {
+	LEN = 0;
+	MAX_LEN = sizeof(BUFFER);
 
+	printf("Client Sending Data to Server\n\n");
+
+	send(SOCKET_D, FILE_NAME, strlen(FILE_NAME), 0);
+
+	printf("Client Data Sent to Server\n\n");
+
+	printf("Client Receiving Data from Server\n\n");
+
+	while((RECV_SIZE = recv(SOCKET_D, BUFF_PTR, (size_t)(MAX_BUFFER_SIZE), 0)) > 0)
+	{
+		BUFF_PTR += RECV_SIZE;
+		MAX_LEN -= RECV_SIZE;
+		LEN += RECV_SIZE;
+
+	}
+
+	BUFFER[LEN] = '\0';
+	printf("Echoed string received: %s\n\n", BUFFER);
+
+	close(SOCKET_D);
+
+	printf("Client Shutting Down");
 }

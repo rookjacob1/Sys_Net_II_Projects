@@ -13,7 +13,7 @@
 #include"headerFiles.h"
 
 #define SERV_PORT 60073
-#define MAX_BUFFER_SIZE 256
+#define MAX_BUFFER_SIZE 257
 
 
 
@@ -21,7 +21,8 @@ int SOCKET_D;
 int RECV_SIZE;
 char *SERVER_NAME;
 int LEN;
-char BUFFER[MAX_BUFFER_SIZE + 1];
+int MAX_LEN;
+char BUFFER[MAX_BUFFER_SIZE];
 char *BUFF_PTR;
 struct sockaddr_in SERVER_ADDR;
 char FILE_NAME[128];
