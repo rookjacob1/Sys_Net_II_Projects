@@ -51,8 +51,12 @@ void findServer(void)
 	hints.ai_flags = 0;
 	hints.ai_protocol = 0;
 
+	char tmpServerPort[16];
 
-	if (getaddrinfo(SERVER_NAME, itoa(SERV_PORT), &hints, &result) != 0)
+	sprintf(tmpServerPort, "%d", SERV_PORT);
+
+
+	if (getaddrinfo(SERVER_NAME, tmpServerPort, &hints, &result) != 0)
 	{
 		perror("Error. Address info not obtained");
 		exit(1);
