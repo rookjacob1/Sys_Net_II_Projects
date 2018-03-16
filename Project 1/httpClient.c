@@ -37,6 +37,22 @@ void checkArguements(int argc, char *argv[])
 
 void connectServer(void)
 {
+	memset(&SERVER_ADDR, 0 , sizeof(SERVER_ADDR));
+	SERVER_ADDR.sin_family = AF_INET;
+	inet_pton(AF_INET, SERVER_NAME, &SERVER_ADDR.sin_addr);
+	SERVER_ADDR.sin_port = htons(SERV_PORT);
+	if((SOCKET_D = socket(PF_INET, SOCK_STREAM, 0)) < 0)
+	{
+		perror("Error. Socket Creation Failed.");
+		exit(1);
+	}
+
+	if(connect(SOCKET_D, (struct sockadd *)&SERVER_ADDR, sizeof(SERVER_ADDR)) < 0)
+	{
+		perror("Error. Connection Failed");
+		exit(1);
+	}
+	/*
 	struct addrinfo hints;
 	struct addrinfo *result, *rp;
 
@@ -80,6 +96,7 @@ void connectServer(void)
 	printf("Client connected to Server.\n\n");
 
 	freeaddrinfo(result);
+	*/
 }
 
 void transferData(void)
