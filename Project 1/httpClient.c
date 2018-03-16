@@ -73,7 +73,6 @@ void findServer(void)
 		close(SOCKET_D);
 	}
 
-	strcpy(SERVER_IP, rp->ai_addr);
 
 	if(rp == NULL)
 	{
