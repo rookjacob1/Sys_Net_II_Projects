@@ -36,7 +36,43 @@ void checkArguements(int argc, char *argv[])
 
 void createSocket(void)
 {
+	findServer();
 
+}
+
+void findServer(void)
+{
+	struct addrinfo hints;
+	struct addrinfo *result, *rp;
+
+	memset(&hints, 0 , sizeof(struct addrinfo));
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = 0;
+	hints.ai_protocol = 0;
+
+	if (getaddrinfo(SERVER_NAME, itoa(SERV_PORT), &hints, &result) != 0)
+	{
+		perror("Error. Address info not obtained");
+		exit(1);
+	}
+
+	for(rp = result; rp != NULL; rp = rp->ai_next)
+	{
+		SOCKET_D = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+		if(SOCKET_D == -1)
+			continue;
+
+		if(connect(SOCKET_D, rp->ai_addr, rp->ai_addrlen) != -1)
+			break;
+		close(SOCKET_D);
+	}
+
+	if(rp == NULL)
+	{
+		perror("Error: Server could not be found");
+		exit(1);
+	}
 }
 
 void connectServer(void)
