@@ -52,51 +52,7 @@ void connectServer(void)
 		perror("Error. Connection Failed");
 		exit(1);
 	}
-	/*
-	struct addrinfo hints;
-	struct addrinfo *result, *rp;
 
-	memset(&hints, 0 , sizeof(struct addrinfo));
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = 0;
-	hints.ai_protocol = 0;
-
-	char tmpServerPort[16];
-
-	sprintf(tmpServerPort, "%d", SERV_PORT);
-
-	printf("Client searching for %s Server\n\n", SERVER_NAME);
-
-	if (getaddrinfo(SERVER_NAME, tmpServerPort, &hints, &result) != 0)
-	{
-		perror("Error. Address info not obtained");
-		//exit(1);
-	}
-
-	for(rp = result; rp != NULL; rp = rp->ai_next)
-	{
-		SOCKET_D = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-		if(SOCKET_D == -1)
-			continue;
-
-		if(connect(SOCKET_D, rp->ai_addr, rp->ai_addrlen) != -1)
-			break;
-		close(SOCKET_D);
-	}
-
-	if(rp == NULL)
-	{
-		perror("Error: Server could not be found");
-		exit(1);
-	}
-
-	SERVER_ADDR = *(struct sockaddr_in *)(rp->ai_addr);
-
-	printf("Client connected to Server.\n\n");
-
-	freeaddrinfo(result);
-	*/
 }
 
 void transferData(void)

@@ -100,6 +100,8 @@ void initVariables(void)
 
 void processRequest(void)
 {
+	send(SOCKET_D,BUFFER,LEN,0);
 
+	close(SOCKET_D);
 
 }
