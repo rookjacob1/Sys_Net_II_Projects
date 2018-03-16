@@ -22,6 +22,7 @@ int LEN;
 char BUFFER[MAX_BUFFER_SIZE + 1];
 char *BUFF_PTR;
 struct sockaddr_in SERVER_ADDR;
+char FILE_NAME[128];
 
 /*
  *

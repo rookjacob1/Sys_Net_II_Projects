@@ -23,7 +23,15 @@ int main (int argc, char *argv[])
 
 void checkArguements(int argc, char *argv[])
 {
-
+	if(argc != 2)
+	{
+		printf("\nPlease enter the server address/name and the file name:\n"
+				"\n"
+				"usage: ./httpClient <address/name> <content>");
+		exit(1);
+	}
+	SERVER_NAME = argv[1];
+	strcpy(FILE_NAME,argv[2]);
 }
 
 void createSocket(void)
