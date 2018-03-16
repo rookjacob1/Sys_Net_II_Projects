@@ -73,7 +73,7 @@ void findServer(void)
 		close(SOCKET_D);
 	}
 
-	SERVER_ADDR = *(struct sockadd_in *)(rp->ai_addr);
+	SERVER_ADDR = *(rp->ai_addr);
 	if(rp == NULL)
 	{
 		perror("Error: Server could not be found");
