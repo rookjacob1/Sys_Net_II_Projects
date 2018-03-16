@@ -47,7 +47,7 @@ void connectServer(void)
 		exit(1);
 	}
 
-	if(connect(SOCKET_D, (struct sockadd *)&SERVER_ADDR, sizeof(SERVER_ADDR)) < 0)
+	if(connect(SOCKET_D, (struct sockaddr *)&SERVER_ADDR, sizeof(SERVER_ADDR)) < 0)
 	{
 		perror("Error. Connection Failed");
 		exit(1);
