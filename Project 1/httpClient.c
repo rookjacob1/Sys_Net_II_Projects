@@ -62,21 +62,22 @@ void transferData(void)
 
 	printf("Client Sending Data to Server\n\n");
 
-	send(SOCKET_D, FILE_NAME, strlen(FILE_NAME), 0);
+	write(SOCKET_D, FILE_NAME, strlen(FILE_NAME));
 
 	printf("Client Data Sent to Server\n\n");
 
 	printf("Client Receiving Data from Server\n\n");
 
-	while((RECV_SIZE = recv(SOCKET_D, BUFF_PTR, (size_t)(MAX_BUFFER_SIZE), 0)) > 0)
+	read(SOCKET_D, BUFFER, sizeof(BUFFER));
+	/*while((RECV_SIZE = recv(SOCKET_D, BUFF_PTR, (size_t)(MAX_BUFFER_SIZE), 0)) > 0)
 	{
 		BUFF_PTR += RECV_SIZE;
 		MAX_LEN -= RECV_SIZE;
 		LEN += RECV_SIZE;
 
-	}
+	}*/
 
-	BUFFER[LEN] = '\0';
+	BUFFER[strlen(BUFFER)] = '\0';
 	printf("Echoed string received: %s\n\n", BUFFER);
 
 	close(SOCKET_D);
