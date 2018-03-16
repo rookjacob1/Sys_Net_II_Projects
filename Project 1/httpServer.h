@@ -14,6 +14,7 @@
 
 	//Variables for the server program
 #define SERV_PORT 60073
+#define SER_NAME "rook_jacob_project1"
 #define MAX_BUFFER_SIZE 256
 
 int LISTEN_SOCKET_D;
