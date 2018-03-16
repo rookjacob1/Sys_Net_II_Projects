@@ -34,12 +34,6 @@ void checkArguements(int argc, char *argv[])
 	strcpy(FILE_NAME,argv[2]);
 }
 
-void createSocket(void)
-{
-	findServer();
-
-}
-
 void connectServer(void)
 {
 	struct addrinfo hints;

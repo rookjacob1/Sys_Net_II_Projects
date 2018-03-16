@@ -34,11 +34,6 @@ void checkArguements(int argc, char *argv[]);
 /*
  *
  */
-void createSocket(void);
-
-/*
- *
- */
 void connectServer(void);
 
 /*
