@@ -24,11 +24,11 @@ int main (int argc, char *argv[])
 
 void checkArguements(int argc, char *argv[])
 {
-	if(argc != 2)
+	if(argc != 3)
 	{
 		printf("\nPlease enter the server address/name and the file name:\n"
-				"%d\n"
-				"usage: ./httpClient <address/name> <content>\n",argc);
+				"\n"
+				"usage: ./httpClient <address/name> <content>\n");
 		exit(1);
 	}
 	SERVER_NAME = argv[1];
