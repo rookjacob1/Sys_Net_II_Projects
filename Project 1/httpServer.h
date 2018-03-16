@@ -14,7 +14,6 @@
 
 	//Variables for the server program
 #define SERV_PORT 60073
-#define SER_NAME "rook_jacob_project1"
 #define MAX_BUFFER_SIZE 256
 
 int LISTEN_SOCKET_D;
@@ -27,6 +26,7 @@ int RECV_SIZE;
 
 #define WAIT_SIZE 16
 
+char SERVER_NAME[32];
 struct sockaddr_in SERVER_ADDR;
 struct sockaddr_in CLIENT_ADDR;
 socklen_t CLNT_ADDR_LEN;
