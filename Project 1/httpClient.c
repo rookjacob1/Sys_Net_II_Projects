@@ -55,7 +55,7 @@ void connectServer(void)
 	if (getaddrinfo(SERVER_NAME, tmpServerPort, &hints, &result) != 0)
 	{
 		perror("Error. Address info not obtained");
-		exit(1);
+		//exit(1);
 	}
 
 	for(rp = result; rp != NULL; rp = rp->ai_next)
