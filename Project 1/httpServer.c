@@ -83,6 +83,7 @@ void startServer(void)
 			MAX_LEN -= RECV_SIZE;
 			LEN += RECV_SIZE;
 			RECV_SIZE = recv(SOCKET_D, BUFF_PTR, MAX_LEN,0);
+			printf("%d\n",RECV_SIZE);
 		}
 
 		processRequest();
