@@ -51,6 +51,7 @@ void findServer(void)
 	hints.ai_flags = 0;
 	hints.ai_protocol = 0;
 
+
 	if (getaddrinfo(SERVER_NAME, itoa(SERV_PORT), &hints, &result) != 0)
 	{
 		perror("Error. Address info not obtained");

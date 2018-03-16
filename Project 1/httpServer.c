@@ -22,7 +22,7 @@ int main(void)
 
 void createSocket(void)
 {
-	if (sethostname(SER_NAME, sozeof(SER_NAME)))
+	if (sethostname(SER_NAME, sizeof(SER_NAME)))
 	{
 		perror("Error: Setting server name failed.");
 		exit(1);
