@@ -76,11 +76,13 @@ void startServer(void)
 		strcpy(clientName, inet_ntoa(CLIENT_ADDR.sin_addr));
 		printf("Connected to %s\n", clientName);
 
-		while((RECV_SIZE = recv(SOCKET_D, BUFF_PTR, MAX_LEN,0)) > 0)
+		RECV_SIZE = recv(SOCKET_D, BUFF_PTR, MAX_LEN,0);
+		while(RECV_SIZE > 0)
 		{
 			BUFF_PTR += RECV_SIZE;
 			MAX_LEN -= RECV_SIZE;
 			LEN += RECV_SIZE;
+			RECV_SIZE = recv(SOCKET_D, BUFF_PTR, MAX_LEN,0);
 		}
 
 		processRequest();
