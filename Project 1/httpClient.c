@@ -40,7 +40,7 @@ void createSocket(void)
 
 }
 
-void findServer(void)
+void connectServer(void)
 {
 	struct addrinfo hints;
 	struct addrinfo *result, *rp;
@@ -81,11 +81,6 @@ void findServer(void)
 	}
 
 	freeaddrinfo(result);
-}
-
-void connectServer(void)
-{
-
 }
 
 void transferData(void)

@@ -39,11 +39,6 @@ void createSocket(void);
 /*
  *
  */
-void findServer(void);
-
-/*
- *
- */
 void connectServer(void);
 
 /*
