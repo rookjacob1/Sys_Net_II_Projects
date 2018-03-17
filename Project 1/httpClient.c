@@ -8,9 +8,9 @@
  */
 #include"httpClient.h"
 
-int main (int argc, char *argv[])
+int main (void)
 {
-	checkArguements(argc, argv);
+	getAddressFile(argc, argv);
 
 	printf("\n\n\nClient Started\n\n");
 
@@ -22,7 +22,7 @@ int main (int argc, char *argv[])
 	return 0;
 }
 
-void checkArguements(int argc, char *argv[])
+void getAddressFile(void)
 {
 	if(argc != 3)
 	{

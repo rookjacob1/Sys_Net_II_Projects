@@ -30,7 +30,7 @@ char FILE_NAME[128];
 /*
  *
  */
-void checkArguements(int argc, char *argv[]);
+void getAddressFile(void);
 
 /*
  *
