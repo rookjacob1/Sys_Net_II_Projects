@@ -55,6 +55,7 @@ void connectServer(void)
 
 void transferData(void)
 {
+
 	LEN = 0;
 	MAX_LEN = sizeof(BUFFER);
 
