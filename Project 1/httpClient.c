@@ -130,7 +130,7 @@ void receiveResponse(char *response, int res_max)
 	int total = sizeof(response) - 1;
 	int received = 0;
 	int bytes;
-	memset(response, 0, sizeof(response));
+	memset(response, 0, res_max);
 
 	printf("Client waiting for response from server\n\n");
 
