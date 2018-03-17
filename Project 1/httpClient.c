@@ -60,7 +60,13 @@ void transferData(void)
 
 	if((strlen(messageFormat) + strlen(FILE_NAME)) < MES_MAX )
 	{
-		strcpy(message, createMessage(messageFormat, FILE_NAME));
+		sprintf(message, messageFormat, FILE_NAME);
+
+	}
+	else
+	{
+		perror("Error. Message is too large\n");
+		exit(1);
 	}
 
 	LEN = 0;
@@ -85,11 +91,4 @@ void transferData(void)
 	printf("Client Shutting Down");
 }
 
-char *createMessage(char *messFormat, char *messInput)
-{
-	char message[MES_MAX];
 
-	sprintf(message, messFormat, messInput);
-
-	return message;
-}
