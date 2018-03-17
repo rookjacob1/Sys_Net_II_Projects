@@ -77,7 +77,7 @@ void startServer(void)
 		printf("Connected to %s\n", clientName);
 
 		RECV_SIZE = read(SOCKET_D, BUFFER, MAX_LEN);
-		while(RECV_SIZE > 0)
+		while(RECV_SIZE != EOF)
 		{
 			printf("%d\n",RECV_SIZE);
 			BUFF_PTR += RECV_SIZE;
