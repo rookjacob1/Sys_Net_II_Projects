@@ -10,7 +10,7 @@
 
 int main (void)
 {
-	getAddressFile(argc, argv);
+	getAddressFile();
 
 	printf("\n\n\nClient Started\n\n");
 
@@ -24,15 +24,12 @@ int main (void)
 
 void getAddressFile(void)
 {
-	if(argc != 3)
-	{
-		printf("\nPlease enter the server address/name and the file name:\n"
-				"\n"
-				"usage: ./httpClient <address/name> <content>\n");
-		exit(1);
-	}
-	SERVER_NAME = argv[1];
-	strcpy(FILE_NAME,"GET /user/bin/image.html HTTP/1.1 \r\n\r\n");
+
+	printf("\nPlease enter the server IP address in dotted decimal form:\n");
+	gets(SERVER_NAME);
+	printf("\nPlease enter the file, with file extension, to be requested from server\n");
+	gets(FILE_NAME);
+
 }
 
 void connectServer(void)

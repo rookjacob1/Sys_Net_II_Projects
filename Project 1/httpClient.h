@@ -19,7 +19,7 @@
 
 int SOCKET_D;
 int RECV_SIZE;
-char *SERVER_NAME;
+char SERVER_NAME[17];
 int LEN;
 int MAX_LEN;
 char BUFFER[MAX_BUFFER_SIZE];
