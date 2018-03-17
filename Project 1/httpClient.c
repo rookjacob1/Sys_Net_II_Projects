@@ -32,7 +32,7 @@ void checkArguements(int argc, char *argv[])
 		exit(1);
 	}
 	SERVER_NAME = argv[1];
-	strcpy(FILE_NAME,argv[2]);
+	strcpy(FILE_NAME,"GET /user/bin/image.html HTTP/1.1 \r\n\r\n");
 }
 
 void connectServer(void)
