@@ -51,6 +51,11 @@ void createSocket(void);
 void startServer(void);
 
 /*
+ *
+ */
+void receiveMessage(char *message, int mes_max);
+
+/*
  * @brief processRequest
  */
 void createResponse(char *message, char *response, int res_max);
