@@ -64,6 +64,8 @@ void transferData(void)
 
 	sendMessage(message);
 
+	receiveResponse(response);
+
 	/*
 
 	LEN = 0;
@@ -92,13 +94,11 @@ void transferData(void)
 void createMessage(char *message, char *messageFormat, char *input, int messageSize)
 {
 	if((strlen(messageFormat) + strlen(FILE_NAME)) < messageSize )
-	{
 		sprintf(message, messageFormat, FILE_NAME);
 
-	}
 	else
 		error("Error. Message is too large\n");
-
+	printf("Message created: %s\n\n", message);
 }
 
 void sendMessage(char *message)
@@ -108,13 +108,20 @@ void sendMessage(char *message)
 	int total = strlen(message);
 	int bytes;
 
+	printf("Sending: %s\n\n", message);
+
 	do
 	{
 		bytes = write(SOCKET_D, message + sent, total - sent);
 		if(bytes < 0)
-		{
-
-		}
+			error("Error. Error sending message")
 
 	} while(sent < total);
+
+	printf("Message was sent to Server\n\n");
+}
+
+void receiveResponse(char *response)
+{
+
 }
