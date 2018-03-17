@@ -20,6 +20,12 @@ int main(void)
 	return 0;
 }
 
+void error(const char *msg)
+{
+	perror(mes);
+	exit(1);
+}
+
 void createSocket(void)
 {
 	/*

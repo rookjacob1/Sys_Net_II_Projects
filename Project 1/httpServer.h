@@ -31,6 +31,10 @@ struct sockaddr_in SERVER_ADDR;
 struct sockaddr_in CLIENT_ADDR;
 socklen_t CLNT_ADDR_LEN;
 
+/*
+ *
+ */
+void error(const char *msg);
 
 /*
  * @brief createSocket
