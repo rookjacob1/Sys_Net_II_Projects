@@ -69,6 +69,10 @@ void transferData(void)
 		exit(1);
 	}
 
+
+
+	/*
+
 	LEN = 0;
 	MAX_LEN = sizeof(BUFFER);
 
@@ -89,6 +93,15 @@ void transferData(void)
 	close(SOCKET_D);
 
 	printf("Client Shutting Down");
+	*/
 }
 
+void createMessage(char *message, char *messageFormat, char *input)
+{
 
+}
+
+void sendMessage(char *message)
+{
+
+}
