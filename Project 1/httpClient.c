@@ -7,6 +7,7 @@
  * Project 1
  */
 #include"httpClient.h"
+#include<stdio.h>
 
 int main (void)
 {
