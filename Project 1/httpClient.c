@@ -114,7 +114,7 @@ void sendMessage(char *message)
 	{
 		bytes = write(SOCKET_D, message + sent, total - sent);
 		if(bytes < 0)
-			error("Error. Error sending message")
+			error("Error. Error sending message");
 
 	} while(sent < total);
 

@@ -59,4 +59,9 @@ void createMessage(char *message, char *messageFormat, char *input, int messageS
  */
 void sendMessage(char *message);
 
+/*
+ *
+ */
+void receiveResponse(char *response);
+
 #endif /* HTTPCLIENT_H_ */
