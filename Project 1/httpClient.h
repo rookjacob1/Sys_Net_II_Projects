@@ -23,12 +23,6 @@ struct sockaddr_in SERVER_ADDR;
 char FILE_NAME[128];
 
 
-int RECV_SIZE;
-int LEN;
-int MAX_LEN;
-char BUFFER[MAX_BUFFER_SIZE];
-char *BUFF_PTR;
-
 /*
  *
  */
