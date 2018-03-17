@@ -23,6 +23,12 @@ int main (void)
 	return 0;
 }
 
+void error(const char *msg)
+{
+	perror(msg);
+	exit(1);
+}
+
 void getAddressFile(void)
 {
 
@@ -40,16 +46,12 @@ void connectServer(void)
 	inet_pton(AF_INET, SERVER_NAME, &SERVER_ADDR.sin_addr);
 	SERVER_ADDR.sin_port = htons(SERV_PORT);
 	if((SOCKET_D = socket(PF_INET, SOCK_STREAM, 0)) < 0)
-	{
-		perror("Error. Socket Creation Failed.");
-		exit(1);
-	}
+		error("Error. Socket Creation Failed.");
+
 
 	if(connect(SOCKET_D, (struct sockaddr *)&SERVER_ADDR, sizeof(SERVER_ADDR)) < 0)
-	{
-		perror("Error. Connection Failed");
-		exit(1);
-	}
+		error("Error. Connection Failed");
+
 
 }
 
@@ -59,6 +61,8 @@ void transferData(void)
 	char *messageFormat = "GET /%s HTTP/1.1\r\n\r\n";
 
 	createMessage(message, messageFormat, FILE_NAME, MES_MAX);
+
+	sendMessage(message);
 
 	/*
 
@@ -93,13 +97,24 @@ void createMessage(char *message, char *messageFormat, char *input, int messageS
 
 	}
 	else
-	{
-		perror("Error. Message is too large\n");
-		exit(1);
-	}
+		error("Error. Message is too large\n");
+
 }
 
 void sendMessage(char *message)
 {
 
+	int sent = 0;
+	int total = strlen(message);
+	int bytes;
+
+	do
+	{
+		bytes = write(SOCKET_D, message + sent, total - sent);
+		if(bytes < 0)
+		{
+
+		}
+
+	} while(sent < total);
 }

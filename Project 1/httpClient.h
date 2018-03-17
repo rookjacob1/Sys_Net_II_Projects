@@ -29,7 +29,10 @@ int MAX_LEN;
 char BUFFER[MAX_BUFFER_SIZE];
 char *BUFF_PTR;
 
-
+/*
+ *
+ */
+void error(const char *msg);
 
 /*
  *
