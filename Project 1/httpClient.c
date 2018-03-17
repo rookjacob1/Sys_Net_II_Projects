@@ -102,6 +102,7 @@ void createMessage(char *message, char *messageFormat, char *input, int messageS
 	else
 		error("Error. Message is too large\n");
 	printf("Client created message: %s\n\n", message);
+	message[strlen(message)] = '\0';
 }
 
 void sendMessage(char *message)
