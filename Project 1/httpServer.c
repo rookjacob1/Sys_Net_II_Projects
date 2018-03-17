@@ -98,7 +98,7 @@ void receiveMessage(char *message, int mes_max)
 	printf("Server received %s from client", message);
 }
 
-void processRequest(void)
+void createResponse(char *message, char *response, int res_max)
 {
 	write(SOCKET_D, BUFFER, sizeof(BUFFER));
 	printf("%s",BUFFER);

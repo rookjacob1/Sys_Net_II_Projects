@@ -53,7 +53,7 @@ void startServer(void);
 /*
  * @brief processRequest
  */
-void processRequest(void);
+void createResponse(char *message, char *response, int res_max);
 
 
 #endif /* HTTPSERVER_H_ */
