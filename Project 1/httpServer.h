@@ -14,7 +14,9 @@
 
 	//Variables for the server program
 #define SERV_PORT 60073
-#define MAX_BUFFER_SIZE 256
+#define MES_MAX 1024
+#define RES_MAX 4096
+
 
 int LISTEN_SOCKET_D;
 int SOCKET_D;

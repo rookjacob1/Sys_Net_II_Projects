@@ -47,6 +47,9 @@ void createSocket(void)
 
 void startServer(void)
 {
+	char message[MES_MAX], response[RES_MAX];
+	char *responseStatusOK = "HTTP/1.1 200 OK\r\n\r\n";
+	char *responseStatusNOTFound = "HTTP/1.1 404 Not Found\r\n\r\n";
 	char clientName[32];
 	printf("\n\nServer ready.\n");
 	for( ; ; )
@@ -63,13 +66,38 @@ void startServer(void)
 		strcpy(clientName, inet_ntoa(CLIENT_ADDR.sin_addr));
 		printf("Connected to %s\n", clientName);
 
-		RECV_SIZE = read(SOCKET_D, BUFFER, MAX_LEN);
+		receiveMessage(message, MES_MAX);
 
 		processRequest();
 
 		close(SOCKET_D);
 
 	}
+}
+
+void receiveMessage(char *message, int mes_max)
+{
+	int total = mes_max - 1;
+	int received = 0;
+	int bytes;
+	memset(message, 0, mes_max);
+
+	printf("Server waiting for message from client\n\n");
+
+	do
+	{
+		bytes = read(SOCKET_D, message + received, total - received);
+		printf("\n%d\n",bytes);
+		if(bytes < 0)
+			error("Error. Error receiving message from client");
+		if(bytes == 0)
+			break;
+
+		received += bytes;
+
+	} while( received < total);
+
+	printf("Server received %s from client", message);
 }
 
 void initVariables(void)
