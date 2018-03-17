@@ -58,18 +58,7 @@ void transferData(void)
 	char message[MES_MAX], response[RES_MAX];
 	char *messageFormat = "GET /%s HTTP/1.1\r\n\r\n";
 
-	if((strlen(messageFormat) + strlen(FILE_NAME)) < MES_MAX )
-	{
-		sprintf(message, messageFormat, FILE_NAME);
-
-	}
-	else
-	{
-		perror("Error. Message is too large\n");
-		exit(1);
-	}
-
-
+	createMessage(message, messageFormat, FILE_NAME, MES_MAX);
 
 	/*
 
@@ -96,9 +85,18 @@ void transferData(void)
 	*/
 }
 
-void createMessage(char *message, char *messageFormat, char *input)
+void createMessage(char *message, char *messageFormat, char *input, int messageSize)
 {
+	if((strlen(messageFormat) + strlen(FILE_NAME)) < messageSize )
+	{
+		sprintf(message, messageFormat, FILE_NAME);
 
+	}
+	else
+	{
+		perror("Error. Message is too large\n");
+		exit(1);
+	}
 }
 
 void sendMessage(char *message)

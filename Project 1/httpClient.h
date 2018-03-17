@@ -49,7 +49,7 @@ void transferData(void);
 /*
  *
  */
-void createMessage(char *message, char *messageFormat, char *input);
+void createMessage(char *message, char *messageFormat, char *input, int messageSize);
 
 /*
  *
