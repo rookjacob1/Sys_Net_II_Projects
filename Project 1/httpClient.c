@@ -66,6 +66,7 @@ void transferData(void)
 
 	receiveResponse(response, RES_MAX);
 
+	processResponse(response);
 	/*
 
 	LEN = 0;
@@ -151,5 +152,6 @@ void receiveResponse(char *response, int res_max)
 
 void processResponse(char *response)
 {
-
+	printf("Client shutting down");
+	close(SOCKET_D);
 }
