@@ -51,11 +51,6 @@ void createSocket(void);
 void startServer(void);
 
 /*
- * @brief initVariables
- */
-void initVariables(void);
-
-/*
  * @brief processRequest
  */
 void processRequest(void);

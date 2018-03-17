@@ -56,8 +56,6 @@ void startServer(void)
 	{
 		printf("Server listening and waiting for client request...\n\n");
 
-		initVariables();
-
 		//Accepting connection requests
 		SOCKET_D = accept(LISTEN_SOCKET_D, (struct sockaddr *)&CLIENT_ADDR, &CLNT_ADDR_LEN);
 		if (SOCKET_D < 0)
@@ -98,14 +96,6 @@ void receiveMessage(char *message, int mes_max)
 	} while( received < total);
 
 	printf("Server received %s from client", message);
-}
-
-void initVariables(void)
-{
-	BUFF_PTR = BUFFER;
-	MAX_LEN = sizeof(BUFFER);
-	LEN = 0;
-	RECV_SIZE = 0;
 }
 
 void processRequest(void)
