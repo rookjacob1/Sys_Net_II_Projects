@@ -39,8 +39,6 @@ void getAddressFile(void)
 	fgets(FILE_NAME, sizeof(FILE_NAME) - 1, stdin);
 	FILE_NAME[strlen(FILE_NAME) - 1] = '\0';
 
-	printf("%s\n%s\n\n", SERVER_NAME, FILE_NAME);
-
 }
 
 void connectServer(void)
@@ -141,7 +139,7 @@ void receiveResponse(char *response, int res_max)
 	do
 	{
 		bytes = read(SOCKET_D, response + received, total - received);
-
+		printf("\n%d\n",bytes);
 		if(bytes < 0)
 			error("Error. Error receiving message from server");
 		if(bytes == 0)
