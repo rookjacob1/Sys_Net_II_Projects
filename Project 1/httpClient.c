@@ -34,8 +34,12 @@ void getAddressFile(void)
 
 	printf("\nPlease enter the server IP address in dotted decimal form:\n");
 	fgets(SERVER_NAME, sizeof(SERVER_NAME) - 1 , stdin);
+	SERVER_NAME[strlen(SERVER_NAME) - 1] = '\0';
 	printf("\nPlease enter the file, with file extension, to be requested from server\n");
 	fgets(FILE_NAME, sizeof(FILE_NAME) - 1, stdin);
+	FILE_NAME[strlen(FILE_NAME) - 1] = '\0';
+
+	printf("%s\n%s\n\n", SERVER_NAME, FILE_NAME);
 
 }
 
@@ -152,6 +156,6 @@ void receiveResponse(char *response, int res_max)
 
 void processResponse(char *response)
 {
-	printf("Client shutting down");
+	printf("Client shutting down\n\n");
 	close(SOCKET_D);
 }
