@@ -87,5 +87,9 @@ void transferData(void)
 
 char *createMessage(char *messFormat, char *messInput)
 {
+	char message[MES_MAX];
 
+	sprintf(message, messFormat, messInput);
+
+	return message;
 }
