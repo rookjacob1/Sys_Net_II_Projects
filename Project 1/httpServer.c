@@ -11,6 +11,8 @@
 
 int main(void)
 {
+	printf("\n\nServer started.\n");
+
 	createSocket();
 
 	startServer();
@@ -31,9 +33,6 @@ void createSocket(void)
 	SERVER_ADDR.sin_family = AF_INET;
 	SERVER_ADDR.sin_addr.s_addr = htonl(INADDR_ANY);
 	SERVER_ADDR.sin_port = htons(SERV_PORT);
-
-	printf("\n\nServer started with IP of %s.\n", inet_ntoa(SERVER_ADDR.sin_addr));
-
 
 	LISTEN_SOCKET_D = socket(PF_INET, SOCK_STREAM, 0);
 	if (LISTEN_SOCKET_D < 0)
