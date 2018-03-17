@@ -27,7 +27,7 @@ void getAddressFile(void)
 {
 
 	printf("\nPlease enter the server IP address in dotted decimal form:\n");
-	SERVER_NAME = gets(SERVER_NAME);
+	fgets(SERVER_NAME, sizeof(SERVER_NAME) - 1 , stdin);
 	printf("\nPlease enter the file, with file extension, to be requested from server\n");
 	gets(FILE_NAME);
 
