@@ -55,6 +55,8 @@ void connectServer(void)
 
 void transferData(void)
 {
+	char message[MES_MAX], response[RES_MAX];
+	char *messageFormat = "GET /%s HTTP/1.1\r\n\r\n";
 
 	LEN = 0;
 	MAX_LEN = sizeof(BUFFER);
@@ -77,3 +79,5 @@ void transferData(void)
 
 	printf("Client Shutting Down");
 }
+
+
