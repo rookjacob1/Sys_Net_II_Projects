@@ -85,7 +85,7 @@ void receiveMessage(char *message, int mes_max)
 
 	do
 	{
-		bytes = read(SOCKET_D, message, total - received);
+		bytes = read(SOCKET_D, message + received, total - received);
 		printf("\n%d\n",bytes);
 		if(bytes < 0)
 			error("Error. Error receiving message from client");
