@@ -22,19 +22,12 @@ int main(void)
 
 void error(const char *msg)
 {
-	perror(mes);
+	perror(msg);
 	exit(1);
 }
 
 void createSocket(void)
 {
-	/*
-	if (sethostname(SER_NAME, sizeof(SER_NAME)))
-	{
-		perror("Error: Setting server name failed.");
-		exit(1);
-	}
-	*/
 	memset(&SERVER_ADDR, 0, sizeof(SERVER_ADDR));
 	SERVER_ADDR.sin_family = AF_INET;
 	SERVER_ADDR.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -42,22 +35,14 @@ void createSocket(void)
 
 	LISTEN_SOCKET_D = socket(PF_INET, SOCK_STREAM, 0);
 	if (LISTEN_SOCKET_D < 0)
-	{
-		perror("Error: Listen socket failed.");
-		exit(1);
-	}
+		error("Error: Listen socket failed.");
 
 	if( bind(LISTEN_SOCKET_D, (struct sockaddr *)&SERVER_ADDR, sizeof(struct sockaddr_in)) < 0)
-	{
-		perror("Error: Binding failed.");
-		exit(1);
-	}
+		error("Error: Binding failed.");
 
 	if( listen(LISTEN_SOCKET_D, WAIT_SIZE) < 0 )
-	{
-		perror("Error: Listening failed");
-		exit(1);
-	}
+		error("Error: Listening failed");
+
 }
 
 void startServer(void)
@@ -73,10 +58,7 @@ void startServer(void)
 		//Accepting connection requests
 		SOCKET_D = accept(LISTEN_SOCKET_D, (struct sockaddr *)&CLIENT_ADDR, &CLNT_ADDR_LEN);
 		if (SOCKET_D < 0)
-		{
-			perror("Error: Accepting failed.");
-			exit(1);
-		}
+			error("Error: Accepting failed.");
 
 		strcpy(clientName, inet_ntoa(CLIENT_ADDR.sin_addr));
 		printf("Connected to %s\n", clientName);
