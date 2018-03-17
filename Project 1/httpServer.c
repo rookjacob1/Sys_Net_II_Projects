@@ -48,8 +48,7 @@ void createSocket(void)
 void startServer(void)
 {
 	char message[MES_MAX], response[RES_MAX];
-	char *responseStatusOK = "HTTP/1.1 200 OK\r\n\r\n";
-	char *responseStatusNOTFound = "HTTP/1.1 404 Not Found\r\n\r\n";
+
 	char clientName[32];
 	printf("\n\nServer ready.\n");
 	for( ; ; )
@@ -67,6 +66,8 @@ void startServer(void)
 		receiveMessage(message, MES_MAX);
 
 		createResponse(message, response, RES_MAX);
+
+		sendResponse(response);
 
 		close(SOCKET_D);
 
@@ -100,9 +101,30 @@ void receiveMessage(char *message, int mes_max)
 
 void createResponse(char *message, char *response, int res_max)
 {
-	write(SOCKET_D, BUFFER, sizeof(BUFFER));
-	printf("%s",BUFFER);
 
-	close(SOCKET_D);
+	sprintf(response, "%s%s", RES_STATUS_OK, message);
 
+}
+
+void sendResponse(char *response)
+{
+
+	int sent = 0;
+	int total = strlen(response);
+	int bytes;
+
+	printf("Server sending:\n%s\nto client \n\n", response);
+
+	do
+	{
+		bytes = write(SOCKET_D, response + sent, total - sent);
+		if(bytes < 0)
+			error("Error. Error sending message");
+		if(bytes == 0)
+			break;
+
+		sent += bytes;
+	} while(sent < total);
+
+	printf("Server sent response to client\n\n");
 }

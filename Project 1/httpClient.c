@@ -111,7 +111,7 @@ void sendMessage(char *message)
 	int total = strlen(message);
 	int bytes;
 
-	printf("Client sending %s to server\n\n", message);
+	printf("Client sending:\n%s\nto server\n\n", message);
 
 	do
 	{

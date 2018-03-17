@@ -18,6 +18,9 @@
 #define RES_MAX 4096
 #define WAIT_SIZE 16
 
+#define RES_STATUS_OK  "HTTP/1.1 200 OK\r\n\r\n"
+#define RES_STATUS_NOT_FOUND  "HTTP/1.1 404 Not Found\r\n\r\n"
+
 int LISTEN_SOCKET_D;
 int SOCKET_D;
 
@@ -53,5 +56,9 @@ void receiveMessage(char *message, int mes_max);
  */
 void createResponse(char *message, char *response, int res_max);
 
+/*
+ *
+ */
+void sendResponse(char *response);
 
 #endif /* HTTPSERVER_H_ */
