@@ -62,6 +62,11 @@ void sendMessage(char *message);
 /*
  *
  */
-void receiveResponse(char *response);
+void receiveResponse(char *response, int res_max);
+
+/*
+ *
+ */
+void processResponse(char *response);
 
 #endif /* HTTPCLIENT_H_ */

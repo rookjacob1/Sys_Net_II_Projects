@@ -64,7 +64,7 @@ void transferData(void)
 
 	sendMessage(message);
 
-	receiveResponse(response);
+	receiveResponse(response, RES_MAX);
 
 	/*
 
@@ -98,7 +98,7 @@ void createMessage(char *message, char *messageFormat, char *input, int messageS
 
 	else
 		error("Error. Message is too large\n");
-	printf("Message created: %s\n\n", message);
+	printf("Client created message: %s\n\n", message);
 }
 
 void sendMessage(char *message)
@@ -108,20 +108,48 @@ void sendMessage(char *message)
 	int total = strlen(message);
 	int bytes;
 
-	printf("Sending: %s\n\n", message);
+	printf("Client sending %s to server\n\n", message);
 
 	do
 	{
 		bytes = write(SOCKET_D, message + sent, total - sent);
 		if(bytes < 0)
 			error("Error. Error sending message");
+		if(bytes == 0)
+			break;
 
+		sent += bytes;
 	} while(sent < total);
 
-	printf("Message was sent to Server\n\n");
+	printf("Client sent message to Server\n\n");
 }
 
-void receiveResponse(char *response)
+void receiveResponse(char *response, int res_max)
+{
+	int total = sizeof(response) - 1;
+	int received = 0;
+	int bytes;
+	memset(response, 0, sizeof(response));
+
+	printf("Client waiting for response from server\n\n");
+
+	do
+	{
+		bytes = read(SOCKET_D, response + received, total - received);
+
+		if(bytes < 0)
+			error("Error. Error receiving message from server");
+		if(bytes == 0)
+			break;
+
+		received += bytes;
+
+	} while( received < total);
+
+	printf("Client received %s from server", response);
+}
+
+void processResponse(char *response)
 {
 
 }
