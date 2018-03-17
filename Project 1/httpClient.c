@@ -102,7 +102,7 @@ void createMessage(char *message, char *messageFormat, char *input, int messageS
 	else
 		error("Error. Message is too large\n");
 	printf("Client created message: %s\n\n", message);
-	message[strlen(message)] = '\0';
+	message[strlen(message)] = EOF;
 }
 
 void sendMessage(char *message)
@@ -142,7 +142,7 @@ void receiveResponse(char *response, int res_max)
 		bytes = read(SOCKET_D, response + received, total - received);
 		printf("\n%d\n",bytes);
 		if(bytes < 0)
-			error("Error. Error receiving message from server");
+			error("Error. Error receiving response from server");
 		if(bytes == 0)
 			break;
 
