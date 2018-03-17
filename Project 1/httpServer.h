@@ -16,17 +16,10 @@
 #define SERV_PORT 60073
 #define MES_MAX 1024
 #define RES_MAX 4096
-
+#define WAIT_SIZE 16
 
 int LISTEN_SOCKET_D;
 int SOCKET_D;
-char BUFFER[MAX_BUFFER_SIZE];
-char *BUFF_PTR;
-int LEN;
-int MAX_LEN;
-int RECV_SIZE;
-
-#define WAIT_SIZE 16
 
 char SERVER_NAME[32];
 struct sockaddr_in SERVER_ADDR;
