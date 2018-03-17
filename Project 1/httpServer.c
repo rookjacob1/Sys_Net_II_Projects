@@ -66,7 +66,7 @@ void startServer(void)
 
 		receiveMessage(message, MES_MAX);
 
-		processRequest();
+		createResponse(message, response, RES_MAX);
 
 		close(SOCKET_D);
 
