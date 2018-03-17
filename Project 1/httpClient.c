@@ -129,7 +129,7 @@ void sendMessage(char *message)
 
 void receiveResponse(char *response, int res_max)
 {
-	int total = sizeof(response) - 1;
+	int total = res_max - 1;
 	int received = 0;
 	int bytes;
 	memset(response, 0, res_max);
