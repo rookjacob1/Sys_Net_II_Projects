@@ -46,4 +46,9 @@ void connectServer(void);
  */
 void transferData(void);
 
+/*
+ *
+ */
+char *createMessage(char *messFormat, char *messInput);
+
 #endif /* HTTPCLIENT_H_ */

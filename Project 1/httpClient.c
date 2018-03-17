@@ -58,6 +58,11 @@ void transferData(void)
 	char message[MES_MAX], response[RES_MAX];
 	char *messageFormat = "GET /%s HTTP/1.1\r\n\r\n";
 
+	if((strlen(messageFormat) + strlen(FILE_NAME)) < MES_MAX )
+	{
+		strcpy(message, createMessage(messageFormat, FILE_NAME));
+	}
+
 	LEN = 0;
 	MAX_LEN = sizeof(BUFFER);
 
@@ -80,4 +85,7 @@ void transferData(void)
 	printf("Client Shutting Down");
 }
 
+char *createMessage(char *messFormat, char *messInput)
+{
 
+}
