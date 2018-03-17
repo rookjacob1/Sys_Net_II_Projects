@@ -96,7 +96,7 @@ void receiveMessage(char *message, int mes_max)
 
 	} while( received < total);
 
-	printf("Server received %s from client", message);
+	printf("Server received %s from client\n\n", message);
 }
 
 void createResponse(char *message, char *response, int res_max)

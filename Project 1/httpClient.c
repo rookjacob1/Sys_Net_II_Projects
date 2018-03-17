@@ -108,7 +108,7 @@ void sendMessage(char *message)
 {
 
 	int sent = 0;
-	int total = strlen(message);
+	int total = strlen(message) + 1;
 	int bytes;
 
 	printf("Client sending:\n%s\nto server\n\n", message);
@@ -149,7 +149,7 @@ void receiveResponse(char *response, int res_max)
 
 	} while( received < total);
 
-	printf("Client received %s from server", response);
+	printf("Client received %s from server\n\n", response);
 }
 
 void processResponse(char *response)
