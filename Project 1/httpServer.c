@@ -68,7 +68,9 @@ void startServer(void)
 		createResponse(message, response, RES_MAX);
 
 		if(response != NULL)
+		{
 			sendResponse(response);
+		}
 
 		close(SOCKET_D);
 
