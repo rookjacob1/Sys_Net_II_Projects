@@ -153,7 +153,7 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 	FILE *fp = fopen(URL, "rb");
 	if(fp == NULL)
 	{
-		perror("Server does not have %s",URL);
+		perror("Server does not have file");
 		printf("\n\n");
 		sprintf(response, "%s", RES_STATUS_NOT_FOUND);
 		return;
@@ -167,15 +167,45 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 
 	//Setting response to NULL to indicate not to send reponse
 	response = NULL;
+	//Closing file
 	if(fclose(fp) == EOF)
 	{
 		perror("Error. Error closing file\n\n");
+		printf("\n\n");
 	}
 
 }
 
 void GET_SendFile(FILE *fp, char *response, int res_max)
 {
+	int readNotSent = 0;
+	int responseLimit = res_max;
+	int responseBytes, fileBytes;
+
+
+	printf("Server sending file to client..\n\n");
+
+	while(1)
+	{
+		if(!feof(fp))
+		{
+			fileBytes = fread(response + readNotSent, 1, responseLimit, fp);
+			readNotSent += fileBytes;
+			responseLimit -= fileBytes;
+		}
+		responseBytes = write(SOCKET_D, response, responseLimit);
+		response += responseBytes;
+		readNotSent -= responseBytes;
+		responseLimit += responseBytes;
+
+		if(responseBytes < 0)
+			error("Error. Error sending message");
+		if(readNotSent == 0 && feof(fp))
+			break;
+
+	}
+
+	printf("Server sent file to client\n\n");
 
 }
 
