@@ -195,7 +195,28 @@ char *findBeginningFile(char *response)
 
 void downloadSmallFile(char *file)
 {
+	int i;
+	int fileSize = strlen(file);
+	char newFilename[140];
+	sprintf(newFilename, "Client_Copy_%s", FILE_NAME);
 
+	FILE *fp = fopen(newFilename, "wb");
+	if(fp == NULL)
+		error("Client can not download file");
+
+	while(fileSize > 0)
+	{
+		i = fwrite(file, 1, fileSize, fp);
+		fileSize -= i;
+		file += i;
+	}
+
+	//Closing file
+	if(fclose(fp) == EOF)
+	{
+		perror("Error. Error closing file\n\n");
+		printf("\n\n");
+	}
 }
 
 void downloadLargeFile(char *response, int res_max)
