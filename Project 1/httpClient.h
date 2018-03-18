@@ -71,6 +71,11 @@ char *findBeginningFile(char *response);
 /*
  *
  */
+void downloadSmallFile(char *file);
+
+/*
+ *
+ */
 void downloadLargeFile(char *response, int res_max);
 
 #endif /* HTTPCLIENT_H_ */
