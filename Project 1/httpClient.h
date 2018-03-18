@@ -15,7 +15,6 @@
 #define SERV_PORT 60073
 #define MES_MAX 1024
 #define RES_MAX 4096
-#define MAX_BUFFER_SIZE 257
 
 int SOCKET_D;
 char SERVER_NAME[17];
