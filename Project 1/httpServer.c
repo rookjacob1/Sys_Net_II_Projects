@@ -119,7 +119,7 @@ void createResponse(char *message, char *response, int res_max)
 	}
 	else
 	{
-		printf("Server detected invalid method: %s\n\n", method);
+		printf("Server detected invalid method\n\n");
 		sprintf(response, "%s", RES_STATUS_NOT_IMPLEMENTED);
 	}
 
@@ -130,7 +130,7 @@ void GET_Method(char *message, char *response, int res_max)
 	char *URL = strtok(NULL, " ");
 	char *version = strtok(NULL, "\r");
 
-	if((URL == NULL) || (version == NULL) || (!strcmp(version, "HTTP/1.1")))
+	if((URL == NULL) || (version == NULL) || (strcmp(version, "HTTP/1.1")))
 	{
 		printf("Server detected bad request\n\n");
 		sprintf(response, "%s", RES_STATUS_BAD_REQUEST);
