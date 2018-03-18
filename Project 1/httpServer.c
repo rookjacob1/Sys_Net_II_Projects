@@ -192,7 +192,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 	while((readNotSent == 0)  || feof(fp))
 	{
 		printf("In loop\n");
-		if(!feof(fp))
+		//if(!feof(fp))
 		{
 			fileBytes = fread(response + readNotSent, 1, responseLimit, fp);
 			readNotSent += fileBytes;
@@ -206,7 +206,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 		responseLimit += responseBytes;
 
 		if(responseBytes < 0)
-			error("Error. Error sending message");
+			error("Error. Error sending file");
 
 	}
 
