@@ -154,11 +154,12 @@ void processResponse(char *response)
 	char *charStatusCode = strtok(NULL, " ");
 	int intStatusCode = atoi(charStatusCode);
 	char *phrase = strtok(NULL, "\r\n");
+	char *file;
 
 	if(intStatusCode == 200)
 	{
 		printf("Client request was successful\n\n");
-		findBeginningFile(response);
+		file = findBeginningFile(response);
 	}
 	else
 	{
@@ -171,6 +172,23 @@ void processResponse(char *response)
 
 char *findBeginningFile(char *response)
 {
+	char *ptr = response;
+	char test[5] = {"\0\0\0\0\0"};
+	while(1)
+	{
+		if(*ptr != '\r')
+		{
+			ptr += 1;
+		}
+		else
+		{
+			strncpy(test, ptr, 4);
+			if(!strcmp(test, "\r\n\r\n"))
+			{
+				return ptr + 4;
+			}
+		}
+	}
 
 }
 
