@@ -23,5 +23,6 @@
 #include<arpa/inet.h>
 #include<sys/wait.h>
 #include<pthread.h>
+#include<time.h>
 
 #endif /* HEADERFILES_H_ */
