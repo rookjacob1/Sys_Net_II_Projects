@@ -189,7 +189,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 
 	printf("Server sending file to client..\n\n");
 
-	while((readNotSent == 0)  || feof(fp))
+	do
 	{
 		printf("In loop\n");
 		if(!feof(fp))
@@ -211,7 +211,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 			printf("\n\n");
 		}
 
-	}
+	}while((readNotSent != 0)  && !feof(fp));
 
 	printf("Server sent file to client\n\n");
 
