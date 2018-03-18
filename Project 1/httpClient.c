@@ -324,7 +324,7 @@ void displayFile(void)
 	if(!pid)
 	{
 		sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
-		exec("sensible-browser", "sensible-browser", FILE_NAME, NULL);
+		execlp("sensible-browser", "sensible-browser", FILE_NAME, NULL);
 	}
 	else
 	{
