@@ -90,6 +90,8 @@ void receiveMessage(char *message, int mes_max)
 	{
 		bytes = read(SOCKET_D, message + received, total - received);
 		printf("\n%d\n",bytes);
+		if(errno == EWOULDBLOCK)
+			break;
 		if(bytes < 0)
 			error("Error. Error receiving message from client");
 		if(bytes == 0)
