@@ -196,7 +196,6 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 			fileBytes = fread(response + readNotSent, 1, responseLimit, fp);
 			readNotSent += fileBytes;
 			responseLimit -= fileBytes;
-			printf("%s", response + readNotSent);
 		}
 
 		responseBytes = write(SOCKET_D, response, responseLimit);
