@@ -184,7 +184,7 @@ char *findBeginningFile(char *response)
 		else
 		{
 			strncpy(test, ptr, 4);
-			if(!strcmp(test, "\r\n\r\n"))
+			if(!strncmp(test, "\r\n\r\n", 4))
 			{
 				return ptr + 4;
 			}
