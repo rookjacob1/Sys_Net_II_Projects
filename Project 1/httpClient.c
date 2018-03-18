@@ -69,29 +69,7 @@ void transferData(void)
 	receiveResponse(response, RES_MAX);
 
 	processResponse(response);
-	/*
 
-	LEN = 0;
-	MAX_LEN = sizeof(BUFFER);
-
-	printf("Client Sending Data to Server\n\n");
-
-	write(SOCKET_D, FILE_NAME, strlen(FILE_NAME));
-
-	printf("Client Data Sent to Server\n\n");
-
-	printf("Client Receiving Data from Server\n\n");
-
-	read(SOCKET_D, BUFFER, sizeof(BUFFER));
-
-
-	BUFFER[strlen(BUFFER)] = '\0';
-	printf("Echoed string received: %s\n\n", BUFFER);
-
-	close(SOCKET_D);
-
-	printf("Client Shutting Down");
-	*/
 }
 
 void createMessage(char *message, char *messageFormat, char *input, int messageSize)
@@ -144,6 +122,11 @@ void receiveResponse(char *response, int res_max)
 	{
 		bytes = read(SOCKET_D, response + received, total - received);
 		printf("\n%d\n",bytes);
+		if(errno == EWOULDBLOCK)
+		{
+			printf("Timeout occurred, assumed end of response\n\n");
+			break;
+		}
 		if(bytes < 0)
 			error("Error. Error receiving response from server");
 		if(bytes == 0)
