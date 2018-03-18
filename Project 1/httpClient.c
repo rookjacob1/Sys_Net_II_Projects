@@ -294,8 +294,14 @@ void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNo
 void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded)
 {
 	int dist2Tail = tailBuffer - curr;
+	int writeBytes;
 
+	writeBytes = fwrite(curr, 1, dist2Tail, fp);
+	*readNotDownloaded -= writeBytes;
 
-
+	if(writeBytes == dist2Tail)
+		curr = headBuffer;
+	else
+		curr = curr + writeBytes;
 
 }
