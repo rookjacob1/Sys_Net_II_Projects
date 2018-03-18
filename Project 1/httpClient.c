@@ -154,9 +154,11 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 {
 	char *responseCopy = (char *)malloc(res_max*sizeof(char));
 	strcpy(responseCopy, response);
+
 	char *charStatusCode = strtok(responseCopy, " ");
 	charStatusCode = strtok(NULL, " ");
 	int intStatusCode = atoi(charStatusCode);
+
 	char *phrase = strtok(NULL, "\r\n");
 	char *file;
 	int sizeOfHeader;
@@ -185,7 +187,7 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 		printf("Client request was not successful: %s",phrase);
 	}
 
-
+	fclose(responseCopy);
 
 }
 
@@ -217,9 +219,8 @@ void downloadSmallFile(char *file)
 	}
 }
 
-void downloadLargeFile(char *file, int bufferSize, int receivedBytes)
+void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 {
-
 	//Adjusting the time to download the large file
 	struct timeval tv ={60,0};
 	setsockopt(SOCKET_D, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
@@ -230,11 +231,50 @@ void downloadLargeFile(char *file, int bufferSize, int receivedBytes)
 	FILE *fp = fopen(newFilename, "wb");
 	if(fp == NULL)
 		error("Client can not download file");
+
+	char *tailBuffer = headBuffer + bufferSize;
+	char *curr = headBuffer;
+
+	int sizeTmpBuffer = bufferSize / 4;
+	char *tmpBuffer = (char *)malloc(sizeTmpBuffer* sizeof(char));
+
+	int *readNotDownloaded;
+	*readNotDownloaded = bufferSize - receivedBytes;
+	int readBytes, writeBytes;
+
 	printf("Downloading large file as %s...\n\n", newFilename);
 
-	int fileBufferSize =
+	do
+	{
+		if(!feof(fp) && ((bufferSize - readNotDownloaded) > sizeTmpBuffer))
+		{
+			readBytes = read(SOCKET_D, tmpBuffer, sizeTmpBuffer);
+			if(errno == EWOULDBLOCK)
+			{
+				printf("Time out occurred, assumed end of message\n\n");
+				break;
+			}
+			if(readBytes < 0)
+				error("Error. Error receiving message from client");
 
+			addBytes2Buffer(headBuffer, tailBuffer, curr, tmpBuffer, readBytes);
+			*readNotDownloaded += readBytes;
+		}
 
+		writeBytes2File(fp, headBuffer, tailBuffer, curr, readNotDownloaded);
 
+	} while(!feof(fp) && (receivedBytes != 0));
+
+	printf("%s was completely downloaded\n\n");
+
+}
+
+void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int readNotDownloaded, char *bytes, int sizeOfBytes)
+{
+	int dist2tail = tailBuffer - curr
+}
+
+void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded)
+{
 
 }

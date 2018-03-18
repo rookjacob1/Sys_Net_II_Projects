@@ -71,6 +71,17 @@ void downloadSmallFile(char *file);
 /*
  *
  */
-void downloadLargeFile(char *file, int bufferSize, int receievedBytes);
+void downloadLargeFile(char *headBuffer, int bufferSize, int receievedBytes);
+
+/*
+ *
+ */
+void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int readNotDownloaded, char *bytes, int sizeOfBytes);
+
+/*
+ *
+ */
+void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded);
+
 
 #endif /* HTTPCLIENT_H_ */
