@@ -164,6 +164,8 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 	int intStatusCode = atoi(charStatusCode);
 
 	char *phrase = strtok(NULL, "\r\n");
+	free(responseCopy);
+
 	char *file;
 	int sizeOfHeader;
 
@@ -191,8 +193,6 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 	{
 		printf("Client request was not successful: %s",phrase);
 	}
-
-	free(responseCopy);
 
 }
 
@@ -270,7 +270,7 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 
 		writeBytes2File(fp, headBuffer, tailBuffer, curr, readNotDownloaded);
 
-	} while(!feof(fp) && (*readNotDownloaded != 0));
+	} while(!feof(fp) && (*readNotDownloaded > 0));
 
 	printf("%s was completely downloaded\n\n", newFilename);
 
@@ -303,8 +303,12 @@ void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, i
 {
 	int dist2Tail = tailBuffer - curr;
 	int writeBytes;
+	int writeLimit = *readNotDownloaded;
+	if(*readNotDownloaded > dist2Tail)
+		writeLimit = dist2Tail;
 
-	writeBytes = fwrite(curr, 1, dist2Tail, fp);
+
+	writeBytes = fwrite(curr, 1, writeLimit, fp);
 	*readNotDownloaded -= writeBytes;
 
 	if(writeBytes == dist2Tail)
