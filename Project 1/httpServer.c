@@ -67,7 +67,8 @@ void startServer(void)
 
 		createResponse(message, response, RES_MAX);
 
-		sendResponse(response);
+		if(response != NULL)
+			sendResponse(response);
 
 		close(SOCKET_D);
 
@@ -138,7 +139,8 @@ void GET_Method(char *message, char *response, int res_max)
 
 	GET_Header_Lines(message, response, res_max);
 
-	GET_AttachFile(message,response, res_max);
+	//URL + 1 gets rid of the first "/"
+	GET_AttachFile(URL + 1,response, res_max);
 }
 
 void GET_Header_Lines(char *message, char *response, int res_max)
@@ -146,7 +148,33 @@ void GET_Header_Lines(char *message, char *response, int res_max)
 
 }
 
-void GET_AttachFile(char *message, char *response, int res_max)
+void GET_AttachFile(char *URL, char *response, int res_max)
+{
+	FILE *fp = fopen(URL, "rb");
+	if(fp == NULL)
+	{
+		perror("Server does not have %s",URL);
+		printf("\n\n");
+		sprintf(response, "%s", RES_STATUS_NOT_FOUND);
+		return;
+	}
+	//Sending Request line with no headerline
+	sprintf(response, "%s", RES_STATUS_OK);
+	sendResponse(response);
+
+	//Sending File
+	GET_SendFile(fp,response,res_max);
+
+	//Setting response to NULL to indicate not to send reponse
+	response = NULL;
+	if(fclose(fp) == EOF)
+	{
+		perror("Error. Error closing file\n\n");
+	}
+
+}
+
+void GET_SendFile(FILE *fp, char *response, int res_max)
 {
 
 }

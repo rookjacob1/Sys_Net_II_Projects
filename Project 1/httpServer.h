@@ -73,7 +73,12 @@ void GET_Header_Lines(char *message, char *response, int res_max);
 /*
  *
  */
-void GET_AttachFile(char *message, char *response, int res_max);
+void GET_AttachFile(char *URL, char *response, int res_max);
+
+/*
+ *
+ */
+void GET_SendFile(FILE *fp, char *response, int res_max);
 
 /*
  *
