@@ -68,7 +68,6 @@ void transferData(void)
 
 	receiveResponse(response, RES_MAX);
 
-	processResponse(response, RES_MAX);
 
 	printf("Client shutting down\n\n");
 	close(SOCKET_D);
@@ -138,7 +137,7 @@ void receiveResponse(char *response, int res_max)
 		//Has a large file that needs to be taken in chunks
 		if(received > res_max/2)
 		{
-			downloadLargeFile(response, res_max);
+			processResponse(response, res_max, 'L');
 			return;
 		}
 
@@ -146,9 +145,12 @@ void receiveResponse(char *response, int res_max)
 
 
 	printf("Client received:\n%s\nfrom server\n\n", response);
+
+	processResponse(response, res_max, 'S');
+
 }
 
-void processResponse(char *response, int res_max)
+void processResponse(char *response, int res_max, char sizeOfFile)
 {
 	char *responseCopy = (char *)malloc(res_max*sizeof(char));
 	strcpy(responseCopy, response);
@@ -166,7 +168,12 @@ void processResponse(char *response, int res_max)
 		if(file == NULL)
 			error("Error. Response was corrupted");
 		printf("%s",file);
-		downloadSmallFile(file + 4);
+		if(sizeOfFile == 'S')
+			downloadSmallFile(file + 4);
+		else if(sizeOfFile == 'L')
+			downloadLargeFile(file + 4);
+		else
+			error("Error. Incorrect arguments passed to processResponse");
 	}
 	else
 	{
@@ -188,6 +195,8 @@ void downloadSmallFile(char *file)
 	if(fp == NULL)
 		error("Client can not download file");
 
+	printf("Downloading small file as %s", newFilename);
+
 	while(fileSize > 0)
 	{
 		i = fwrite(file, 1, fileSize, fp);
@@ -206,4 +215,15 @@ void downloadSmallFile(char *file)
 void downloadLargeFile(char *response, int res_max)
 {
 
+	//Adjusting the time to download the large file
+	struct timeval tv ={60,0};
+	setsockopt(SOCKET_D, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
+
+	char newFilename[140];
+	sprintf(newFilename, "Client_Copy_%s", FILE_NAME);
+
+	FILE *fp = fopen(newFilename, "wb");
+	if(fp == NULL)
+		error("Client can not download file");
+	printf("Downloading large file as %s", newFilename);
 }

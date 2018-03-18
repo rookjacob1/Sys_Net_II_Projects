@@ -61,7 +61,7 @@ void receiveResponse(char *response, int res_max);
 /*
  *
  */
-void processResponse(char *response, int res_max);
+void processResponse(char *response, int res_max, char sizeOfFile);
 
 /*
  *
