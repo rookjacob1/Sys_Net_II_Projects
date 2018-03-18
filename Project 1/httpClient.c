@@ -238,7 +238,7 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 	int sizeTmpBuffer = bufferSize / 4;
 	char *tmpBuffer = (char *)malloc(sizeTmpBuffer* sizeof(char));
 
-	int *readNotDownloaded;
+	int *readNotDownloaded = (int *)malloc(sizeof(int));
 	*readNotDownloaded = bufferSize - receivedBytes;
 	int readBytes;
 
@@ -266,6 +266,8 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 
 	printf("%s was completely downloaded\n\n", newFilename);
 
+	free(readNotDownloaded);
+
 }
 
 void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded, char *bytes, int sizeOfBytes)
@@ -292,6 +294,8 @@ void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNo
 void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded)
 {
 	int dist2Tail = tailBuffer - curr;
+
+
 
 
 }
