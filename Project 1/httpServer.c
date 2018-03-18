@@ -89,7 +89,6 @@ void receiveMessage(char *message, int mes_max)
 	do
 	{
 		bytes = read(SOCKET_D, message + received, total - received);
-		printf("\n%d\n",bytes);
 		if(errno == EWOULDBLOCK)
 		{
 			printf("Time out occurred, assumed end of message\n\n");

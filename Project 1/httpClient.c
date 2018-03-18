@@ -80,7 +80,6 @@ void createMessage(char *message, char *messageFormat, char *input, int messageS
 	else
 		error("Error. Message is too large\n");
 	printf("Client created message: %s\n\n", message);
-	//message[strlen(message)] = EOF;
 }
 
 void sendMessage(char *message)
@@ -121,7 +120,6 @@ void receiveResponse(char *response, int res_max)
 	do
 	{
 		bytes = read(SOCKET_D, response + received, total - received);
-		printf("\n%d\n",bytes);
 		if(errno == EWOULDBLOCK)
 		{
 			printf("Timeout occurred, assumed end of response\n\n");
