@@ -82,5 +82,10 @@ void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNo
  */
 void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded);
 
+/*
+ *
+ */
+void displayFile(void);
+
 
 #endif /* HTTPCLIENT_H_ */

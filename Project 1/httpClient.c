@@ -11,8 +11,7 @@
 
 int main (void)
 {
-	do
-	{
+
 	getAddressFile();
 
 	printf("\n\n\nClient Started\n\n");
@@ -21,8 +20,8 @@ int main (void)
 
 	transferData();
 
+	displayFile();
 
-	}while(1);
 
 	return 0;
 }
@@ -316,4 +315,19 @@ void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, i
 	else
 		curr = curr + writeBytes;
 
+}
+
+void displayFile(void)
+{
+	pid_t pid = fork();
+
+	if(!pid)
+	{
+		sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
+		exec("sensible-browser", "sensible-browser", FILE_NAME, NULL);
+	}
+	else
+	{
+		waitpid(pid, NULL,0);
+	}
 }
