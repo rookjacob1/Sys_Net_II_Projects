@@ -112,7 +112,7 @@ void receiveResponse(char *response, int res_max)
 	int bytes;
 	memset(response, 0, res_max);
 
-	struct timeval tv ={5,0};
+	struct timeval tv ={10,0};
 	setsockopt(SOCKET_D, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
 
 	printf("Client waiting for response from server\n\n");
