@@ -134,7 +134,7 @@ void receiveResponse(char *response, int res_max)
 
 	} while( received < total);
 
-	printf("Client received:\n%s from server\n\n", response);
+	printf("Client received:\n%s\nfrom server\n\n", response);
 }
 
 void processResponse(char *response)
