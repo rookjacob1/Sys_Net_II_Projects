@@ -112,14 +112,14 @@ void createResponse(char *message, char *response, int res_max)
 	memset(response, 0 , res_max);
 	char *method = strtok(message, " ");
 
-	if(strcmp(method, "GET") != 0)
+	if(!strcmp(method, "GET"))
 	{
 		printf("Server detected GET Method\n\n");
 		GET_Method(message, response, res_max);
 	}
 	else
 	{
-		printf("Server detected invalid method\n\n");
+		printf("Server detected invalid method: %s\n\n", method);
 		sprintf(response, "%s", RES_STATUS_NOT_IMPLEMENTED);
 	}
 
