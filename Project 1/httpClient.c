@@ -68,7 +68,7 @@ void transferData(void)
 
 	receiveResponse(response, RES_MAX);
 
-	processResponse(response);
+	processResponse(response, RES_MAX);
 
 	printf("Client shutting down\n\n");
 	close(SOCKET_D);
@@ -148,9 +148,11 @@ void receiveResponse(char *response, int res_max)
 	printf("Client received:\n%s\nfrom server\n\n", response);
 }
 
-void processResponse(char *response)
+void processResponse(char *response, int res_max)
 {
-	char *charStatusCode = strtok(response, " ");
+	char *responseCopy = (char *)malloc(res_max*sizeof(char));
+	strcpy(responseCopy, response);
+	char *charStatusCode = strtok(responseCopy, " ");
 	charStatusCode = strtok(NULL, " ");
 	int intStatusCode = atoi(charStatusCode);
 	char *phrase = strtok(NULL, "\r\n");
