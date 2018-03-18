@@ -66,11 +66,6 @@ void processResponse(char *response);
 /*
  *
  */
-char *findBeginningFile(char *response);
-
-/*
- *
- */
 void downloadSmallFile(char *file);
 
 /*

@@ -159,7 +159,7 @@ void processResponse(char *response)
 	if(intStatusCode == 200)
 	{
 		printf("Client request was successful\n\n");
-		file = findBeginningFile(response);
+		file = strstr(response, "\r\n\r\n") + 4;
 		downloadSmallFile(file);
 	}
 	else
@@ -168,28 +168,6 @@ void processResponse(char *response)
 	}
 
 
-
-}
-
-char *findBeginningFile(char *response)
-{
-	char *ptr = response;
-	char test[5] = {"\0\0\0\0\0"};
-	while(1)
-	{
-		if(*ptr != '\r')
-		{
-			ptr += 1;
-		}
-		else
-		{
-			strncpy(test, ptr, 4);
-			if(!strncmp(test, "\r\n\r\n", 4))
-			{
-				return ptr + 4;
-			}
-		}
-	}
 
 }
 
