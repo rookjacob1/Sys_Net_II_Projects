@@ -113,11 +113,23 @@ void createResponse(char *message, char *response, int res_max)
 
 	if(strcmp(method, "GET") != 0)
 	{
-
+		GET_Method(message, response, res_max);
 	}
 	else
 		sprintf(response, "%s", RES_STATUS_METH_NOT_ALLOWED);
 
+
+}
+
+void GET_Method(char *message, char *response, int res_max)
+{
+	char *URL = strtok(NULL, " ");
+	char *version = strtok(NULL, "\r");
+
+	if((URL == NULL) || (version == NULL) || (!strcmp(version, "HTTP/1.1")))
+	{
+		sprintf(response, "%s", RES_STATUS_BAD_REQUEST);
+	}
 
 }
 
