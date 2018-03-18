@@ -67,7 +67,7 @@ void startServer(void)
 
 		createResponse(message, response, RES_MAX);
 
-		if(response == NULL)
+		if(response != NULL)
 		{
 			sendResponse(response);
 		}
@@ -167,7 +167,8 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 	//Sending File
 	GET_SendFile(fp,response,res_max);
 
-	//Setting response to NULL to indicate not to send reponse
+	memset(response, 0 , sizeof(response));
+	//Setting response to NULL to indicate not to send response
 	response = NULL;
 	//Closing file
 	if(fclose(fp) == EOF)
