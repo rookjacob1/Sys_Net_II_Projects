@@ -171,7 +171,7 @@ void processResponse(char *response, int res_max, char sizeOfFile)
 		if(sizeOfFile == 'S')
 			downloadSmallFile(file + 4);
 		else if(sizeOfFile == 'L')
-			downloadLargeFile(file + 4);
+			downloadLargeFile(file + 4, res_max);
 		else
 			error("Error. Incorrect arguments passed to processResponse");
 	}
