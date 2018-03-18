@@ -270,7 +270,7 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 
 		writeBytes2File(fp, headBuffer, tailBuffer, curr, readNotDownloaded);
 
-	} while(!feof(fp) && (receivedBytes != 0));
+	} while(!feof(fp) && (*readNotDownloaded != 0));
 
 	printf("%s was completely downloaded\n\n", newFilename);
 
