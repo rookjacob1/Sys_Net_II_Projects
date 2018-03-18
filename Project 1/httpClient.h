@@ -61,7 +61,7 @@ void receiveResponse(char *response, int res_max);
 /*
  *
  */
-void processResponse(char *response, int res_max, char sizeOfFile);
+void processResponse(char *response, int res_max, int bytesInBuffer);
 
 /*
  *
@@ -71,6 +71,6 @@ void downloadSmallFile(char *file);
 /*
  *
  */
-void downloadLargeFile(char *response, int res_max);
+void downloadLargeFile(char *file, int bufferSize, int receievedBytes);
 
 #endif /* HTTPCLIENT_H_ */

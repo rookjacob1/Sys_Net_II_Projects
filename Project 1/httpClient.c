@@ -69,7 +69,7 @@ void transferData(void)
 	receiveResponse(response, RES_MAX);
 
 
-	printf("Client shutting down\n\n");
+	printf("\nClient shutting down\n\n");
 	close(SOCKET_D);
 
 }
@@ -137,7 +137,7 @@ void receiveResponse(char *response, int res_max)
 		//Has a large file that needs to be taken in chunks
 		if(received > res_max/2)
 		{
-			processResponse(response, res_max, 'L');
+			processResponse(response, res_max, received);
 			return;
 		}
 
@@ -146,11 +146,11 @@ void receiveResponse(char *response, int res_max)
 
 	printf("Client received:\n%s\nfrom server\n\n", response);
 
-	processResponse(response, res_max, 'S');
+	processResponse(response, res_max, 0);
 
 }
 
-void processResponse(char *response, int res_max, char sizeOfFile)
+void processResponse(char *response, int res_max, int bytesInBuffer)
 {
 	char *responseCopy = (char *)malloc(res_max*sizeof(char));
 	strcpy(responseCopy, response);
@@ -159,6 +159,8 @@ void processResponse(char *response, int res_max, char sizeOfFile)
 	int intStatusCode = atoi(charStatusCode);
 	char *phrase = strtok(NULL, "\r\n");
 	char *file;
+	int sizeOfHeader;
+
 
 	if(intStatusCode == 200)
 	{
@@ -167,11 +169,14 @@ void processResponse(char *response, int res_max, char sizeOfFile)
 		file = strstr(response, "\r\n\r\n");
 		if(file == NULL)
 			error("Error. Response was corrupted");
-		printf("%s",file);
-		if(sizeOfFile == 'S')
-			downloadSmallFile(file + 4);
-		else if(sizeOfFile == 'L')
-			downloadLargeFile(file + 4, res_max);
+		file += 4;
+		if(bytesInBuffer == 0)
+			downloadSmallFile(file);
+		else if((bytesInBuffer > 0) && (bytesInBuffer < res_max))
+		{
+			sizeOfHeader = file - response;
+			downloadLargeFile(file, res_max - sizeOfHeader, bytesInBuffer - sizeOfHeader);
+		}
 		else
 			error("Error. Incorrect arguments passed to processResponse");
 	}
@@ -212,7 +217,7 @@ void downloadSmallFile(char *file)
 	}
 }
 
-void downloadLargeFile(char *response, int res_max)
+void downloadLargeFile(char *file, int bufferSize, int receivedBytes)
 {
 
 	//Adjusting the time to download the large file
@@ -225,5 +230,11 @@ void downloadLargeFile(char *response, int res_max)
 	FILE *fp = fopen(newFilename, "wb");
 	if(fp == NULL)
 		error("Client can not download file");
-	printf("Downloading large file as %s", newFilename);
+	printf("Downloading large file as %s...\n\n", newFilename);
+
+	int fileBufferSize =
+
+
+
+
 }
