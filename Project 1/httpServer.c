@@ -81,6 +81,9 @@ void receiveMessage(char *message, int mes_max)
 	int bytes;
 	memset(message, 0, mes_max);
 
+	struct timeval tv ={5,0};
+	setsockopt(SOCKET_D, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
+
 	printf("Server waiting for message from client\n\n");
 
 	do
