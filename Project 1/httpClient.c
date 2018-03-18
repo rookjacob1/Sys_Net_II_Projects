@@ -70,6 +70,9 @@ void transferData(void)
 
 	processResponse(response);
 
+	printf("Client shutting down\n\n");
+	close(SOCKET_D);
+
 }
 
 void createMessage(char *message, char *messageFormat, char *input, int messageSize)
@@ -132,13 +135,46 @@ void receiveResponse(char *response, int res_max)
 
 		received += bytes;
 
+		//Has a large file that needs to be taken in chunks
+		if(received > res_max/2)
+		{
+			downloadLargeFile(response, res_max);
+			return;
+		}
+
 	} while( received < total);
+
 
 	printf("Client received:\n%s\nfrom server\n\n", response);
 }
 
 void processResponse(char *response)
 {
-	printf("Client shutting down\n\n");
-	close(SOCKET_D);
+	char *version = strtok(response, " ");
+	char *charStatusCode = strtok(NULL, " ");
+	int intStatusCode = atoi(charStatusCode);
+	char *phrase = strtok(NULL, "\r\n");
+
+	if(intStatusCode == 200)
+	{
+		printf("Client request was successful\n\n");
+		findBeginningFile(response);
+	}
+	else
+	{
+		printf("Client request was not successful: %s",phrase);
+	}
+
+
+
+}
+
+char *findBeginningFile(char *response)
+{
+
+}
+
+void downloadLargeFile(char *response, int res_max)
+{
+
 }

@@ -63,4 +63,14 @@ void receiveResponse(char *response, int res_max);
  */
 void processResponse(char *response);
 
+/*
+ *
+ */
+char *findBeginningFile(char *response);
+
+/*
+ *
+ */
+void downloadLargeFile(char *response, int res_max);
+
 #endif /* HTTPCLIENT_H_ */
