@@ -182,10 +182,9 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 	int responseLimit = res_max;
 	int responseBytes, fileBytes;
 
-
 	printf("Server sending file to client..\n\n");
 
-	while(1)
+	while(readNotSent == 0 && feof(fp))
 	{
 		if(!feof(fp))
 		{
@@ -193,6 +192,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 			readNotSent += fileBytes;
 			responseLimit -= fileBytes;
 		}
+
 		responseBytes = write(SOCKET_D, response, responseLimit);
 		response += responseBytes;
 		readNotSent -= responseBytes;
@@ -200,8 +200,6 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 
 		if(responseBytes < 0)
 			error("Error. Error sending message");
-		if(readNotSent == 0 && feof(fp))
-			break;
 
 	}
 
