@@ -67,7 +67,7 @@ void startServer(void)
 
 		createResponse(message, response, RES_MAX);
 
-		if(response != NULL)
+		if(response == NULL)
 		{
 			sendResponse(response);
 		}
