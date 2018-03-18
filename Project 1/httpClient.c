@@ -257,8 +257,7 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 			if(readBytes < 0)
 				error("Error. Error receiving message from client");
 
-			addBytes2Buffer(headBuffer, tailBuffer, curr, tmpBuffer, readBytes);
-			*readNotDownloaded += readBytes;
+			addBytes2Buffer(headBuffer, tailBuffer, curr, readNotDownloaded, tmpBuffer, readBytes);
 		}
 
 		writeBytes2File(fp, headBuffer, tailBuffer, curr, readNotDownloaded);
@@ -269,12 +268,30 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 
 }
 
-void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int readNotDownloaded, char *bytes, int sizeOfBytes)
+void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded, char *bytes, int sizeOfBytes)
 {
-	int dist2tail = tailBuffer - curr
+	int dist2Tail = tailBuffer - curr;
+	char *tailByte;
+
+	if(dist2Tail >= *readNotDownloaded)
+	{
+		tailByte = curr + *readNotDownloaded;
+		if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
+			error("Error. Error with reading bytes into buffer");
+		*readNotDownloaded += sizeOfBytes;
+	}
+	else
+	{
+		tailByte = headBuffer + (*readNotDownloaded - dist2Tail);
+		if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
+					error("Error. Error with reading bytes into buffer");
+		*readNotDownloaded += sizeOfBytes;
+	}
 }
 
 void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded)
 {
+	int dist2Tail = tailBuffer - curr;
+
 
 }
