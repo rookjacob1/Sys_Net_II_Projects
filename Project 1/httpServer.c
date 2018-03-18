@@ -53,6 +53,7 @@ void startServer(void)
 	printf("\n\nServer ready.\n");
 	for( ; ; )
 	{
+		SKIP_SEND = 0;
 		printf("Server listening and waiting for client request...\n\n");
 
 		//Accepting connection requests
@@ -67,7 +68,7 @@ void startServer(void)
 
 		createResponse(message, response, RES_MAX);
 
-		if(response != NULL)
+		if(!SKIP_SEND)
 		{
 			sendResponse(response);
 		}
@@ -167,9 +168,8 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 	//Sending File
 	GET_SendFile(fp,response,res_max);
 
-	memset(response, 0 , sizeof(response));
-	//Setting response to NULL to indicate not to send response
-	response = NULL;
+	SKIP_SEND = 1;
+
 	//Closing file
 	if(fclose(fp) == EOF)
 	{
