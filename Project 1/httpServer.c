@@ -103,7 +103,7 @@ void receiveMessage(char *message, int mes_max)
 
 	} while( received < total);
 
-	printf("Server received %s from client\n\n", message);
+	printf("Server received:\n%s\nfrom client\n\n", message);
 }
 
 void createResponse(char *message, char *response, int res_max)
@@ -113,10 +113,16 @@ void createResponse(char *message, char *response, int res_max)
 
 	if(strcmp(method, "GET") != 0)
 	{
+		printf("Server detected GET Method\n\n");
 		GET_Method(message, response, res_max);
 	}
 	else
+	{
+		printf("Server detected invalid method\n\n");
 		sprintf(response, "%s", RES_STATUS_METH_NOT_ALLOWED);
+
+	}
+		sprintf(response, "%s", RES_STATUS_NOT_IMPLEMENTED);
 
 
 }
@@ -128,8 +134,17 @@ void GET_Method(char *message, char *response, int res_max)
 
 	if((URL == NULL) || (version == NULL) || (!strcmp(version, "HTTP/1.1")))
 	{
+		printf("Server detected bad request\n\n");
 		sprintf(response, "%s", RES_STATUS_BAD_REQUEST);
+		return;
 	}
+
+
+	GET_Header_Lines(message, response, res_max);
+}
+
+void GET_Header_Lines(char *message, char *response, int res_max)
+{
 
 }
 
