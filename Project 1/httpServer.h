@@ -20,6 +20,7 @@
 
 #define RES_STATUS_OK  "HTTP/1.1 200 OK\r\n\r\n"
 #define RES_STATUS_NOT_FOUND  "HTTP/1.1 404 Not Found\r\n\r\n"
+#define RES_STATUS_METH_NOT_ALLOWED "HTTP/1.1 405 Method Not Allowed\r\n\r\n"
 
 int LISTEN_SOCKET_D;
 int SOCKET_D;
@@ -55,6 +56,11 @@ void receiveMessage(char *message, int mes_max);
  * @brief processRequest
  */
 void createResponse(char *message, char *response, int res_max);
+
+/*
+ *
+ */
+int validateMethod(char *method);
 
 /*
  *

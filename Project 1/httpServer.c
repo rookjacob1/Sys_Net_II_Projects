@@ -108,10 +108,27 @@ void receiveMessage(char *message, int mes_max)
 
 void createResponse(char *message, char *response, int res_max)
 {
+	memset(response, 0 , res_max);
+	char *method = strtok(message, " ");
+
+	if(!validateMethod(method))
+	{
+		sprintf(response, "%s", RES_STATUS_METH_NOT_ALLOWED);
+	}
 
 	sprintf(response, "%s%s", RES_STATUS_OK, message);
 
 }
+
+int validateMethod(char *method)
+{
+	if(strcmp(method, "GET") != 0)
+		return 1;
+	else
+		return 0;
+}
+
+
 
 void sendResponse(char *response)
 {
