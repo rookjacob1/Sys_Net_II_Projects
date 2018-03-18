@@ -160,6 +160,7 @@ void processResponse(char *response)
 	{
 		printf("Client request was successful\n\n");
 		file = findBeginningFile(response);
+		downloadSmallFile(file);
 	}
 	else
 	{
@@ -189,6 +190,11 @@ char *findBeginningFile(char *response)
 			}
 		}
 	}
+
+}
+
+void downloadSmallFile(char *file)
+{
 
 }
 
