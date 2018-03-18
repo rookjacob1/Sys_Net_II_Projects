@@ -159,7 +159,10 @@ void processResponse(char *response)
 	if(intStatusCode == 200)
 	{
 		printf("Client request was successful\n\n");
+		//Finding the beginning of the file
 		file = strstr(response, "\r\n\r\n") + 4;
+		if(file == NULL)
+			error("Error. Response was corrupted");
 		downloadSmallFile(file);
 	}
 	else
