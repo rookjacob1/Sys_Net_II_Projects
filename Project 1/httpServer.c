@@ -119,11 +119,8 @@ void createResponse(char *message, char *response, int res_max)
 	else
 	{
 		printf("Server detected invalid method\n\n");
-		sprintf(response, "%s", RES_STATUS_METH_NOT_ALLOWED);
-
-	}
 		sprintf(response, "%s", RES_STATUS_NOT_IMPLEMENTED);
-
+	}
 
 }
 
@@ -139,11 +136,17 @@ void GET_Method(char *message, char *response, int res_max)
 		return;
 	}
 
-
 	GET_Header_Lines(message, response, res_max);
+
+	GET_AttachFile(message,response, res_max);
 }
 
 void GET_Header_Lines(char *message, char *response, int res_max)
+{
+
+}
+
+void GET_AttachFile(char *message, char *response, int res_max)
 {
 
 }

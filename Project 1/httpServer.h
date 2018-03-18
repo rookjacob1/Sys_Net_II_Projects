@@ -73,6 +73,11 @@ void GET_Header_Lines(char *message, char *response, int res_max);
 /*
  *
  */
+void GET_AttachFile(char *message, char *response, int res_max);
+
+/*
+ *
+ */
 void sendResponse(char *response);
 
 #endif /* HTTPSERVER_H_ */
