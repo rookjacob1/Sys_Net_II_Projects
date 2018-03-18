@@ -187,7 +187,7 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 		printf("Client request was not successful: %s",phrase);
 	}
 
-	fclose(responseCopy);
+	free(responseCopy);
 
 }
 
@@ -240,13 +240,13 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 
 	int *readNotDownloaded;
 	*readNotDownloaded = bufferSize - receivedBytes;
-	int readBytes, writeBytes;
+	int readBytes;
 
 	printf("Downloading large file as %s...\n\n", newFilename);
 
 	do
 	{
-		if(!feof(fp) && ((bufferSize - readNotDownloaded) > sizeTmpBuffer))
+		if(!feof(fp) && ((bufferSize - *readNotDownloaded) > sizeTmpBuffer))
 		{
 			readBytes = read(SOCKET_D, tmpBuffer, sizeTmpBuffer);
 			if(errno == EWOULDBLOCK)
@@ -264,7 +264,7 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 
 	} while(!feof(fp) && (receivedBytes != 0));
 
-	printf("%s was completely downloaded\n\n");
+	printf("%s was completely downloaded\n\n", newFilename);
 
 }
 
