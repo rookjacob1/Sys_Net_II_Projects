@@ -150,8 +150,8 @@ void receiveResponse(char *response, int res_max)
 
 void processResponse(char *response)
 {
-	char *version = strtok(response, " ");
-	char *charStatusCode = strtok(NULL, " ");
+	char *charStatusCode = strtok(response, " ");
+	charStatusCode = strtok(NULL, " ");
 	int intStatusCode = atoi(charStatusCode);
 	char *phrase = strtok(NULL, "\r\n");
 	char *file;
