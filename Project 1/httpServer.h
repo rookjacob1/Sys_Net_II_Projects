@@ -60,11 +60,6 @@ void createResponse(char *message, char *response, int res_max);
 /*
  *
  */
-int validateMethod(char *method);
-
-/*
- *
- */
 void sendResponse(char *response);
 
 #endif /* HTTPSERVER_H_ */
