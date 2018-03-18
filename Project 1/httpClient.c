@@ -11,6 +11,8 @@
 
 int main (void)
 {
+	do
+	{
 	getAddressFile();
 
 	printf("\n\n\nClient Started\n\n");
@@ -19,6 +21,8 @@ int main (void)
 
 	transferData();
 
+
+	}while(1);
 
 	return 0;
 }
@@ -172,9 +176,10 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 		if(file == NULL)
 			error("Error. Response was corrupted");
 		file += 4;
-		if(bytesInBuffer == 0)
+
+		if(bytesInBuffer == 0)//Have all of the bytes
 			downloadSmallFile(file);
-		else if((bytesInBuffer > 0) && (bytesInBuffer < res_max))
+		else if((bytesInBuffer > 0) && (bytesInBuffer < res_max))//Still have bytes to download
 		{
 			sizeOfHeader = file - response;
 			downloadLargeFile(file, res_max - sizeOfHeader, bytesInBuffer - sizeOfHeader);
@@ -202,7 +207,7 @@ void downloadSmallFile(char *file)
 	if(fp == NULL)
 		error("Client can not download file");
 
-	printf("Downloading small file as %s", newFilename);
+	printf("Downloading small file as %s\n\n", newFilename);
 
 	while(fileSize > 0)
 	{
@@ -210,6 +215,9 @@ void downloadSmallFile(char *file)
 		fileSize -= i;
 		file += i;
 	}
+
+	printf("%s was completely downloaded\n\n", newFilename);
+
 
 	//Closing file
 	if(fclose(fp) == EOF)
@@ -221,7 +229,7 @@ void downloadSmallFile(char *file)
 
 void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 {
-	//Adjusting the time to download the large file
+	//Adjusting the timeout to give the large file time to download
 	struct timeval tv ={60,0};
 	setsockopt(SOCKET_D, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
 
