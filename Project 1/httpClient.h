@@ -54,7 +54,7 @@ void connectServer(void);
 void transferData(void);
 
 /*
- * @brief	createMessage		The createMessage function creates a HTTP/1.1 request based on the file specified by the
+ * @brief	createMessage		The createMessage() function creates a HTTP/1.1 request based on the file specified by the
  * user. The function uses the messageFormat and input, which is the name of the file, to create an HTTP/1.1 GET request.
  * The GET request is stored in a character array starting at the message pointer.
  *
@@ -69,22 +69,45 @@ void transferData(void);
 void createMessage(char *message, char *messageFormat, char *input, int messageSize);
 
 /*
+ *	@brief	sendMessage		The sendMessage() function sends the HTTP/1.1 GET request created by createMessage() to the
+ *	server.
  *
+ *	@parm	message			Pointer to the beginning of the HTTP/1.1 GET request
  */
 void sendMessage(char *message);
 
 /*
+ *	@brief	receiveResponse		The receiveResponse() function receives the response of the server. The function initially
+ *	assumes that the response will be short. However, if the response becomes greater than half of the size of the buffer,
+ *	the function assumes that response includes a large file that will need to be taken in chunks and it handle appropriately.
+ *	The function also calls the processResponse() function to handle the servers response.
  *
+ * @parm	response		Pointer to beginning of response buffer
+ *
+ * @parm	res_max			Size of response buffer
  */
 void receiveResponse(char *response, int res_max);
 
 /*
+ *	@brief	processResponse		The processResponse() function handles the response message sent by the server by printing
+ *	out the status line of the response message and downloading the file, if it is attached. processResponse() handles
+ *	small and large file by calling downloadSmallFile() and downloadLargeFile() respectively.
  *
+ * @parm	response		Pointer to beginning of response buffer
+ *
+ * @parm	res_max			Size of response buffer
+ *
+ * @parm	bytesInBuffer	This variable determines wither there is a large or small file. If the value is greater than 0
+ * there is a large file and the variable tells how many bytes are in the response buffer currently
  */
 void processResponse(char *response, int res_max, int bytesInBuffer);
 
 /*
+ * @brief	downloadSmallFile		The downloadSmallFile() function assumes that the whole file is in the response buffer
+ * and downloads the file into a file with the same name as the file which was requested with "Client_Copy_ to distinguish
+ * between the original files and the transfered files.
  *
+ * @parm	file					Pointer to the beginning of the file in the response buffer
  */
 void downloadSmallFile(char *file);
 

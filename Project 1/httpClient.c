@@ -169,6 +169,7 @@ void receiveResponse(char *response, int res_max)
 
 void processResponse(char *response, int res_max, int bytesInBuffer)
 {
+	//Making a copy to not change original
 	char *responseCopy = (char *)malloc(res_max*sizeof(char));
 	strcpy(responseCopy, response);
 
