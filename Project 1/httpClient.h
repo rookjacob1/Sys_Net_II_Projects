@@ -126,17 +126,42 @@ void downloadSmallFile(char *file);
 void downloadLargeFile(char *headBuffer, int bufferSize, int receievedBytes);
 
 /*
+ *	@brief	addBytes2Buffer		The addBytes2Buffer() function adds the bytes in the temporary buffer to the response
+ *	buffer.
  *
+ *	@parm	headBuffer			Pointer to the start of the response buffer
+ *
+ *	@parm	tailBuffer			Pointer to the end of the response buffer
+ *
+ *	@parm	curr				Pointer to the current position in the response buffer
+ *
+ *	@parm	readNotDownloaded	Pointer to the location where the number of bytes that have been read but not downloaded is stored
+ *
+ *	@parm	bytes				Pointer to the beginning of the temporary buffer to be added the the response buffer
+ *
+ *	@parm	sizeOfBytes			Number of bytes in the temporary buffer
  */
 void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded, char *bytes, int sizeOfBytes);
 
 /*
+ * @brief	writeBytes2File		The writeBytes2File() function writes the bytes in the response buffer to the file sent
+ * by the server
+ *
+ * @parm	fp					FILE pointer of the file writing the file to
+ *
+ * @parm	headBuffer			Pointer to the head of the response buffer used to download the file
+ *
+ * @parm	tailBuffer			Pointer to the end of the response buffer used to download the file
+ *
+ * @parm	curr				Pointer to the current position in the response buffer
+ *
+ * @parm	readNotDownloaded	Pointer to the location where the number of bytes that have been downloaded but not writen to the file
  *
  */
 void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded);
 
 /*
- *
+ * @brief	displayFile			The displayFile() function displays the downloaded file in the browser sensed by the OS.
  */
 void displayFile(void);
 
