@@ -294,7 +294,30 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 
 void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotDownloaded, char *bytes, int sizeOfBytes)
 {
-	int dist2Tail = tailBuffer - curr;
+	char *tailByte = curr + *readNotDownloaded;			//Last byte to start adding to
+	if(tailBuffer - tailByte < 0)
+	{
+		tailByte = headBuffer + (tailByte - tailBuffer);
+	}
+
+	int dist2Tail = tailBuffer - tailByte;			//How many bytes are in between tailBuffer and tailByte
+
+
+	if(dist2Tail >= sizeOfBytes)
+	{
+		if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
+			error("Error. Error with reading bytes into buffer");
+		*readNotDownloaded += sizeOfBytes;
+	}
+	else
+	{
+
+		if(strncpy(tailByte, bytes, sizeOfBytes - dist2Tail) == NULL)
+					error("Error. Error with reading bytes into buffer");
+		if(strncpy(tailByte, bytes + (sizeOfBytes - dist2Tail), dist2Tail) == NULL)
+					error("Error. Error with reading bytes into buffer");
+		*readNotDownloaded += sizeOfBytes;
+	}	int dist2Tail = tailBuffer - curr;
 	char *tailByte;
 
 	if(dist2Tail >= *readNotDownloaded)
