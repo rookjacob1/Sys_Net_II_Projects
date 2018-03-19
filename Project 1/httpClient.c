@@ -355,8 +355,8 @@ void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, i
 
 void displayFile(void)
 {
-	pid_t pid = fork();
 	sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
+	pid_t pid = fork();
 	if(!pid)
 	{
 		execlp("sensible-browser", "sensible-browser", FILE_NAME, NULL);
