@@ -25,7 +25,6 @@
 
 int main (void)
 {
-	char opt;
 	getAddressFile();
 
 	printf("\n\n\nClient Started\n\n");
