@@ -104,15 +104,24 @@ void processResponse(char *response, int res_max, int bytesInBuffer);
 
 /*
  * @brief	downloadSmallFile		The downloadSmallFile() function assumes that the whole file is in the response buffer
- * and downloads the file into a file with the same name as the file which was requested with "Client_Copy_ to distinguish
- * between the original files and the transfered files.
+ * and downloads the file into a file with the same name as the file which was requested with "Client_Copy_" attached to
+ * the beginning to distinguish between the original files and the transfered files.
  *
  * @parm	file					Pointer to the beginning of the file in the response buffer
  */
 void downloadSmallFile(char *file);
 
 /*
+ * @brief	downloadLargeFile		The downloadLargeFile() function assumes that the file to be downloaded is going to be
+ * larger than the response buffer, so the function reads from the server and writes to the file simultaneously. Similar to
+ * downloadSmallFile(), the function downloads the file into a file with the same name as the file request with "Client_Copy_"
+ * attached to the beginning of the file name to distinguish between the original files and the transfered files.
  *
+ * @parm	headBuffer				Pointer to the beginning of the buffer used to receive the file
+ *
+ * @parm	bufferSize				Size of the buffer used to receive the file
+ *
+ * @parm	receivedBytes			Number of bytes of already received from the server
  */
 void downloadLargeFile(char *headBuffer, int bufferSize, int receievedBytes);
 
