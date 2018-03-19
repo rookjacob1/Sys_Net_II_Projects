@@ -114,9 +114,9 @@ void receiveMessage(char *message, int mes_max)
 
 void createResponse(char *message, char *response, int res_max)
 {
-	memset(response, 0 , res_max);
-	char *method = strtok(message, " ");
-
+	memset(response, 0 , res_max);				//Initializing response to 0
+	char *method = strtok(message, " ");		//First token should be method in HTTP/1.1 protocol
+	//Determining method
 	if(!strcmp(method, "GET"))
 	{
 		printf("Server detected GET Method\n\n");
@@ -156,7 +156,7 @@ void GET_Header_Lines(char *message, char *response, int res_max)
 void GET_AttachFile(char *URL, char *response, int res_max)
 {
 	FILE *fp = fopen(URL, "rb");
-	if(fp == NULL)
+	if(fp == NULL) //If fp is NULL the file was not found
 	{
 		perror("Server does not have file");
 		printf("\n\n");
@@ -198,11 +198,11 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 	do
 	{
 		if(!feof(fp) && ((res_max - *readNotSent) > sizeTmpBuffer))
-		{
+		{//If not at the end of file and the avaiable space left in the buffer is greater than the temporary buffer size
 			fileBytes = fread(tmpBuffer, 1, sizeTmpBuffer, fp);
 			addBytes2Buffer(headBuffer, tailBuffer, curr, readNotSent, tmpBuffer, fileBytes);
 		}
-
+		//Sending bytes to the client
 		sendBytes2Client(headBuffer, tailBuffer, curr, readNotSent);
 
 
@@ -214,7 +214,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 
 void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent, char *bytes, int sizeOfBytes)
 {
-	int dist2Tail = tailBuffer - curr;
+	int dist2Tail = tailBuffer - curr;			//Distance from
 		char *tailByte;
 
 		if(dist2Tail >= *readNotSent)
