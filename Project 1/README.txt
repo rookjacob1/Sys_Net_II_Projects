@@ -12,3 +12,26 @@
  *
  * Currently, the only HTTP/1.1 method supported by this server is the GET method. The server sends proper HTTP/1.1
  * status lines, however, the sending of the file requested currently does not work properly.
+
+
+ * @file httpClient.c		This file contains all of the function definitions for the functions used the the httpClient
+ * program. Description on how the function works can be found in this file. Description of what the individual functions
+ * do can be found in the httpClient.h file.
+ * 
+ * The httpClient program is suppose to act as an HTTP/1.1 client that sends HTTP/1.1 GET requests to the server using TCP.
+ * The httpClient program will ask the user for the IP address of the server and the file that the user wants from that 
+ * server. Then the httpClient program will attempt to find and connect to that IP address. If connected, an HTTP/1.1
+ * GET request will be produced and sent to the server. The response will be received by the httpClient program, interpreted,
+ * and handled. If the file was successfully transfered to the client, the file will be downloaded with the same name but
+ * with "Client_Copy_ to differentiate between the original files and transfered files. Once the file is downloaded, the
+ * httpClient will open the file in the default browser for the user to see. 
+ * 
+ * NOTE: Currently the file transfer is not complete. Large file do not get downloaded properly and can not be opened 
+ * successfully by the httpClient program. However, the httpClient can open some small files like text files because
+ * they are downloaded correctly. 
+
+
+
+
+
+
