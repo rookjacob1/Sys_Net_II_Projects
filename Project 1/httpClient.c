@@ -52,6 +52,7 @@ void getAddressFile(void)
 	printf("\nPlease enter the server IP address in dotted decimal form:\n");
 	fgets(SERVER_NAME, sizeof(SERVER_NAME) - 1 , stdin);
 	SERVER_NAME[strlen(SERVER_NAME) - 1] = '\0';
+
 	printf("\nPlease enter the file, with file extension, to be requested from server\n");
 	fgets(FILE_NAME, sizeof(FILE_NAME) - 1, stdin);
 	FILE_NAME[strlen(FILE_NAME) - 1] = '\0';
@@ -70,7 +71,6 @@ void connectServer(void)
 
 	if(connect(SOCKET_D, (struct sockaddr *)&SERVER_ADDR, sizeof(SERVER_ADDR)) < 0)
 		error("Error. Connection Failed");
-
 
 }
 
