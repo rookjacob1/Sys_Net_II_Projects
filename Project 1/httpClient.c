@@ -253,7 +253,7 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 
 	do
 	{
-		if(!feof(fp) && ((bufferSize - *readNotDownloaded) > sizeTmpBuffer))
+		if(((bufferSize - *readNotDownloaded) > sizeTmpBuffer))
 		{
 			readBytes = read(SOCKET_D, tmpBuffer, sizeTmpBuffer);
 			if(errno == EWOULDBLOCK)
@@ -263,8 +263,8 @@ void downloadLargeFile(char *headBuffer, int bufferSize, int receivedBytes)
 			}
 			if(readBytes < 0)
 				error("Error. Error receiving message from client");
-
-			addBytes2Buffer(headBuffer, tailBuffer, curr, readNotDownloaded, tmpBuffer, readBytes);
+			if(readBytes != 0)
+				addBytes2Buffer(headBuffer, tailBuffer, curr, readNotDownloaded, tmpBuffer, readBytes);
 		}
 
 		writeBytes2File(fp, headBuffer, tailBuffer, curr, readNotDownloaded);
@@ -320,7 +320,7 @@ void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, i
 void displayFile(void)
 {
 	pid_t pid = fork();
-
+	//sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
 	if(!pid)
 	{
 		//sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
@@ -328,6 +328,7 @@ void displayFile(void)
 	}
 	else
 	{
+		printf("Displaying %s\n\n", FILE_NAME);
 		waitpid(pid, NULL,0);
 	}
 }
