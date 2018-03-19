@@ -355,16 +355,16 @@ void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, i
 
 void displayFile(void)
 {
-	printf("%s",FILE_NAME);
-	sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
+	char newFileName[140];
+	sprintf(newFileName, "Client_Copy_%s", FILE_NAME);
 	pid_t pid = fork();
 	if(!pid)
 	{
-		execlp("sensible-browser", "sensible-browser", FILE_NAME, NULL);
+		execlp("sensible-browser", "sensible-browser", newFileName, NULL);
 	}
 	else
 	{
-		printf("Displaying %s\n\n", FILE_NAME);
+		printf("Displaying %s\n\n", newFileName);
 		waitpid(pid, NULL,0);
 	}
 }
