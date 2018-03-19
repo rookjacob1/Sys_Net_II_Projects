@@ -30,16 +30,16 @@ void createSocket(void)
 {
 	memset(&SERVER_ADDR, 0, sizeof(SERVER_ADDR));
 	SERVER_ADDR.sin_family = AF_INET;
-	SERVER_ADDR.sin_addr.s_addr = htonl(INADDR_ANY);
-	SERVER_ADDR.sin_port = htons(SERV_PORT);
+	SERVER_ADDR.sin_addr.s_addr = htonl(INADDR_ANY);		//Default IP address
+	SERVER_ADDR.sin_port = htons(SERV_PORT);				//Default port
 
-	LISTEN_SOCKET_D = socket(PF_INET, SOCK_STREAM, 0);
+	LISTEN_SOCKET_D = socket(PF_INET, SOCK_STREAM, 0);		//Create listen socket
 	if (LISTEN_SOCKET_D < 0)
 		error("Error: Listen socket failed.");
-
+	//Bind listen socket to the local socket address
 	if( bind(LISTEN_SOCKET_D, (struct sockaddr *)&SERVER_ADDR, sizeof(struct sockaddr_in)) < 0)
 		error("Error: Binding failed.");
-
+	//Listen to connection requests
 	if( listen(LISTEN_SOCKET_D, WAIT_SIZE) < 0 )
 		error("Error: Listening failed");
 
@@ -47,7 +47,7 @@ void createSocket(void)
 
 void startServer(void)
 {
-	char message[MES_MAX], response[RES_MAX];
+	char message[MES_MAX], response[RES_MAX];		//Variables to hold message and responses
 
 	char clientName[32];
 	printf("\n\nServer ready.\n");
@@ -60,21 +60,21 @@ void startServer(void)
 		SOCKET_D = accept(LISTEN_SOCKET_D, (struct sockaddr *)&CLIENT_ADDR, &CLNT_ADDR_LEN);
 		if (SOCKET_D < 0)
 			error("Error: Accepting failed.");
-
+		//Printing the clients address to console
 		strcpy(clientName, inet_ntoa(CLIENT_ADDR.sin_addr));
 		printf("Connected to %s\n", clientName);
-
+		//Receive message sent by client
 		receiveMessage(message, MES_MAX);
-
+		//Create response
 		createResponse(message, response, RES_MAX);
 
-		if(!SKIP_SEND)
+		if(!SKIP_SEND)		//Some functions send the response automatically. If SKIP_SEND is set, the response has been sent
 		{
 			sendResponse(response);
 		}
 
 		printf("Server closing connection with client\n\n");
-
+		//Close the socket
 		close(SOCKET_D);
 
 	}
@@ -82,16 +82,16 @@ void startServer(void)
 
 void receiveMessage(char *message, int mes_max)
 {
-	int total = mes_max - 1;
-	int received = 0;
-	int bytes;
+	int total = mes_max - 1;		//Total amount of bytes capable to receive
+	int received = 0;				//Count of how mant bytes received
+	int bytes;						//Variable to store how many bytes were received in one call
 	memset(message, 0, mes_max);
-
+	//Setting max time to wait for a subsequent packet to 5 seconds
 	struct timeval tv ={5,0};
 	setsockopt(SOCKET_D, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
 
 	printf("Server waiting for message from client\n\n");
-
+	//Receiving bytes from client
 	do
 	{
 		bytes = read(SOCKET_D, message + received, total - received);
