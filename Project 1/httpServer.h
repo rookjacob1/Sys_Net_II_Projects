@@ -1,7 +1,7 @@
 /*
  * @file httpServer.h		This file contains all of the function prototypes and function descriptions for the functions
  * used in the httpServer.c file. All information about specific functions will be found in this file above the individual
- * functions. Description of what the httpServer program does can be found in the header of the httpClient.c file.
+ * functions. Description of what the httpServer program does can be found in the header of the httpServer.c file.
  *
  * @author Jacob Rook
  * @date 03/09/2018
@@ -29,7 +29,7 @@
 
 
 int LISTEN_SOCKET_D;							//Listen socket descriptor
-int SOCKET_D;									//Client socket descriptor
+int SOCKET_D;									//Socket descriptor
 
 char SERVER_NAME[32];							//Name of server in dotted decimal form: "255.255.255.255"
 struct sockaddr_in SERVER_ADDR;					//Server address
