@@ -33,8 +33,6 @@ int main (void)
 
 	transferData();
 
-	displayFile();
-
 
 	return 0;
 }
@@ -193,11 +191,16 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 		file += 4;
 
 		if(bytesInBuffer == 0)//Have all of the bytes
+		{
+			downloadSmallFile(file);
+			displayFile();
+		}
 			downloadSmallFile(file);
 		else if((bytesInBuffer > 0) && (bytesInBuffer < res_max))//Still have bytes to download
 		{
 			sizeOfHeader = file - response;
 			downloadLargeFile(file, res_max - sizeOfHeader, bytesInBuffer - sizeOfHeader);
+			displayFile();
 		}
 		else
 			error("Error. Incorrect arguments passed to processResponse");
