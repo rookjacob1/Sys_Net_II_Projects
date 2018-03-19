@@ -188,7 +188,8 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 	int fileBytes;
 
 	char *headBuffer = response, *tailBuffer = response + res_max;
-	char *curr = response;
+	char *firstByte = response;			//First byte to send
+	char *lastByte = response;			//Last byte to read into
 
 	int sizeTmpBuffer = res_max / 4;
 	char *tmpBuffer = (char *)malloc(sizeTmpBuffer);
@@ -200,10 +201,10 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 		if(!feof(fp) && ((res_max - *readNotSent) > sizeTmpBuffer))
 		{//If not at the end of file and the avaiable space left in the buffer is greater than the temporary buffer size
 			fileBytes = fread(tmpBuffer, 1, sizeTmpBuffer, fp);
-			addBytes2Buffer(headBuffer, tailBuffer, curr, readNotSent, tmpBuffer, fileBytes);
+			addBytes2Buffer(headBuffer, tailBuffer, lastByte, readNotSent, tmpBuffer, fileBytes);
 		}
 		//Sending bytes to the client
-		sendBytes2Client(headBuffer, tailBuffer, curr, readNotSent);
+		sendBytes2Client(headBuffer, tailBuffer, firstByte, readNotSent);
 
 
 	}while((readNotSent != 0)  && !feof(fp));
@@ -212,9 +213,9 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 
 }
 
-void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent, char *bytes, int sizeOfBytes)
+void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *lastByte, int *readNotSent, char *bytes, int sizeOfBytes)
 {
-	int dist2Tail = tailBuffer - curr;			//Distance from
+	int dist2Tail = tailBuffer - lastByte;			//Distance from
 		char *tailByte;
 
 		if(dist2Tail >= *readNotSent)

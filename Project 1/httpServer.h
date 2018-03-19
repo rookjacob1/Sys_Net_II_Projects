@@ -146,7 +146,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max);
  *
  *	@parm	tailBuffer			Pointer to the end of the response buffer
  *
- *	@parm	curr				Pointer to the current position in the response buffer
+ *	@parm	lastByte			Pointer to the position to start adding bytes
  *
  *	@parm	readNotSent			Pointer to the location where the number of bytes that have been read but not sent is stored
  *
@@ -154,7 +154,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max);
  *
  *	@parm	sizeOfBytes			Number of bytes in the temporary buffer
  */
-void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent, char *bytes, int sizeOfBytes);
+void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *lastByte, int *readNotSent, char *bytes, int sizeOfBytes);
 
 /*
  *	@breif	sendBytes2Client	The sendBytes2Client() function sends the bytes in the response buffer to the client.
