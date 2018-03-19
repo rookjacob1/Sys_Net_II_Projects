@@ -214,7 +214,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 
 void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent, char *bytes, int sizeOfBytes)
 {
-	char *tailByte = curr + readNotSent;			//Last byte to start adding to
+	char *tailByte = curr + *readNotSent;			//Last byte to start adding to
 	if(tailBuffer - tailByte < 0)
 	{
 		tailByte = headBuffer + (tailByte - tailBuffer);
