@@ -183,33 +183,74 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 
 void GET_SendFile(FILE *fp, char *response, int res_max)
 {
-	int readNotSent = 0;
+	int *readNotSent = (int *)malloc(sizeof(int));
+	*readNotSent = 0;
 	int responseLimit = res_max;
-	int responseBytes, fileBytes;
+	int fileBytes;
+
+	char *headBuffer = response, *tailBuffer = response + res_max;
+	char *curr = response;
+
+	int sizeTmpBuffer = res_max / 4;
+	char *tmpBuffer = (char *)malloc(sizeTmpBuffer);
 
 	printf("Server sending file to client..\n\n");
 
 	do
 	{
-		if(!feof(fp))
+		if(!feof(fp) && ((res_max - readNotSent) > sizeTmpBuffer))
 		{
-			fileBytes = fread(response + readNotSent, 1, responseLimit, fp);
-			readNotSent += fileBytes;
-			responseLimit -= fileBytes;
+			fileBytes = fread(tmpBuffer, 1, sizeTmpBuffer, fp);
+			addBytes2Buffer(headBuffer, tailBuffer, curr, readNotSent, tmpBuffer, fileBytes);
 		}
 
-		responseBytes = write(SOCKET_D, response, responseLimit);
-		response += responseBytes;
-		readNotSent -= responseBytes;
-		responseLimit += responseBytes;
-
-		if(responseBytes < 0)
-			error("Error. Error sending file");
+		sendBytes2Client(headBuffer, tailBuffer, curr, readNotSent);
 
 
 	}while((readNotSent != 0)  && !feof(fp));
 
 	printf("Server sent file to client\n\n");
+
+}
+
+void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent, char *bytes, int sizeOfBytes)
+{
+	int dist2Tail = tailBuffer - curr;
+		char *tailByte;
+
+		if(dist2Tail >= *readNotSent)
+		{
+			tailByte = curr + *readNotSent;
+			if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
+				error("Error. Error with reading bytes into buffer");
+			*readNotSent += sizeOfBytes;
+		}
+		else
+		{
+			tailByte = headBuffer + (*readNotSent - dist2Tail);
+			if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
+						error("Error. Error with reading bytes into buffer");
+			*readNotSent += sizeOfBytes;
+		}
+}
+
+void sendBytes2Client(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent)
+{
+	int dist2Tail = tailBuffer - curr;
+	int sentBytes;
+	int sendLimit = *readNotSent;
+	if(*readNotSent > dist2Tail)
+		sendLimit = dist2Tail;
+
+	sentBytes = write(SOCKET_D, curr, sendLimit);
+	if(sentBytes < 0)
+		error("Error. Error sending file");
+	*readNotSent -= sentBytes;
+
+	if(sentBytes == dist2Tail)
+		curr = headBuffer;
+	else
+		curr = curr + sentBytes;
 
 }
 

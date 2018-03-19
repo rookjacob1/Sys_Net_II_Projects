@@ -85,6 +85,16 @@ void GET_SendFile(FILE *fp, char *response, int res_max);
 /*
  *
  */
+void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent, char *bytes, int sizeOfBytes);
+
+/*
+ *
+ */
+void sendBytes2Client(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent);
+
+/*
+ *
+ */
 void sendResponse(char *response);
 
 #endif /* HTTPSERVER_H_ */
