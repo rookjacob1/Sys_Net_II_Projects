@@ -185,7 +185,6 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 {
 	int *readNotSent = (int *)malloc(sizeof(int));
 	*readNotSent = 0;
-	int responseLimit = res_max;
 	int fileBytes;
 
 	char *headBuffer = response, *tailBuffer = response + res_max;
@@ -198,7 +197,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 
 	do
 	{
-		if(!feof(fp) && ((res_max - readNotSent) > sizeTmpBuffer))
+		if(!feof(fp) && ((res_max - *readNotSent) > sizeTmpBuffer))
 		{
 			fileBytes = fread(tmpBuffer, 1, sizeTmpBuffer, fp);
 			addBytes2Buffer(headBuffer, tailBuffer, curr, readNotSent, tmpBuffer, fileBytes);
