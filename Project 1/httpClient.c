@@ -195,7 +195,6 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 			downloadSmallFile(file);
 			displayFile();
 		}
-			downloadSmallFile(file);
 		else if((bytesInBuffer > 0) && (bytesInBuffer < res_max))//Still have bytes to download
 		{
 			sizeOfHeader = file - response;
