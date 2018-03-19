@@ -317,22 +317,6 @@ void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNo
 		if(strncpy(tailByte, bytes + (sizeOfBytes - dist2Tail), dist2Tail) == NULL)
 					error("Error. Error with reading bytes into buffer");
 		*readNotDownloaded += sizeOfBytes;
-	}	int dist2Tail = tailBuffer - curr;
-	char *tailByte;
-
-	if(dist2Tail >= *readNotDownloaded)
-	{
-		tailByte = curr + *readNotDownloaded;
-		if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
-			error("Error. Error with reading bytes into buffer");
-		*readNotDownloaded += sizeOfBytes;
-	}
-	else
-	{
-		tailByte = headBuffer + (*readNotDownloaded - dist2Tail);
-		if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
-					error("Error. Error with reading bytes into buffer");
-		*readNotDownloaded += sizeOfBytes;
 	}
 }
 
