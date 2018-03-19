@@ -44,7 +44,7 @@ int main (void)
 	if(opt == 'Y' || opt == 'y')
 	{
 		printf("\nPlease enter the file, with file extension, to be requested from server\n");
-		fgets(FILE_NAME, sizeof(FILE_NAME) - 1, stdin);
+		gets(FILE_NAME);
 		FILE_NAME[strlen(FILE_NAME) - 1] = '\0';
 	}
 
