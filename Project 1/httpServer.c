@@ -188,8 +188,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 	int fileBytes;
 
 	char *headBuffer = response, *tailBuffer = response + res_max;
-	char *firstByte = response;			//First byte to send
-	char *lastByte = response;			//Last byte to read into
+	char *curr = response;
 
 	int sizeTmpBuffer = res_max / 4;
 	char *tmpBuffer = (char *)malloc(sizeTmpBuffer);
@@ -201,10 +200,10 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 		if(!feof(fp) && ((res_max - *readNotSent) > sizeTmpBuffer))
 		{//If not at the end of file and the avaiable space left in the buffer is greater than the temporary buffer size
 			fileBytes = fread(tmpBuffer, 1, sizeTmpBuffer, fp);
-			addBytes2Buffer(headBuffer, tailBuffer, lastByte, readNotSent, tmpBuffer, fileBytes);
+			addBytes2Buffer(headBuffer, tailBuffer, curr, readNotSent, tmpBuffer, fileBytes);
 		}
 		//Sending bytes to the client
-		sendBytes2Client(headBuffer, tailBuffer, firstByte, readNotSent);
+		sendBytes2Client(headBuffer, tailBuffer, curr, readNotSent);
 
 
 	}while((readNotSent != 0)  && !feof(fp));
@@ -213,25 +212,32 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 
 }
 
-void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *lastByte, int *readNotSent, char *bytes, int sizeOfBytes)
+void addBytes2Buffer(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent, char *bytes, int sizeOfBytes)
 {
-	int dist2Tail = tailBuffer - lastByte;			//Distance from
-		char *tailByte;
+	char *tailByte = curr + readNotSent;			//Last byte to start adding to
+	if(tailBuffer - tailByte < 0)
+	{
+		tailByte = headBuffer + (tailByte - tailBuffer);
+	}
 
-		if(dist2Tail >= *readNotSent)
-		{
-			tailByte = curr + *readNotSent;
-			if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
-				error("Error. Error with reading bytes into buffer");
-			*readNotSent += sizeOfBytes;
-		}
-		else
-		{
-			tailByte = headBuffer + (*readNotSent - dist2Tail);
-			if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
-						error("Error. Error with reading bytes into buffer");
-			*readNotSent += sizeOfBytes;
-		}
+	int dist2Tail = tailBuffer - tailByte;			//How many bytes are in between tailBuffer and tailByte
+
+
+	if(dist2Tail >= sizeOfBytes)
+	{
+		if(strncpy(tailByte, bytes, sizeOfBytes) == NULL)
+			error("Error. Error with reading bytes into buffer");
+		*readNotSent += sizeOfBytes;
+	}
+	else
+	{
+
+		if(strncpy(tailByte, bytes, sizeOfBytes - dist2Tail) == NULL)
+					error("Error. Error with reading bytes into buffer");
+		if(strncpy(tailByte, bytes + (sizeOfBytes - dist2Tail), dist2Tail) == NULL)
+					error("Error. Error with reading bytes into buffer");
+		*readNotSent += sizeOfBytes;
+	}
 }
 
 void sendBytes2Client(char *headBuffer, char *tailBuffer, char *curr, int *readNotSent)
