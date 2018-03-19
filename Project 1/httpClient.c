@@ -355,6 +355,7 @@ void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, i
 
 void displayFile(void)
 {
+	printf("%s",FILE_NAME);
 	sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
 	pid_t pid = fork();
 	if(!pid)
