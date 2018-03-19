@@ -320,10 +320,9 @@ void writeBytes2File(FILE *fp, char *headBuffer, char *tailBuffer, char *curr, i
 void displayFile(void)
 {
 	pid_t pid = fork();
-	//sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
+	sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
 	if(!pid)
 	{
-		//sprintf(FILE_NAME, "Client_Copy_%s", FILE_NAME);
 		execlp("sensible-browser", "sensible-browser", FILE_NAME, NULL);
 	}
 	else
