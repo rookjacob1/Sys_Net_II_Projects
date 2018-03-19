@@ -28,8 +28,6 @@ int main (void)
 	char opt;
 	getAddressFile();
 
-	do
-	{
 	printf("\n\n\nClient Started\n\n");
 
 	connectServer();
@@ -37,18 +35,6 @@ int main (void)
 	transferData();
 
 	displayFile();
-
-	printf("Would you like to request another file? (y/n): ");
-	scanf("\n%c", &opt);
-
-	if(opt == 'Y' || opt == 'y')
-	{
-		printf("\nPlease enter the file, with file extension, to be requested from server\n");
-		gets(FILE_NAME);
-		FILE_NAME[strlen(FILE_NAME) - 1] = '\0';
-	}
-
-	} while(opt == 'Y' || opt == 'y');
 
 
 	return 0;
