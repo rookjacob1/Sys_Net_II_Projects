@@ -136,7 +136,7 @@ void GET_AttachFile(char *URL, char *response, int res_max);
  *
  * @parm	res_max			Size of response buffer
  */
-void GET_SendFile(FILE *fp, char *response, int res_max);
+void GET_SendFile(int fd, char *response, int res_max);
 
 /*
  *	@brief	addBytes2Buffer		The addBytes2Buffer() function adds the bytes in the temporary buffer to the response

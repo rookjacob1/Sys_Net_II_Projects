@@ -163,8 +163,8 @@ void GET_Header_Lines(char *message, char *response, int res_max)
 
 void GET_AttachFile(char *URL, char *response, int res_max)
 {
-	FILE *fp = fopen(URL, "rb");
-	if(fp == NULL) //If fp is NULL the file was not found
+	int fd = open(URL, O_RDONLY);
+	if(fd == -1) //If fp is NULL the file was not found
 	{
 		perror("Server does not have file");
 		printf("\n\n");
@@ -176,7 +176,7 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 	sendResponse(response);
 
 	//Sending File
-	GET_SendFile(fp,response,res_max);
+	GET_SendFile(fd,response,res_max);
 
 	SKIP_SEND = 1;
 
@@ -189,19 +189,19 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 
 }
 
-void GET_SendFile(FILE *fp, char *response, int res_max)
+void GET_SendFile(int fd, char *response, int res_max)
 {
 	int offset = 0;
 	int remainData;
 	int sentBytes;
 	struct stat fileStat;
 
-	if(fstat(fp, &fileStat) < 0)
+	if(fstat(fd, &fileStat) < 0)
 		error("Error. Error with fstat");
 
 	remainData = fileStat.st_size;
 
-	while(((sentBytes = sendfile(SOCKET_D, fp, &offset,BUFSIZ)) > 0) && (remainData > 0))
+	while(((sentBytes = sendfile(SOCKET_D, fd, &offset,BUFSIZ)) > 0) && (remainData > 0))
 	{
 		remainData -= sentBytes;
 	}
