@@ -200,6 +200,7 @@ void GET_SendFile(int fd, char *response, int res_max)
 		error("Error. Error with fstat");
 
 	remainData = fileStat.st_size;
+	printf("%d\n\n", remainData);
 
 	while(((sentBytes = sendfile(SOCKET_D, fd,(off_t *) &offset,BUFSIZ)) > 0) && (remainData > 0))
 	{
