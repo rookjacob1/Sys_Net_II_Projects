@@ -191,6 +191,22 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 
 void GET_SendFile(FILE *fp, char *response, int res_max)
 {
+	int offset = 0;
+	int remainData;
+	int sentBytes;
+	struct stat fileStat;
+
+	if(fstat(fp, &fileStat) < 0)
+		error("Error. Error with fstat");
+
+	remainData = fileStat.st_size;
+
+	while(((sentBytes = sendfile(SOCKET_D, fp, &offset,BUFSIZ)) > 0) && (remainData > 0))
+	{
+		remainData -= sentBytes;
+	}
+
+	/*
 	int *readNotSent = (int *)malloc(sizeof(int));
 	*readNotSent = 0;
 	int fileBytes;
@@ -216,7 +232,7 @@ void GET_SendFile(FILE *fp, char *response, int res_max)
 
 	}while((readNotSent != 0)  && !feof(fp));
 
-	printf("Server sent file to client\n\n");
+	printf("Server sent file to client\n\n");*/
 
 }
 
