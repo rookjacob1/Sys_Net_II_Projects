@@ -25,30 +25,13 @@
 
 int main (void)
 {
-	char opt;
 	getAddressFile();
 
-	do
-	{
 	printf("\n\n\nClient Started\n\n");
 
 	connectServer();
 
 	transferData();
-
-	displayFile();
-
-	printf("Would you like to request another file? (y/n): ");
-	scanf("\n%c", &opt);
-
-	if(opt == 'Y' || opt == 'y')
-	{
-		printf("\nPlease enter the file, with file extension, to be requested from server\n");
-		gets(FILE_NAME);
-		FILE_NAME[strlen(FILE_NAME) - 1] = '\0';
-	}
-
-	} while(opt == 'Y' || opt == 'y');
 
 
 	return 0;
@@ -208,11 +191,15 @@ void processResponse(char *response, int res_max, int bytesInBuffer)
 		file += 4;
 
 		if(bytesInBuffer == 0)//Have all of the bytes
+		{
 			downloadSmallFile(file);
+			displayFile();
+		}
 		else if((bytesInBuffer > 0) && (bytesInBuffer < res_max))//Still have bytes to download
 		{
 			sizeOfHeader = file - response;
 			downloadLargeFile(file, res_max - sizeOfHeader, bytesInBuffer - sizeOfHeader);
+			displayFile();
 		}
 		else
 			error("Error. Incorrect arguments passed to processResponse");
