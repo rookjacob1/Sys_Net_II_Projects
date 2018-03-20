@@ -204,7 +204,7 @@ void GET_SendFile(int fd, char *response, int res_max)
 
 	while( (remainData > 0))
 	{
-		sentBytes = sendfile(SOCKET_D, fd,(off_t *) &offset,BUFSIZ);
+		sentBytes = sendfile(SOCKET_D, fd,NULL,BUFSIZ);
 		if(sentBytes < 0)
 			error("Error sending file\n\n");
 		printf("Sending %d Bytes\n\n",sentBytes);
