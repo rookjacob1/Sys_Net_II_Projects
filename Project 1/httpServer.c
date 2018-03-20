@@ -201,7 +201,7 @@ void GET_SendFile(int fd, char *response, int res_max)
 
 	remainData = fileStat.st_size;
 
-	while(((sentBytes = sendfile(SOCKET_D, fd, &offset,BUFSIZ)) > 0) && (remainData > 0))
+	while(((sentBytes = sendfile(SOCKET_D, fd,(off_t *) &offset,BUFSIZ)) > 0) && (remainData > 0))
 	{
 		remainData -= sentBytes;
 	}
