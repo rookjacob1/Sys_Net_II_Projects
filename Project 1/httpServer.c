@@ -181,7 +181,7 @@ void GET_AttachFile(char *URL, char *response, int res_max)
 	SKIP_SEND = 1;
 
 	//Closing file
-	if(fclose(fp) == EOF)
+	if(close(fd) < 0)
 	{
 		perror("Error. Error closing file\n\n");
 		printf("\n\n");
