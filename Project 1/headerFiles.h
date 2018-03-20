@@ -24,5 +24,7 @@
 #include<sys/wait.h>
 #include<pthread.h>
 #include<time.h>
+#include<sys/sendfile.h>
+#include<sys/stat.h>
 
 #endif /* HEADERFILES_H_ */
