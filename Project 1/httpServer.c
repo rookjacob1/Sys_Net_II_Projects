@@ -203,6 +203,7 @@ void GET_SendFile(int fd, char *response, int res_max)
 
 	while(((sentBytes = sendfile(SOCKET_D, fd,(off_t *) &offset,BUFSIZ)) > 0) && (remainData > 0))
 	{
+		printf("Sending %d Bytes\n\n",sentBytes);
 		remainData -= sentBytes;
 	}
 
