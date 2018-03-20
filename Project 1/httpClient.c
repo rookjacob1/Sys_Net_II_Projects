@@ -128,11 +128,35 @@ void receiveResponse(char *response, int res_max)
 	int bytes;
 	memset(response, 0, res_max);
 
+	char *beginFile = NULL;
+
 	struct timeval tv ={10,0};
 	setsockopt(SOCKET_D, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
 
 	printf("Client waiting for response from server\n\n");
 
+	do
+	{
+		bytes = read(SOCKET_D, response + received, total - received);
+		if(errno == EWOULDBLOCK)
+		{
+			printf("Timeout occurred, assumed end of response\n\n");
+			break;
+		}
+		if(bytes < 0)
+			error("Error. Error receiving response from server");
+		if(bytes == 0)
+			break;
+
+		received += bytes;
+
+		beginFile = strstr(response, "\r\n\r\n");
+
+	}while(beginFile == NULL);
+
+	beginFile += 4;
+
+	/*
 	do
 	{
 		bytes = read(SOCKET_D, response + received, total - received);
@@ -156,7 +180,7 @@ void receiveResponse(char *response, int res_max)
 		}
 
 	} while( received < total);
-
+*/
 
 	printf("Client received:\n%s\nfrom server\n\n", response);
 
