@@ -109,7 +109,7 @@ void processResponse(char *response, int res_max, int bytesInBuffer, char *begin
  *
  * @parm	file					Pointer to the beginning of the file in the response buffer
  */
-void downloadFile(char *file);
+void downloadFile(char *response, int res_max, int bytesInBuffer, char *beginFile);
 
 /*
  * @brief	downloadLargeFile		The downloadLargeFile() function assumes that the file to be downloaded is going to be
