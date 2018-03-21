@@ -271,7 +271,7 @@ void downloadFile(char *response, int res_max, int bytesInBuffer, char *beginFil
 		bytesInBuffer += readBytes;
 		receivedFileBytes += readBytes;
 
-		printf("Read %s bytes\n", readBytes);
+		printf("Read %d bytes\n", readBytes);
 
 		if(readFilePtr == endBuffer)
 			readFilePtr = response;
