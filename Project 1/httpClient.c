@@ -213,7 +213,7 @@ void processResponse(char *response, int res_max, int bytesInBuffer, char *begin
 		//Finding the beginning of the file
 
 		downloadFile(response, res_max, bytesInBuffer, beginFile);
-
+		displayFile();
 	}
 	else
 	{
