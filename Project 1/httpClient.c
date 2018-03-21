@@ -156,6 +156,8 @@ void receiveResponse(char *response, int res_max)
 
 	beginFile += 4;
 
+	processResponse(response, res_max, received, beginFile);
+
 	/*
 	do
 	{
@@ -182,77 +184,118 @@ void receiveResponse(char *response, int res_max)
 	} while( received < total);
 */
 
-	printf("Client received:\n%s\nfrom server\n\n", response);
+	//printf("Client received:\n%s\nfrom server\n\n", response);
 
-	processResponse(response, res_max, 0);
 
 }
 
-void processResponse(char *response, int res_max, int bytesInBuffer)
+void processResponse(char *response, int res_max, int bytesInBuffer, char *beginFile)
 {
 	//Making a copy to not change original
-	char *responseCopy = (char *)malloc(res_max*sizeof(char));
-	strcpy(responseCopy, response);
+	char *responseHeader = (char *)malloc((beginFile - response)*sizeof(char));
+	strncpy(responseHeader, response, beginFile - response);
 
-	char *charStatusCode = strtok(responseCopy, " ");
+	printf("Client received:\n\n%s\n\nfrom server\n\n");
+
+	char *charStatusCode = strtok(responseHeader, " ");
 	charStatusCode = strtok(NULL, " ");
 	int intStatusCode = atoi(charStatusCode);
 
 	char *phrase = strtok(NULL, "\r\n");
-	free(responseCopy);
 
-	char *file;
-	int sizeOfHeader;
+
+
 
 
 	if(intStatusCode == 200)
 	{
 		printf("Client request was successful\n\n");
 		//Finding the beginning of the file
-		file = strstr(response, "\r\n\r\n");
-		if(file == NULL)
-			error("Error. Response was corrupted");
-		file += 4;
 
-		if(bytesInBuffer == 0)//Have all of the bytes
-		{
-			downloadSmallFile(file);
-			displayFile();
-		}
-		else if((bytesInBuffer > 0) && (bytesInBuffer < res_max))//Still have bytes to download
-		{
-			sizeOfHeader = file - response;
-			downloadLargeFile(file, res_max - sizeOfHeader, bytesInBuffer - sizeOfHeader);
-			displayFile();
-		}
-		else
-			error("Error. Incorrect arguments passed to processResponse");
+		downloadFile(response, res_max, bytesInBuffer, beginFile);
+
 	}
 	else
 	{
 		printf("Client request was not successful: %s",phrase);
 	}
+	free(responseHeader);
 
 }
 
-void downloadSmallFile(char *file)
+void downloadFile(char *response, int res_max, int bytesInBuffer, char *beginFile)
 {
 	int i;
-	int fileSize = strlen(file);
+	int fileSize = *(int *)beginFile;
+	beginFile += sizeof(int);
+	int receivedFileBytes = bytesInBuffer - (beginFile - response);
+	bytesInBuffer = receivedFileBytes;
+
+	strncpy(response, beginFile, receivedFileBytes);
+	char *endBuffer = response + res_max;
+	char *writeFilePtr = response;
+	char *readFilePtr = response + receivedFileBytes;
+
+	int readBytes, maxReadBytes, writeBytes, maxWriteBytes;
+
 	char newFilename[140];
-	sprintf(newFilename, "Client_Copy_%s", FILE_NAME);
+	sprintf(newFilename,"Client_Copy_%s", FILE_NAME);
 
 	FILE *fp = fopen(newFilename, "wb");
 	if(fp == NULL)
 		error("Client can not download file");
 
-	printf("Downloading small file as %s\n\n", newFilename);
+	printf("Downloading %d byte file as %s\n\n",fileSize, newFilename);
 
-	while(fileSize > 0)
+	while(receivedFileBytes < fileSize)
 	{
-		i = fwrite(file, 1, fileSize, fp);
-		fileSize -= i;
-		file += i;
+		//Reading File
+		if(endBuffer - readFilePtr < res_max - bytesInBuffer)
+		{
+			maxReadBytes = endBuffer -readFilePtr;
+		}
+		else
+		{
+			maxReadBytes = res_max - bytesInBuffer;
+		}
+
+		readBytes = read(SOCKET_D, readFilePtr, maxReadBytes );
+		if(errno == EWOULDBLOCK)
+		{
+			printf("Time out occurred, assumed end of message\n\n");
+			break;
+		}
+		if(readBytes < 0)
+			error("Error. Error receiving message from client");
+
+		readFilePtr += readBytes;
+		bytesInBuffer += readBytes;
+		receivedFileBytes += readBytes;
+
+		printf("Read %s bytes\n", readBytes);
+
+		if(readFilePtr == endBuffer)
+			readFilePtr = response;
+
+		//Writing File
+		if(bytesInBuffer < endBuffer - writeFilePtr )
+		{
+			maxWriteBytes = bytesInBuffer;
+		}
+		else
+		{
+			maxWriteBytes = endBuffer - writeFilePtr;
+		}
+
+		writeBytes = fwrite(writeFilePtr, 1 , maxWriteBytes);
+		writeFilePtr += writeBytes;
+		bytesInBuffer -= writeBytes;
+
+		printf("Downloaded %d bytes\n", writeBytes);
+
+		if(writeFilePtr == endBuffer)
+			writeFilePtr = response;
+
 	}
 
 	printf("%s was completely downloaded\n\n", newFilename);

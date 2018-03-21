@@ -100,7 +100,7 @@ void receiveResponse(char *response, int res_max);
  * @parm	bytesInBuffer	This variable determines wither there is a large or small file. If the value is greater than 0
  * there is a large file and the variable tells how many bytes are in the response buffer currently
  */
-void processResponse(char *response, int res_max, int bytesInBuffer);
+void processResponse(char *response, int res_max, int bytesInBuffer, char *beginFile);
 
 /*
  * @brief	downloadSmallFile		The downloadSmallFile() function assumes that the whole file is in the response buffer
@@ -109,7 +109,7 @@ void processResponse(char *response, int res_max, int bytesInBuffer);
  *
  * @parm	file					Pointer to the beginning of the file in the response buffer
  */
-void downloadSmallFile(char *file);
+void downloadFile(char *file);
 
 /*
  * @brief	downloadLargeFile		The downloadLargeFile() function assumes that the file to be downloaded is going to be
