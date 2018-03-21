@@ -246,7 +246,7 @@ void downloadFile(char *response, int res_max, int bytesInBuffer, char *beginFil
 
 	printf("Downloading %d byte file as %s\n\n",fileSize, newFilename);
 
-	while(receivedFileBytes < fileSize)
+	do
 	{
 		//Reading File
 		if(endBuffer - readFilePtr < res_max - bytesInBuffer)
@@ -295,7 +295,7 @@ void downloadFile(char *response, int res_max, int bytesInBuffer, char *beginFil
 		if(writeFilePtr == endBuffer)
 			writeFilePtr = response;
 
-	}
+	} while(receivedFileBytes < fileSize);
 
 	printf("%s was completely downloaded\n\n", newFilename);
 
