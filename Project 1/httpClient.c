@@ -195,7 +195,7 @@ void processResponse(char *response, int res_max, int bytesInBuffer, char *begin
 	char *responseHeader = (char *)malloc((beginFile - response)*sizeof(char));
 	strncpy(responseHeader, response, beginFile - response);
 
-	printf("Client received:\n\n%s\n\nfrom server\n\n");
+	printf("Client received:\n\n%s\n\nfrom server\n\n", responseHeader);
 
 	char *charStatusCode = strtok(responseHeader, " ");
 	charStatusCode = strtok(NULL, " ");
@@ -225,7 +225,6 @@ void processResponse(char *response, int res_max, int bytesInBuffer, char *begin
 
 void downloadFile(char *response, int res_max, int bytesInBuffer, char *beginFile)
 {
-	int i;
 	int fileSize = *(int *)beginFile;
 	beginFile += sizeof(int);
 	int receivedFileBytes = bytesInBuffer - (beginFile - response);
@@ -287,7 +286,7 @@ void downloadFile(char *response, int res_max, int bytesInBuffer, char *beginFil
 			maxWriteBytes = endBuffer - writeFilePtr;
 		}
 
-		writeBytes = fwrite(writeFilePtr, 1 , maxWriteBytes);
+		writeBytes = fwrite(writeFilePtr, 1 , maxWriteBytes, fp);
 		writeFilePtr += writeBytes;
 		bytesInBuffer -= writeBytes;
 
