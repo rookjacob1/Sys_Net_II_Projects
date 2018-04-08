@@ -14,13 +14,20 @@
 #include"bulletinBoard.h"
 
 /*
+ *	@brief	error		The error() function produces an error message using perror() then terminates the program.
+ *
+ *	@parm	msg			Message to display as the error message
+ */
+void error(const char *msg);
+
+/*
  * @breif	validateArgv
  *
  * @param	argc
  *
  * @param	argv
  */
-int validateArgv(int argc, char *argv[], int *serverPort, int *numHosts);
+void validateArgv(int argc, char *argv[], int *serverPort, int *numHosts);
 
 /*
  * @breif	createRing

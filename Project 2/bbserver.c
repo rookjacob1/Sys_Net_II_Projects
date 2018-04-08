@@ -30,28 +30,6 @@ int main(int argc, char *argv[])
 
 	peerAddrs = (struct sockaddr_in *)malloc(numberHosts * sizeof(peerAddrs));
 
-	//Build local server socket address
-	memset(&servAddr, 0, sizeof(servAddr));
-	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(serverPort);
-	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-	//Create socket
-	sock = socket(PF_INET,SOCK_DGRAM,0);
-	if(sock < 0)
-	{
-		perror("Error: Socket Failed");
-		exit(1);
-	}
-
-	//Bind socket to local address and port
-	if((bind(sock, (struct sockaddr *)&servAddr, sizeof(servAddr))) < 0 )
-	{
-		perror("Error: Bind Failed");
-		exit(1);
-	}
-
-	printf("Socket was created and binded to local address and port\n");
 
 	//Receive numberHost peer information
 	for(i = 0; i < numberHosts; i++)
@@ -74,28 +52,53 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+void error(const char *msg)
+{
+	perror(msg);
+	exit(1);
+}
 
-int validateArgv(int argc, char *argv[], int *serverPort, int *numHosts)
+void validateArgv(int argc, char *argv[], int *serverPort, int *numHosts)
 {
 	if (argc != 3)
-	{
-		printf("Invalid Parameters.\n"
+		error("Invalid Parameters.\n"
 				"Parameter Format: bbserver <PortNum> <numberHosts>\n");
-		return 0;
-	}
+
 
 	*serverPort = atoi(argv[1]);
 	*numHosts = atoi(argv[2]);
 
 	if(*numHosts <= 0 || *serverPort < 60000 || *serverPort > 60099)
-	{
-		printf("Invalid Parameter Values.\n"
+		error("Invalid Parameter Values.\n"
 				"Port Number must be between 60,000 and 60,099\n"
 				"Must have one or more hosts to join.\n");
-		return 0;
+
+}
+
+void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *sockDescriptor)
+{
+	//Build local server socket address
+	memset(&servAddr, 0, sizeof(servAddr));
+	servAddr.sin_family = AF_INET;
+	servAddr.sin_port = htons(serverPort);
+	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	//Create socket
+	sock = socket(PF_INET,SOCK_DGRAM,0);
+	if(sock < 0)
+	{
+		perror("Error: Socket Failed");
+		exit(1);
 	}
 
-	return 1;
+	//Bind socket to local address and port
+	if((bind(sock, (struct sockaddr *)&servAddr, sizeof(servAddr))) < 0 )
+	{
+		perror("Error: Bind Failed");
+		exit(1);
+	}
+
+	printf("Socket was created and binded to local address and port\n");
 }
 
 void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socket)
