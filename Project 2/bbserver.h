@@ -20,7 +20,7 @@
  *
  * @param	argv
  */
-int validateArgv(int argc, char *argv[]);
+int validateArgv(int argc, char *argv[], int *serverPort, int *numHosts);
 
 /*
  * @breif	createRing

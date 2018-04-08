@@ -11,25 +11,29 @@
 
 int main(int argc, char *argv[])
 {
-	if(!validateArgv(argc, argv))
+	//Declare Variables
+	int i;
+
+	int sock;
+	int serverPort;
+	int numberHosts;
+
+
+	struct sockaddr_in servAddr;
+	struct sockaddr_in *peerAddrs;
+
+	if(!validateArgv(argc, argv, &serverPort, &numberHosts))
 	{
 		printf("Program Terminating.");
 		return 0;
 	}
 
-	//Declare Variables
-	int i;
-
-	int sock;
-	int numberHosts = atoi(argv[2]);
-
-	struct sockaddr_in servAddr;
-	struct sockaddr_in *peerAddrs = (struct sockaddr_in *)malloc(numberHosts * sizeof(peerAddrs));
+	peerAddrs = (struct sockaddr_in *)malloc(numberHosts * sizeof(peerAddrs));
 
 	//Build local server socket address
 	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(SERVER_PORT);
+	servAddr.sin_port = htons(serverPort);
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	//Create socket
@@ -71,19 +75,19 @@ int main(int argc, char *argv[])
 }
 
 
-int validateArgv(int argc, char *argv[])
+int validateArgv(int argc, char *argv[], int *serverPort, int *numHosts)
 {
 	if (argc != 3)
 	{
 		printf("Invalid Parameters.\n"
-				"Parameter Format: Port_Number Number_of_Hosts\n");
+				"Parameter Format: bbserver <PortNum> <numberHosts>\n");
 		return 0;
 	}
 
-	int portNum = atoi(argv[1]);
-	int numberHosts = atoi(argv[2]);
+	*serverPort = atoi(argv[1]);
+	*numHosts = atoi(argv[2]);
 
-	if(numberHosts <= 0 || portNum < 60000 || portNum > 60099)
+	if(*numHosts <= 0 || *serverPort < 60000 || *serverPort > 60099)
 	{
 		printf("Invalid Parameter Values.\n"
 				"Port Number must be between 60,000 and 60,099\n"
