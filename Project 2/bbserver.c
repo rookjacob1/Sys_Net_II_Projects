@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
 
 	struct sockaddr_in serverAddr;
-	struct sockaddr_in *peerAddrs;
+	struct sockaddr_in *peerAddrs = NULL;
 
 	validateArgv(argc, argv, &serverPort, &numberHosts);
 
