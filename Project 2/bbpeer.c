@@ -11,30 +11,18 @@
 
 int main(int argc, char *argv[])
 {
+
 	int sockD;
-	int serverPort;
+	int sendPort;
 	int hostPort;
 	char *filename;
 
+	struct sockaddr_in nextPeerAddr;
 
+	validateArgv(argc, argv, &sendPort, &hostPort, filename);
 
+	getNextPeer(&nextPeerAddr, &sendPort, hostPort, &sockD);
 
-	validateArgv(argc, argv, &serverPort, &hostPort, filename);
-
-	if(i < 0)
-	{
-		printf("Program Terminating");
-		exit(1);
-	}
-
-	if(argc == 5)
-	{
-
-	}
-	else
-	{
-
-	}
 
 
 	return 0;
@@ -82,6 +70,21 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 		error("Invalid Host Port Number.\n"
 				"Host Port Number must be between 60,000 and 60,099\n");
 	}
+}
+
+void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *sockDescriptor)
+{
+	struct sockaddr_in sendingAddr;
+
+
+}
+
+void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort)
+{
+	memset(socketAddress, 0 , sizeof(struct sockaddr_in));
+	(*socketAddress).sin_family = AF_INET;
+	inet_pton(AF_INET, "127.0.0.1", socketAddress->sin_addr);
+	(*socketAddress).sin_port = htons(socketPort);
 }
 
 
