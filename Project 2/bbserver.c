@@ -14,12 +14,12 @@ int main(int argc, char *argv[])
 	//Declare Variables
 	int i;
 
-	int sock;
+	int sockD;
 	int serverPort;
 	int numberHosts;
 
 
-	struct sockaddr_in servAddr;
+	struct sockaddr_in serverAddr;
 	struct sockaddr_in *peerAddrs;
 
 	if(!validateArgv(argc, argv, &serverPort, &numberHosts))
@@ -28,15 +28,18 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	peerAddrs = (struct sockaddr_in *)malloc(numberHosts * sizeof(peerAddrs));
+	createBindSocket(&serverAddr, &serverPort, &sockD);
 
+
+
+	peerAddrs = (struct sockaddr_in *)malloc(numberHosts * sizeof(peerAddrs));
 
 	//Receive numberHost peer information
 	for(i = 0; i < numberHosts; i++)
 	{
 		printf("Waiting for peers to join.\n");
 		//Receive peer information
-		if ((recvfrom(sock, NULL, 0, 0,(struct sockaddr *)&peerAddrs[i], NULL)) < 0)
+		if ((recvfrom(sockD, NULL, 0, 0,(struct sockaddr *)&peerAddrs[i], NULL)) < 0)
 		{
 			perror("Error: Received Message Error");
 			exit(1);
@@ -45,7 +48,7 @@ int main(int argc, char *argv[])
 				(unsigned long)peerAddrs[i].sin_addr.s_addr, peerAddrs[i].sin_port);
 	}
 
-	createRing(peerAddrs,numberHosts, sock);
+	createRing(peerAddrs,numberHosts, sockD);
 
 	printf("Ring created. Server Terminating.");
 
@@ -75,31 +78,33 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *numHosts)
 
 }
 
-void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *sockDescriptor)
+void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *socketDescriptor)
 {
 	//Build local server socket address
-	memset(&servAddr, 0, sizeof(servAddr));
-	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(serverPort);
-	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	memset(&serverAddr, 0, sizeof(serverAddr));
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_port = htons(serverPort);
+	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	//Create socket
-	sock = socket(PF_INET,SOCK_DGRAM,0);
-	if(sock < 0)
+	socketDescriptor = socket(PF_INET,SOCK_DGRAM,0);
+	if(socketDescriptor < 0)
 	{
-		perror("Error: Socket Failed");
+		error("Error: Socket Failed");
 		exit(1);
 	}
 
 	//Bind socket to local address and port
-	if((bind(sock, (struct sockaddr *)&servAddr, sizeof(servAddr))) < 0 )
+	if((bind(socketDescriptor, (struct sockaddr *)&serverAddr, sizeof(serverAddr))) < 0 )
 	{
-		perror("Error: Bind Failed");
+		error("Error: Bind Failed");
 		exit(1);
 	}
 
-	printf("Socket was created and binded to local address and port\n");
+	printf("Socket was created and binded to local address and port\n\n");
 }
+
+void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socketDescriptor)
 
 void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socket)
 {

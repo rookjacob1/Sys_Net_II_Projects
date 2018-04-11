@@ -30,6 +30,12 @@ void error(const char *msg);
 void validateArgv(int argc, char *argv[], int *serverPort, int *numHosts);
 
 /*
+ *
+ */
+void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *socketDescriptor);
+
+
+/*
  * @breif	createRing
  *
  * @param	peerAddresses
