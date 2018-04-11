@@ -11,7 +11,15 @@
 
 int main(int argc, char *argv[])
 {
-	int i = validateArgv(argc, argv);
+	int sockD;
+	int serverPort;
+	int hostPort;
+	char *filename;
+
+
+
+
+	validateArgv(argc, argv, &serverPort, &hostPort, filename);
 
 	if(i < 0)
 	{
@@ -32,49 +40,48 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-int validateArgv(int argc, char *argv[])
+void error(const char *msg)
+{
+	perror(msg);
+	exit(1);
+}
+
+void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *filename)
 {
 	int portNum;
-	int hostPort;
-	int ret;
 
 	if(argc != 5 || argc != 6)
 	{
-		printf("Invalid Number of Parameters. \n"
-				"Parameter Format: [-new] portNum hostIP hostPort filenameBulletinBoard\n");
-		return -1;
+		error("Invalid Number of Parameters. \n"
+				"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 	}
 	if(argc == 6)
 	{
 		if(!strcmp(argv[1], "[-new]"))
 		{
-			printf("Invalid Parameter Format."
-					"Parameter Format: [-new] portNum hostIP hostPort filenameBulletinBoard\n");
-			return -1;
+			error("Invalid Parameter Format."
+					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		}
 		portNum = atoi(argv[2]);
 		hostPort = atoi(argv[4]);
-		ret = 0;
+		filename = argv[5];
 	}
 	else
 	{
 		portNum = atoi(argv[1]);
 		hostPort = atoi(argv[3]);
-		ret = 1;
+		filename = argv[4];
 	}
 	if(portNum < 60000 || portNum > 60099)
 	{
-		printf("Invalid Parameter Value.\n"
+		error("Invalid Port Number.\n"
 				"Port Number must be between 60,000 and 60,099\n");
-		return 0;
 	}
 	if(hostPort < 60000 || hostPort > 60099)
 	{
-		printf("Invalid Parameter Value.\n"
+		error("Invalid Host Port Number.\n"
 				"Host Port Number must be between 60,000 and 60,099\n");
-		return 0;
 	}
-	return ret;
 }
 
 

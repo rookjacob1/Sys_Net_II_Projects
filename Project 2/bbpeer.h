@@ -19,6 +19,10 @@
 	int LISTBIT;
 	int EXITBIT;
 
+/*
+ *
+ */
+void error(const char *msg);
 
 /*
  * @breif	validateArgv	The validateArgv() call checks if the arguments passed to the main
@@ -32,7 +36,7 @@
  * new ring, 1 if the arguments indicate a peer joining an existing ring, and -1 if the arguements
  * are in the wrong format or have the wrong corresponding values.
  */
-int validateArgv(int argc, char *argv[]);
+void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *filename);
 
 
 #endif /* BBPEER_H_ */
