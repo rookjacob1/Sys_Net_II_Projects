@@ -20,11 +20,7 @@ int main(int argc, char *argv[])
 	struct sockaddr_in serverAddr;
 	struct sockaddr_in *peerAddrs;
 
-	if(!validateArgv(argc, argv, &serverPort, &numberHosts))
-	{
-		printf("Program Terminating.");
-		return 0;
-	}
+	validateArgv(argc, argv, &serverPort, &numberHosts)
 
 	createBindSocket(&serverAddr, &serverPort, &sockD);
 
