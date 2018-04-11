@@ -61,10 +61,10 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *numHosts)
 void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *socketDescriptor)
 {
 	//Build local server socket address
-	memset(serverAddr, 0, sizeof(*serverAddr));
-	*serverAddr.sin_family = AF_INET;
-	*serverAddr.sin_port = htons(serverPort);
-	*serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	memset(serverAddr, 0, sizeof(struct sockaddr_in));
+	(*serverAddr).sin_family = AF_INET;
+	(*serverAddr).sin_port = htons(serverPort);
+	(*serverAddr).sin_addr.s_addr = htonl(INADDR_ANY);
 
 	//Create socket
 	socketDescriptor = socket(PF_INET,SOCK_DGRAM,0);
