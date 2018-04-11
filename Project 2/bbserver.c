@@ -63,7 +63,7 @@ void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *sock
 	//Build local server socket address
 	memset(serverAddr, 0, sizeof(struct sockaddr_in));
 	(*serverAddr).sin_family = AF_INET;
-	(*serverAddr).sin_port = htons(serverPort);
+	(*serverAddr).sin_port = htons(*serverPort);
 	(*serverAddr).sin_addr.s_addr = htonl(INADDR_ANY);
 
 	//Create socket
