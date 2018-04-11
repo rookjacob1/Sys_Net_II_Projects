@@ -34,6 +34,10 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *numHosts);
  */
 void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *socketDescriptor);
 
+/*
+ *
+ */
+void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socketDescriptor);
 
 /*
  * @breif	createRing

@@ -12,8 +12,6 @@
 int main(int argc, char *argv[])
 {
 	//Declare Variables
-	int i;
-
 	int sockD;
 	int serverPort;
 	int numberHosts;
@@ -30,27 +28,13 @@ int main(int argc, char *argv[])
 
 	createBindSocket(&serverAddr, &serverPort, &sockD);
 
+	acceptPeers(peerAddrs, numberHosts, sockD);
 
-
-	peerAddrs = (struct sockaddr_in *)malloc(numberHosts * sizeof(peerAddrs));
-
-	//Receive numberHost peer information
-	for(i = 0; i < numberHosts; i++)
-	{
-		printf("Waiting for peers to join.\n");
-		//Receive peer information
-		if ((recvfrom(sockD, NULL, 0, 0,(struct sockaddr *)&peerAddrs[i], NULL)) < 0)
-		{
-			perror("Error: Received Message Error");
-			exit(1);
-		}
-		printf("Peer received with IP address: %lu Port address: %hu \n",
-				(unsigned long)peerAddrs[i].sin_addr.s_addr, peerAddrs[i].sin_port);
-	}
-
-	createRing(peerAddrs,numberHosts, sockD);
+	createRing(peerAddrs, numberHosts, sockD);
 
 	printf("Ring created. Server Terminating.");
+
+	free(peerAddrs);
 
 	return 0;
 }
@@ -105,23 +89,46 @@ void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *sock
 }
 
 void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socketDescriptor)
+{
+	int i = 0;
+	char buffer[256];
+	buffer[255] = '\0';
+	peerAddresses = (struct sockaddr_in *)malloc(numberOfPeers * sizeof(peerAddresses));
 
-void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socket)
+	//Receive number of peer information
+	while(i < numberOfPeers)
+	{
+		printf("Waiting for peers to join.\n");
+		//Receive peer information
+		if ((recvfrom(socketDescriptor, buffer, sizeof(buffer) - 1, 0,(struct sockaddr *)&peerAddresses[i], NULL)) < 0)
+		{
+			perror("Error: Received Message Error");
+			exit(1);
+		}
+		printf("Peer received with IP address: %lu Port address: %hu \n",
+				(unsigned long)peerAddresses[i].sin_addr.s_addr, peerAddresses[i].sin_port);
+		printf("Peer's message: %s\n\n", buffer);
+
+		i++;
+	}
+}
+
+void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socketDescriptor)
 {
 	int i;
 
 	for(i = 0; i < numberOfPeers - 1; i++)
 	{
-		if ((sendto(socket, &peerAddresses[i + 1], sizeof(peerAddresses[i + 1]), 0,
+		if ((sendto(socketDescriptor, &peerAddresses[i + 1], sizeof(peerAddresses[i + 1]), 0,
 				(struct sockaddr *)&peerAddresses[i], sizeof(peerAddresses[i]))) < 0 )
 		{
-			perror("Error: Sending Error");
+			error("Error: Sending Error");
 			exit(1);
 		}
 	}
-	if( (sendto(socket, &peerAddresses[0], sizeof(peerAddresses[0]), 0,
+	if( (sendto(socketDescriptor, &peerAddresses[0], sizeof(peerAddresses[0]), 0,
 			(struct sockaddr *)&peerAddresses[numberOfPeers - 1],
-			sizeof(peerAddresses[numberOfPeers]))) < 0)
+			sizeof(peerAddresses[numberOfPeers - 1]))) < 0)
 	{
 		perror("Error: Sending Error");
 		exit(1);
