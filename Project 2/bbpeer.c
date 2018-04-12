@@ -52,13 +52,19 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 			error("Invalid Parameter Format."
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		}
-		*serverPort = atoi(argv[2]);
+		if(!strcmp(argv[2], "localhost"))
+			error("Program does not support nonlocal message passing\n"
+					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
+		*serverPort = atoi(argv[3]);
 		*hostPort = atoi(argv[4]);
 		filename = argv[5];
 	}
 	else
 	{
-		*serverPort = atoi(argv[1]);
+		if(!strcmp(argv[2], "localhost"))
+					error("Program does not support nonlocal message passing\n"
+							"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
+		*serverPort = atoi(argv[2]);
 		*hostPort = atoi(argv[3]);
 		filename = argv[4];
 	}
