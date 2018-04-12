@@ -38,5 +38,16 @@ void error(const char *msg);
  */
 void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *filename);
 
+/*
+ *
+ */
+void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *socketDescriptor);
+
+/*
+ *
+ */
+void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort);
+
+
 
 #endif /* BBPEER_H_ */

@@ -80,7 +80,7 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 	}
 }
 
-void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *socketDescriptor,)
+void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *socketDescriptor)
 {
 	struct sockaddr_in sendingAddr;
 	struct sockaddr_in hostAddr;
