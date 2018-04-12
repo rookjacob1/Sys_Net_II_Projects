@@ -14,14 +14,16 @@ int main(int argc, char *argv[])
 
 	int sockD;
 	int sendPort;
+	int nextPeerPort;
 	int hostPort;
+
 	char *filename;
 
 	struct sockaddr_in nextPeerAddr;
 
 	validateArgv(argc, argv, &sendPort, &hostPort, filename);
 
-	getNextPeer(&nextPeerAddr, &sendPort, hostPort, &sockD);
+	getNextPeer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
 
 
 
@@ -72,9 +74,16 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 	}
 }
 
-void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *sockDescriptor)
+void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *socketDescriptor)
 {
 	struct sockaddr_in sendingAddr;
+	struct sockaddr_in hostAddr;
+
+	buildSocketAddress(&hostAddr, hostPort);
+	buildSocketAddress(&sendingAddr, sendingPort);
+
+	if ((*socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
+		error("Error creating socket\n");
 
 
 }

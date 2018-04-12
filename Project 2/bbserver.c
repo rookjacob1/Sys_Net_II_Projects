@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 	printf("Ring created. Server Terminating.");
 
 	free(peerAddrs);
+	close(sockD);
 
 	return 0;
 }
