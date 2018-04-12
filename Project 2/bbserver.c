@@ -91,13 +91,14 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 	char buffer[256];
 	buffer[255] = '\0';
 	peerAddresses = (struct sockaddr_in *)malloc(numberOfPeers * sizeof(peerAddresses));
+	socklen_t len = sizeof(struct sockaddr_in);
 
 	//Receive number of peer information
 	while(i < numberOfPeers)
 	{
 		printf("Waiting for peers to join.\n");
 		//Receive peer information
-		if ((recvfrom(socketDescriptor, buffer, sizeof(buffer) - 1, 0,(struct sockaddr *)&peerAddresses[i], NULL)) < 0)
+		if ((recvfrom(socketDescriptor, buffer, sizeof(buffer) - 1, 0,(struct sockaddr *)&peerAddresses[i], &len)) < 0)
 		{
 			perror("Error: Received Message Error");
 			exit(1);
