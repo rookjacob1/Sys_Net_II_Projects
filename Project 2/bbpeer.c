@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 	getNextPeer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
 
 
-
+	close(sockD);
 	return 0;
 }
 
@@ -80,10 +80,12 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 	}
 }
 
-void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *socketDescriptor)
+void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *socketDescriptor,)
 {
 	struct sockaddr_in sendingAddr;
 	struct sockaddr_in hostAddr;
+
+	char message[256];
 
 	buildSocketAddress(&hostAddr, hostPort);
 	buildSocketAddress(&sendingAddr, sendingPort);
@@ -91,7 +93,18 @@ void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendin
 	if ((*socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
 		error("Error creating socket\n");
 
+	if((bind(*socketDescriptor, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
+		error("Error binding socket\n");
 
+
+	printf("Please enter a message:\n");
+	fgets(message, sizeof(message), stdin);
+
+	sendto(*socketDescriptor, message, strlen(message), 0, (struct sockaddr *)&sendingAddr, sizeof(struct sockaddr_in));
+
+	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
+
+	*nextPeerPort = ntohs((*nextPeerAddr).sin_port);
 }
 
 void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort)
