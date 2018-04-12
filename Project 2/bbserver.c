@@ -90,7 +90,7 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 	int i = 0;
 	char buffer[256];
 	buffer[255] = '\0';
-	peerAddresses = (struct sockaddr_in *)malloc(numberOfPeers * sizeof(peerAddresses));
+	peerAddresses = (struct sockaddr_in *)malloc(numberOfPeers * sizeof(struct sockaddr_in));
 	socklen_t len = sizeof(struct sockaddr_in);
 
 	//Receive number of peer information
