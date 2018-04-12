@@ -76,7 +76,7 @@ void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *sock
 	}
 
 	//Bind socket to local address and port
-	if((bind(*socketDescriptor, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in))) < 0 )
+	if((bind(*socketDescriptor, (struct sockaddr *)serverAddr, sizeof(struct sockaddr_in))) < 0 )
 	{
 		error("Error: Bind Failed");
 		exit(1);
