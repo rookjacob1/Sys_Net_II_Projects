@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	int nextPeerPort;
 	int hostPort;
 
-	char *filename;
+	char *filename = NULL;
 
 	struct sockaddr_in nextPeerAddr;
 
@@ -96,15 +96,23 @@ void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendin
 	if((bind(*socketDescriptor, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
 		error("Error binding socket\n");
 
+	printf("Socket bound with port number %s\n\n", hostPort);
+
 
 	printf("Please enter a message:\n");
 	fgets(message, sizeof(message), stdin);
 
+	printf("Sending %s to server\n\n");
 	sendto(*socketDescriptor, message, strlen(message), 0, (struct sockaddr *)&sendingAddr, sizeof(struct sockaddr_in));
 
 	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
 	*nextPeerPort = ntohs((*nextPeerAddr).sin_port);
+
+	printf("Next Peer Information:\n"
+			"IP Address: %s\n"
+			"Port Number: %d\n\n",
+			inet_ntoa((*nextPeerAddr).sin_addr), *nextPeerPort);
 }
 
 void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort)
