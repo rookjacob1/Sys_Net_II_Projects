@@ -40,7 +40,7 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 {
 
 
-	if(argc != 5 || argc != 6)
+	if(argc != 5 && argc != 6)
 	{
 		error("Invalid Number of Parameters. \n"
 				"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
