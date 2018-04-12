@@ -90,6 +90,7 @@ void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *sock
 void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socketDescriptor)
 {
 	int i = 0;
+	//int received;
 	char buffer[256];
 	buffer[255] = '\0';
 	socklen_t len = sizeof(struct sockaddr_in);
@@ -99,11 +100,12 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 	{
 		printf("Waiting for peers to join.\n");
 		//Receive peer information
-		if ((recvfrom(socketDescriptor, buffer, sizeof(buffer) - 1, 0,(struct sockaddr *)&peerAddresses[i], &len)) < 0)
+		if ((/*received =*/ recvfrom(socketDescriptor, buffer, sizeof(buffer) - 1, 0,(struct sockaddr *)&peerAddresses[i], &len)) < 0)
 		{
 			perror("Error: Received Message Error");
 			exit(1);
 		}
+		//buffer[received] = '\0';
 		printf("Peer received with IP address: %s Port address: %d \n",
 				inet_ntoa((peerAddresses[i]).sin_addr), ntohs((peerAddresses[i]).sin_port));
 		printf("Peer's message: %s\n\n", buffer);

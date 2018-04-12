@@ -102,8 +102,9 @@ void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendin
 	printf("Please enter a message:\n");
 	fgets(message, sizeof(message), stdin);
 
+	message[strlen(message) - 1] = '\0';
 	printf("Sending %s to server\n\n", message);
-	sendto(*socketDescriptor, message, strlen(message), 0, (struct sockaddr *)&sendingAddr, sizeof(struct sockaddr_in));
+	sendto(*socketDescriptor, message, strlen(message) + 1, 0, (struct sockaddr *)&sendingAddr, sizeof(struct sockaddr_in));
 
 	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
