@@ -103,7 +103,7 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 			perror("Error: Received Message Error");
 			exit(1);
 		}
-		printf("Peer received with IP address: %lu Port address: %d \n",
+		printf("Peer received with IP address: %s Port address: %d \n",
 				inet_ntoa((peerAddresses[i]).sin_addr), ntohs((peerAddresses[i]).sin_port));
 		printf("Peer's message: %s\n\n", buffer);
 
