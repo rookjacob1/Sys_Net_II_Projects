@@ -101,7 +101,7 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 	{
 		printf("Waiting for peers to join.\n");
 		//Receive peer information
-		if ((recvfrom(socketDescriptor, buffer, sizeof(buffer) - 1, 0,(struct sockaddr *)peerAddresses[i], &len)) < 0)
+		if ((recvfrom(socketDescriptor, buffer, sizeof(buffer) - 1, 0,(struct sockaddr *)&peerAddresses[i], &len)) < 0)
 		{
 			perror("Error: Received Message Error");
 			exit(1);
