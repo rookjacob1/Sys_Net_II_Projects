@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
 
 	createBindSocket(&serverAddr, &serverPort, &sockD);
 
+	peerAddrs = (struct sockaddr_in *)malloc(numberHosts * sizeof(struct sockaddr_in));
+
 	acceptPeers(peerAddrs, numberHosts, sockD);
 
 	printf("\n%p\n", peerAddrs);
@@ -92,7 +94,7 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 	int i = 0;
 	char buffer[256];
 	buffer[255] = '\0';
-	peerAddresses = (struct sockaddr_in *)malloc(numberOfPeers * sizeof(struct sockaddr_in));
+	//peerAddresses = (struct sockaddr_in *)malloc(numberOfPeers * sizeof(struct sockaddr_in));
 	printf("\n%p\n", peerAddresses);
 	if(peerAddresses == NULL)
 		printf("\nNULL\n");
