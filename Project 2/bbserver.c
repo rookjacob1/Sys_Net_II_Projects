@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
 
 	struct sockaddr_in serverAddr;
-	struct sockaddr_in *peerAddrs = NULL;
+	struct sockaddr_in *peerAddrs;
 
 	validateArgv(argc, argv, &serverPort, &numberHosts);
 
@@ -28,11 +28,9 @@ int main(int argc, char *argv[])
 
 	acceptPeers(peerAddrs, numberHosts, sockD);
 
-	printf("\n%p\n", peerAddrs);
-
 	createRing(peerAddrs, numberHosts, sockD);
 
-	printf("Ring created. Server Terminating.");
+	printf("Ring created. Server Terminating.\n\n");
 
 	free(peerAddrs);
 	close(sockD);
@@ -94,10 +92,6 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 	int i = 0;
 	char buffer[256];
 	buffer[255] = '\0';
-	//peerAddresses = (struct sockaddr_in *)malloc(numberOfPeers * sizeof(struct sockaddr_in));
-	printf("\n%p\n", peerAddresses);
-	if(peerAddresses == NULL)
-		printf("\nNULL\n");
 	socklen_t len = sizeof(struct sockaddr_in);
 
 	//Receive number of peer information
@@ -116,7 +110,6 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 
 		i++;
 	}
-	printf("\n%p\n", peerAddresses);
 }
 
 void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socketDescriptor)
