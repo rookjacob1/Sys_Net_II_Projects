@@ -118,15 +118,15 @@ void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socket
 	for(i = 0; i < numberOfPeers - 1; i++)
 	{
 		printf("%d -> %d\n\n", ntohs((peerAddresses[i]).sin_port), ntohs((peerAddresses[i + 1]).sin_port));
-		if ((sendto(socketDescriptor, peerAddresses[i + 1], sizeof(struct sockaddr_in), 0,
-				(struct sockaddr *)peerAddresses[i], sizeof(struct sockaddr_in))) < 0 )
+		if ((sendto(socketDescriptor, &peerAddresses[i + 1], sizeof(struct sockaddr_in), 0,
+				(struct sockaddr *)&peerAddresses[i], sizeof(struct sockaddr_in))) < 0 )
 		{
 			error("Error: Sending Error");
 		}
 	}
 	printf("%d -> %d\n\n", ntohs((peerAddresses[numberOfPeers - 1]).sin_port), ntohs((peerAddresses[0]).sin_port));
-	if( (sendto(socketDescriptor, peerAddresses[0], sizeof(struct sockaddr_in), 0,
-			(struct sockaddr *)peerAddresses[numberOfPeers - 1],
+	if( (sendto(socketDescriptor, &peerAddresses[0], sizeof(struct sockaddr_in), 0,
+			(struct sockaddr *)&peerAddresses[numberOfPeers - 1],
 			sizeof(struct sockaddr_in))) < 0)
 	{
 		error("Error: Sending Error");
