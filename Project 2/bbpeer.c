@@ -96,13 +96,13 @@ void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendin
 	if((bind(*socketDescriptor, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
 		error("Error binding socket\n");
 
-	printf("Socket bound with port number %s\n\n", hostPort);
+	printf("Socket bound with port number %d\n\n", hostPort);
 
 
 	printf("Please enter a message:\n");
 	fgets(message, sizeof(message), stdin);
 
-	printf("Sending %s to server\n\n");
+	printf("Sending %s to server\n\n", message);
 	sendto(*socketDescriptor, message, strlen(message), 0, (struct sockaddr *)&sendingAddr, sizeof(struct sockaddr_in));
 
 	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
