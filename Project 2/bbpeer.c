@@ -111,7 +111,7 @@ void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort)
 {
 	memset(socketAddress, 0 , sizeof(struct sockaddr_in));
 	(*socketAddress).sin_family = AF_INET;
-	inet_pton(AF_INET, "127.0.0.1", (*socketAddress).sin_addr);
+	inet_pton(AF_INET, "127.0.0.1", &(*socketAddress).sin_addr);
 	(*socketAddress).sin_port = htons(socketPort);
 }
 
