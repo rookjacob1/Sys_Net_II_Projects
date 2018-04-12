@@ -68,7 +68,7 @@ void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *sock
 	(*serverAddr).sin_addr.s_addr = htonl(INADDR_ANY);
 
 	//Create socket
-	*socketDescriptor = socket(AF_INET,SOCK_DGRAM,0);
+	*socketDescriptor = socket(AF_INET ,SOCK_DGRAM,0);
 	if(*socketDescriptor < 0)
 	{
 		error("Error: Socket Failed");
