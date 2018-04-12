@@ -26,6 +26,8 @@ int main(int argc, char *argv[])
 
 	acceptPeers(peerAddrs, numberHosts, sockD);
 
+	printf("\n%p\n", peerAddrs);
+
 	createRing(peerAddrs, numberHosts, sockD);
 
 	printf("Ring created. Server Terminating.");
@@ -112,6 +114,7 @@ void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socke
 
 		i++;
 	}
+	printf("\n%p\n", peerAddresses);
 }
 
 void createRing(struct sockaddr_in *peerAddresses, int numberOfPeers, int socketDescriptor)
