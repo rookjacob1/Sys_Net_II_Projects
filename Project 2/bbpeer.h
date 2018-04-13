@@ -12,6 +12,25 @@
 
 #include"headerFiles.h"
 
+//Message Formats
+#define HEADER "<message n=%d>\n"
+#define FOOTER "</message>\n"
+#define BODYSIZE 256
+
+//Token Modes
+#define PASS_TOKEN 1024
+#define NO_TOKEN 1025
+#define TOKEN_INIT 1026
+
+//Action Modes
+#define NO_ACTION 2048
+#define JOIN 2049
+#define EXIT 2050
+
+
+
+
+
 int READBIT;
 int WRITEBIT;
 int LISTBIT;
@@ -20,11 +39,14 @@ int EXITBIT;
 
 typedef struct Header{
 	int token;
+	int action;
+	int sequenceNumber;
 }message_Header_t;
 
 typedef struct message{
 
-struct message_Header_t header;
+	struct message_Header_t header;
+	char messageBody[BODYSIZE];
 
 }message_t;
 
@@ -51,7 +73,7 @@ void validateArgv(int argc, char *argv[], int *sendPort, int *hostPort, char *fi
 /*
  *
  */
-void getNextPeerServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int serverPort, int hostPort, int *socketDescriptor);
+void getNextPeerFromServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int serverPort, int hostPort, int *socketDescriptor);
 
 /*
  *

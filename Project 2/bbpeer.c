@@ -24,8 +24,9 @@ int main(int argc, char *argv[])
 	validateArgv(argc, argv, &sendPort, &hostPort, filename);
 
 	if(argc == 6)
-		getNextPeerServer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
+		getNextPeerFromServer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
 	else
+		getNextPeerFromPeer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
 
 
 	close(sockD);
@@ -82,15 +83,15 @@ void validateArgv(int argc, char *argv[], int *sendPort, int *hostPort, char *fi
 	}
 }
 
-void getNextPeerServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int serverPort, int hostPort, int *socketDescriptor)
+void getNextPeerFromServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int serverPort, int hostPort, int *socketDescriptor)
 {
-	struct sockaddr_in sendingAddr;
+	struct sockaddr_in serverAddr;
 	struct sockaddr_in hostAddr;
 
 	char message[256];
 
 	buildSocketAddress(&hostAddr, hostPort);
-	buildSocketAddress(&sendingAddr, serverPort);
+	buildSocketAddress(&serverAddr, serverPort);
 
 	if ((*socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
 		error("Error creating socket\n");
@@ -106,7 +107,7 @@ void getNextPeerServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int 
 
 	message[strlen(message) - 1] = '\0';
 	printf("Sending \"%s\" to server\n\n", message);
-	sendto(*socketDescriptor, message, strlen(message) + 1, 0, (struct sockaddr *)&sendingAddr, sizeof(struct sockaddr_in));
+	sendto(*socketDescriptor, message, strlen(message) + 1, 0, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in));
 
 	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
@@ -125,6 +126,46 @@ void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort)
 	inet_pton(AF_INET, "127.0.0.1", &(*socketAddress).sin_addr);
 	(*socketAddress).sin_port = htons(socketPort);
 }
+
+void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int peerPort, int hostPort, int *socketDescriptor)
+{
+	struct sockaddr_in peerAddr;
+	struct sockaddr_in hostAddr;
+
+	char message[256];
+
+	buildSocketAddress(&hostAddr, hostPort);
+	buildSocketAddress(&peerAddr, peerPort);
+
+	if ((*socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
+		error("Error creating socket\n");
+
+	if((bind(*socketDescriptor, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
+		error("Error binding socket\n");
+
+	printf("Socket bound with port number %d\n\n", hostPort);
+
+
+	printf("Please enter a message:\n");
+	fgets(message, sizeof(message), stdin);
+
+	message[strlen(message) - 1] = '\0';
+	printf("Sending \"%s\" to server\n\n", message);
+
+
+
+	sendto(*socketDescriptor, message, strlen(message) + 1, 0, (struct sockaddr *)&peerAddr, sizeof(struct sockaddr_in));
+
+	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
+
+	*nextPeerPort = ntohs((*nextPeerAddr).sin_port);
+
+	printf("Next Peer Information:\n"
+			"IP Address: %s\n"
+			"Port Number: %d\n\n",
+			inet_ntoa((*nextPeerAddr).sin_addr), *nextPeerPort);
+}
+
 
 
 
