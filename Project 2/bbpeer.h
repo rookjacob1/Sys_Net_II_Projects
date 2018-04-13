@@ -12,12 +12,22 @@
 
 #include"headerFiles.h"
 
-#include"bulletinBoard.h"
+int READBIT;
+int WRITEBIT;
+int LISTBIT;
+int EXITBIT;
 
-	int READBIT;
-	int WRITEBIT;
-	int LISTBIT;
-	int EXITBIT;
+
+typedef struct Header{
+
+}message_Header_t;
+
+typedef struct message{
+
+struct message_Header_t header;
+
+}message_t;
+
 
 /*
  *
