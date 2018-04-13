@@ -71,9 +71,9 @@ void validateArgv(int argc, char *argv[], int *sendPort)
 	}
 	if(argc == 6)
 	{
-		if(!strcmp(argv[1], "[-new]"))
+		if(!strcmp(argv[1], "-new"))
 		{
-			error("Invalid Parameter Format."
+			error("Invalid Parameter Format. \n"
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		}
 		if(!strcmp(argv[2], "localhost"))
@@ -165,7 +165,7 @@ void getNextPeerFromPeer( int peerPort)
 	fgets(message, sizeof(message), stdin);
 
 	message[strlen(message) - 1] = '\0';
-	printf("Sending \"%s\" to server\n\n", message);
+	printf("Sending \"%s\" to peer with port %d\n\n", message, peerPort);
 
 	initMessage(&peerRequest, NO_TOKEN, JOIN, NO_SEQ, message);
 
