@@ -19,7 +19,7 @@ int EXITBIT;
 
 
 typedef struct Header{
-
+	int token;
 }message_Header_t;
 
 typedef struct message{
@@ -46,12 +46,12 @@ void error(const char *msg);
  * new ring, 1 if the arguments indicate a peer joining an existing ring, and -1 if the arguements
  * are in the wrong format or have the wrong corresponding values.
  */
-void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *filename);
+void validateArgv(int argc, char *argv[], int *sendPort, int *hostPort, char *filename);
 
 /*
  *
  */
-void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *socketDescriptor);
+void getNextPeerServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int serverPort, int hostPort, int *socketDescriptor);
 
 /*
  *

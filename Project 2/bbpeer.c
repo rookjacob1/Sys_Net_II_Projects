@@ -23,7 +23,9 @@ int main(int argc, char *argv[])
 
 	validateArgv(argc, argv, &sendPort, &hostPort, filename);
 
-	getNextPeer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
+	if(argc == 6)
+		getNextPeerServer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
+	else
 
 
 	close(sockD);
@@ -36,7 +38,7 @@ void error(const char *msg)
 	exit(1);
 }
 
-void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *filename)
+void validateArgv(int argc, char *argv[], int *sendPort, int *hostPort, char *filename)
 {
 
 
@@ -55,7 +57,7 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 		if(!strcmp(argv[2], "localhost"))
 			error("Program does not support nonlocal message passing\n"
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
-		*serverPort = atoi(argv[3]);
+		*sendPort = atoi(argv[3]);
 		*hostPort = atoi(argv[4]);
 		filename = argv[5];
 	}
@@ -64,11 +66,11 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 		if(!strcmp(argv[2], "localhost"))
 					error("Program does not support nonlocal message passing\n"
 							"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
-		*serverPort = atoi(argv[2]);
+		*sendPort = atoi(argv[2]);
 		*hostPort = atoi(argv[3]);
 		filename = argv[4];
 	}
-	if(*serverPort < 60000 || *serverPort > 60099)
+	if(*sendPort < 60000 || *sendPort > 60099)
 	{
 		error("Invalid Port Number.\n"
 				"Port Number must be between 60,000 and 60,099\n");
@@ -80,7 +82,7 @@ void validateArgv(int argc, char *argv[], int *serverPort, int *hostPort, char *
 	}
 }
 
-void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendingPort, int hostPort, int *socketDescriptor)
+void getNextPeerServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int serverPort, int hostPort, int *socketDescriptor)
 {
 	struct sockaddr_in sendingAddr;
 	struct sockaddr_in hostAddr;
@@ -88,7 +90,7 @@ void getNextPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int sendin
 	char message[256];
 
 	buildSocketAddress(&hostAddr, hostPort);
-	buildSocketAddress(&sendingAddr, sendingPort);
+	buildSocketAddress(&sendingAddr, serverPort);
 
 	if ((*socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
 		error("Error creating socket\n");
