@@ -73,7 +73,7 @@ void validateArgv(int argc, char *argv[], int *sendPort)
 	{
 		if(!strcmp(argv[1], "-new"))
 		{
-			printf("%s\n",argv);
+			printf("%s\n",argv[1]);
 			error("Invalid Parameter Format. \n"
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		}
