@@ -86,7 +86,7 @@ void validateArgv(int argc, char *argv[], int *sendPort)
 	}
 	else
 	{
-		if(strcmp(argv[2], "localhost"))
+		if(strcmp(argv[1], "localhost"))
 					error("Program does not support nonlocal message passing\n"
 							"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		*sendPort = atoi(argv[2]);
