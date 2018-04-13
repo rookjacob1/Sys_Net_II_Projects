@@ -173,6 +173,7 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 void initMessage(struct message_t *message, int token, int action, int sequenceNumber, char *messageText)
 {
 	char tmp[BODYSIZE];
+	char tmpHeader[BODYSIZE];
 	(*message).header.token = token;
 	(*message).header.action = action;
 	(*message).header.sequenceNumber = sequenceNumber;
@@ -183,7 +184,8 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 	}
 	else if(messageText != NULL)
 	{
-		sprintf((*message).messageBody, "%s", HEADER, sequenceNumber, "%s\n%s", messageText, FOOTER);
+		sprintf(tmpHeader, HEADER, sequenceNumber);
+		sprintf((*message).messageBody, tmpHeader, "%s\n%s", messageText, FOOTER);
 	}
 }
 
