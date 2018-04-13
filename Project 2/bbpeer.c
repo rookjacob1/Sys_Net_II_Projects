@@ -168,9 +168,20 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 			inet_ntoa((*nextPeerAddr).sin_addr), *nextPeerPort);
 }
 
-void initMessage(struct message_t *message, int messageToken, int messageAction, int messageSequenceNumber, char *messageText)
+void initMessage(struct message_t *message, int token, int action, int sequenceNumber, char *messageText)
 {
-	(*message).header.token = messageToken;
+	(*message).header.token = token;
+	(*message).header.action = action;
+	(*message).header.sequenceNumber = sequenceNumber;
+
+	if(sequenceNumber == NO_SEQ && messageText != NULL)
+	{
+		snprintf((*message).messageBody, BODYSIZE, "%s", messageText);
+	}
+	else if(messageText != NULL)
+	{
+		snprintf((*message).messageBody, BODYSIZE, HEADER, sequenceNumber, "%s\n", messageText, FOOTER);
+	}
 }
 
 
