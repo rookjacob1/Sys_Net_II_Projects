@@ -18,11 +18,11 @@ int main(int argc, char *argv[])
 	if(argc == 6)
 		getNextPeerFromServer(sendPort);
 	else
-		getNextPeerFromPeer( sendPort);
+		getNextPeerFromPeer(sendPort);
 
 	bulletinBoardRing();
 
-	close(sockD);
+	close(SOCKET_D);
 	return 0;
 }
 
@@ -132,12 +132,12 @@ void getNextPeerFromServer(int serverPort)
 
 	recvfrom(SOCKET_D, &NEXT_PEER_ADDR, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
-	*nextPeerPort = ntohs((NEXT_PEER_ADDR).sin_port);
+	NEXT_PEER_PORT = ntohs((NEXT_PEER_ADDR).sin_port);
 
 	printf("Next Peer Information:\n"
 			"IP Address: %s\n"
 			"Port Number: %d\n\n",
-			inet_ntoa((NEXT_PEER_ADDR).sin_addr), *nextPeerPort);
+			inet_ntoa((NEXT_PEER_ADDR).sin_addr), NEXT_PEER_PORT);
 }
 
 void getNextPeerFromPeer( int peerPort)
@@ -173,12 +173,12 @@ void getNextPeerFromPeer( int peerPort)
 
 	recvfrom(SOCKET_D, &NEXT_PEER_ADDR, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
-	*nextPeerPort = ntohs((NEXT_PEER_ADDR).sin_port);
+	NEXT_PEER_PORT = ntohs((NEXT_PEER_ADDR).sin_port);
 
 	printf("Next Peer Information:\n"
 			"IP Address: %s\n"
 			"Port Number: %d\n\n",
-			inet_ntoa((NEXT_PEER_ADDR).sin_addr), *nextPeerPort);
+			inet_ntoa((NEXT_PEER_ADDR).sin_addr), NEXT_PEER_PORT);
 }
 
 void bulletinBoardRing(void)
@@ -186,7 +186,10 @@ void bulletinBoardRing(void)
 
 }
 
-void determineInitiator
+void determineInitiator(void)
+{
+
+}
 
 
 

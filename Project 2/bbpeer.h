@@ -87,17 +87,28 @@ void initMessage(struct message_t *message, int messageToken, int messageAction,
  * new ring, 1 if the arguments indicate a peer joining an existing ring, and -1 if the arguements
  * are in the wrong format or have the wrong corresponding values.
  */
-void validateArgv(int argc, char *argv[], int *sendPort, int *hostPort, char *filename);
+void validateArgv(int argc, char *argv[], int *sendPort);
 
 /*
  *
  */
-void getNextPeerFromServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int serverPort, int hostPort, int *socketDescriptor);
+void getNextPeerFromServer(int serverPort);
 
 /*
  *
  */
-void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int peerPort, int hostPort, int *socketDescriptor);
+void getNextPeerFromPeer( int peerPort);
+
+/*
+ *
+ */
+void bulletinBoardRing(void);
+
+/*
+ *
+ */
+void determineInitiator(void);
+
 
 
 
