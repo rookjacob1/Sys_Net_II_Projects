@@ -88,7 +88,7 @@ void getNextPeerFromServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, 
 	struct sockaddr_in serverAddr;
 	struct sockaddr_in hostAddr;
 
-	char message[256];
+	char message[BODYSIZE];
 
 	buildSocketAddress(&hostAddr, hostPort);
 	buildSocketAddress(&serverAddr, serverPort);
@@ -131,8 +131,10 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 {
 	struct sockaddr_in peerAddr;
 	struct sockaddr_in hostAddr;
+	struct message_t peerRequest;
 
-	char message[256];
+
+	char message[BODYSIZE];
 
 	buildSocketAddress(&hostAddr, hostPort);
 	buildSocketAddress(&peerAddr, peerPort);
@@ -152,9 +154,9 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 	message[strlen(message) - 1] = '\0';
 	printf("Sending \"%s\" to server\n\n", message);
 
+	initMessage(&peerRequest, NO_TOKEN, JOIN, NO_SEQ, message);
 
-
-	sendto(*socketDescriptor, message, strlen(message) + 1, 0, (struct sockaddr *)&peerAddr, sizeof(struct sockaddr_in));
+	sendto(*socketDescriptor, &peerRequest, sizeof(struct message_t), 0, (struct sockaddr *)&peerAddr, sizeof(struct sockaddr_in));
 
 	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
@@ -164,6 +166,11 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 			"IP Address: %s\n"
 			"Port Number: %d\n\n",
 			inet_ntoa((*nextPeerAddr).sin_addr), *nextPeerPort);
+}
+
+void initMessage(message_t *message, int messageToken, int messageAction, int messageSequenceNumber, char *messageText)
+{
+	(*message).header.token = messageToken;
 }
 
 

@@ -27,6 +27,9 @@
 #define JOIN 2049
 #define EXIT 2050
 
+//Sequence Modes
+#define NO_SEQ -2048
+
 
 
 
