@@ -72,13 +72,12 @@ void validateArgv(int argc, char *argv[], int *sendPort)
 	}
 	if(argc == 6)
 	{
-		if(!(i = strcmp(argv[1], "-new")))
+		if( strcmp(argv[1], "-new"))
 		{
-			printf("%s %d\n",argv[1], i);
 			error("Invalid Parameter Format. \n"
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		}
-		if(!strcmp(argv[2], "localhost"))
+		if(strcmp(argv[2], "localhost"))
 			error("Program does not support nonlocal message passing\n"
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		*sendPort = atoi(argv[3]);
@@ -87,7 +86,7 @@ void validateArgv(int argc, char *argv[], int *sendPort)
 	}
 	else
 	{
-		if(!strcmp(argv[2], "localhost"))
+		if(strcmp(argv[2], "localhost"))
 					error("Program does not support nonlocal message passing\n"
 							"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		*sendPort = atoi(argv[2]);
