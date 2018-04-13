@@ -40,18 +40,18 @@ int LISTBIT;
 int EXITBIT;
 
 
-typedef struct Header{
+struct message_Header_t{
 	int token;
 	int action;
 	int sequenceNumber;
-}message_Header_t;
+};
 
-typedef struct message{
+struct message_t{
 
 	struct message_Header_t header;
 	char messageBody[BODYSIZE];
 
-}message_t;
+};
 
 
 /*
