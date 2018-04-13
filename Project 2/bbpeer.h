@@ -60,6 +60,16 @@ struct message_t{
 void error(const char *msg);
 
 /*
+ *
+ */
+void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort);
+
+/*
+ *
+ */
+void initMessage(struct message_t *message, int messageToken, int messageAction, int messageSequenceNumber, char *messageText);
+
+/*
  * @breif	validateArgv	The validateArgv() call checks if the arguments passed to the main
  * function are in the correct format and have appropriate values.
  *
@@ -81,17 +91,9 @@ void getNextPeerFromServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, 
 /*
  *
  */
-void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort);
-
-/*
- *
- */
 void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int peerPort, int hostPort, int *socketDescriptor);
 
-/*
- *
- */
-void initMessage(struct message_t *message, int messageToken, int messageAction, int messageSequenceNumber, char *messageText);
+
 
 
 
