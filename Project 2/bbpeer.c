@@ -63,8 +63,6 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 void validateArgv(int argc, char *argv[], int *sendPort)
 {
 
-	int i;
-
 	if(argc != 5 && argc != 6)
 	{
 		error("Invalid Number of Parameters. \n"
