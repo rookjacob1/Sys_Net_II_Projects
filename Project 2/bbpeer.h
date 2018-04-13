@@ -83,6 +83,18 @@ void getNextPeerFromServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, 
  */
 void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort);
 
+/*
+ *
+ */
+void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int peerPort, int hostPort, int *socketDescriptor);
+
+/*
+ *
+ */
+void initMessage(message_t *message, int messageToken, int messageAction, int messageSequenceNumber, char *messageText);
+
+
+
 
 
 #endif /* BBPEER_H_ */
