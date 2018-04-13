@@ -13,8 +13,8 @@
 #include"headerFiles.h"
 
 //Message Formats
-#define HEADER "<message n=%d>\n"
-#define FOOTER "</message>\n"
+const char HEADER[] "<message n=%d>\n"
+const char FOOTER[] "</message>\n"
 #define BODYSIZE 256
 
 //Token Modes
