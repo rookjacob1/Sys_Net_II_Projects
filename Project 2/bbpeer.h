@@ -53,6 +53,12 @@ struct message_t{
 
 };
 
+struct sockaddr_in NEXT_PEER_ADDR;
+int NEXT_PEER_PORT;
+int HOST_PORT;
+int SOCKET_D;
+char *FILENAME;
+
 
 /*
  *

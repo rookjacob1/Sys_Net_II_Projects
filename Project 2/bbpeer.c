@@ -11,24 +11,16 @@
 
 int main(int argc, char *argv[])
 {
-
-	int sockD;
 	int sendPort;
-	int nextPeerPort;
-	int hostPort;
 
-	char *filename = NULL;
-
-	struct sockaddr_in nextPeerAddr;
-
-	validateArgv(argc, argv, &sendPort, &hostPort, filename);
+	validateArgv(argc, argv, &sendPort);
 
 	if(argc == 6)
-		getNextPeerFromServer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
+		getNextPeerFromServer(sendPort);
 	else
-		getNextPeerFromPeer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
+		getNextPeerFromPeer( sendPort);
 
-	bulletinBoardRing(&nextPeerAddr, nextPeerPort, hostPort, sockD);
+	bulletinBoardRing();
 
 	close(sockD);
 	return 0;
@@ -68,7 +60,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 	printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
 }
 
-void validateArgv(int argc, char *argv[], int *sendPort, int *hostPort, char *filename)
+void validateArgv(int argc, char *argv[], int *sendPort)
 {
 
 
@@ -88,8 +80,8 @@ void validateArgv(int argc, char *argv[], int *sendPort, int *hostPort, char *fi
 			error("Program does not support nonlocal message passing\n"
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		*sendPort = atoi(argv[3]);
-		*hostPort = atoi(argv[4]);
-		filename = argv[5];
+		HOST_PORT = atoi(argv[4]);
+		FILENAME = argv[5];
 	}
 	else
 	{
@@ -97,38 +89,38 @@ void validateArgv(int argc, char *argv[], int *sendPort, int *hostPort, char *fi
 					error("Program does not support nonlocal message passing\n"
 							"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		*sendPort = atoi(argv[2]);
-		*hostPort = atoi(argv[3]);
-		filename = argv[4];
+		HOST_PORT = atoi(argv[3]);
+		FILENAME = argv[4];
 	}
 	if(*sendPort < 60000 || *sendPort > 60099)
 	{
 		error("Invalid Port Number.\n"
 				"Port Number must be between 60,000 and 60,099\n");
 	}
-	if(*hostPort < 60000 || *hostPort > 60099)
+	if(HOST_PORT < 60000 || HOST_PORT > 60099)
 	{
 		error("Invalid Host Port Number.\n"
 				"Host Port Number must be between 60,000 and 60,099\n");
 	}
 }
 
-void getNextPeerFromServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int serverPort, int hostPort, int *socketDescriptor)
+void getNextPeerFromServer(int serverPort)
 {
 	struct sockaddr_in serverAddr;
 	struct sockaddr_in hostAddr;
 
 	char message[BODYSIZE];
 
-	buildSocketAddress(&hostAddr, hostPort);
+	buildSocketAddress(&hostAddr, HOST_PORT);
 	buildSocketAddress(&serverAddr, serverPort);
 
-	if ((*socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
+	if ((SOCKET_D = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
 		error("Error creating socket\n");
 
-	if((bind(*socketDescriptor, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
+	if((bind(SOCKET_D, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
 		error("Error binding socket\n");
 
-	printf("Socket bound with port number %d\n\n", hostPort);
+	printf("Socket bound with port number %d\n\n", HOST_PORT);
 
 
 	printf("Please enter a message:\n");
@@ -136,19 +128,19 @@ void getNextPeerFromServer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, 
 
 	message[strlen(message) - 1] = '\0';
 	printf("Sending \"%s\" to server\n\n", message);
-	sendto(*socketDescriptor, message, strlen(message) + 1, 0, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in));
+	sendto(SOCKET_D, message, strlen(message) + 1, 0, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in));
 
-	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
+	recvfrom(SOCKET_D, &NEXT_PEER_ADDR, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
-	*nextPeerPort = ntohs((*nextPeerAddr).sin_port);
+	*nextPeerPort = ntohs((NEXT_PEER_ADDR).sin_port);
 
 	printf("Next Peer Information:\n"
 			"IP Address: %s\n"
 			"Port Number: %d\n\n",
-			inet_ntoa((*nextPeerAddr).sin_addr), *nextPeerPort);
+			inet_ntoa((NEXT_PEER_ADDR).sin_addr), *nextPeerPort);
 }
 
-void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, int peerPort, int hostPort, int *socketDescriptor)
+void getNextPeerFromPeer( int peerPort)
 {
 	struct sockaddr_in peerAddr;
 	struct sockaddr_in hostAddr;
@@ -157,16 +149,16 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 
 	char message[BODYSIZE];
 
-	buildSocketAddress(&hostAddr, hostPort);
+	buildSocketAddress(&hostAddr, HOST_PORT);
 	buildSocketAddress(&peerAddr, peerPort);
 
-	if ((*socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
+	if ((SOCKET_D = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
 		error("Error creating socket\n");
 
-	if((bind(*socketDescriptor, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
+	if((bind(SOCKET_D, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
 		error("Error binding socket\n");
 
-	printf("Socket bound with port number %d\n\n", hostPort);
+	printf("Socket bound with port number %d\n\n", HOST_PORT);
 
 
 	printf("Please enter a message:\n");
@@ -177,22 +169,24 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 
 	initMessage(&peerRequest, NO_TOKEN, JOIN, NO_SEQ, message);
 
-	sendto(*socketDescriptor, &peerRequest, sizeof(struct message_t), 0, (struct sockaddr *)&peerAddr, sizeof(struct sockaddr_in));
+	sendto(SOCKET_D, &peerRequest, sizeof(struct message_t), 0, (struct sockaddr *)&peerAddr, sizeof(struct sockaddr_in));
 
-	recvfrom(*socketDescriptor, nextPeerAddr, sizeof(struct sockaddr_in), 0 , NULL, NULL);
+	recvfrom(SOCKET_D, &NEXT_PEER_ADDR, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
-	*nextPeerPort = ntohs((*nextPeerAddr).sin_port);
+	*nextPeerPort = ntohs((NEXT_PEER_ADDR).sin_port);
 
 	printf("Next Peer Information:\n"
 			"IP Address: %s\n"
 			"Port Number: %d\n\n",
-			inet_ntoa((*nextPeerAddr).sin_addr), *nextPeerPort);
+			inet_ntoa((NEXT_PEER_ADDR).sin_addr), *nextPeerPort);
 }
 
-void bulletinBoardRing(struct sockaddr_in *nextPeerAddr, int nextPeerPort, int hostPort, int socketDescriptor)
+void bulletinBoardRing(void)
 {
 
 }
+
+void determineInitiator
 
 
 
