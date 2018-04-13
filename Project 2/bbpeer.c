@@ -139,7 +139,7 @@ void getNextPeerFromServer(int serverPort)
 			inet_ntoa((NEXT_PEER_ADDR).sin_addr), NEXT_PEER_PORT);
 }
 
-void getNextPeerFromPeer( int peerPort)
+void getNextPeerFromPeer(int peerPort)
 {
 	struct sockaddr_in peerAddr;
 	struct sockaddr_in hostAddr;
@@ -182,6 +182,26 @@ void getNextPeerFromPeer( int peerPort)
 
 void bulletinBoardRing(void)
 {
+	READ_BIT = 0;
+	WRITE_BIT = 0;
+	LIST_BIT = 0;
+	EXIT_BIT = 0;
+
+	determineInitiator();
+
+	pthread_create(TID, NULL, bulletinBoardEditing, NULL);
+
+	while(EXIT_BIT != 1)
+	{
+		processNextMessage();
+		checkUserInput();
+	}
+
+	exitRing();
+}
+
+void mutexPrint(const char *str)
+{
 
 }
 
@@ -190,6 +210,25 @@ void determineInitiator(void)
 
 }
 
+void processNextMessage(void)
+{
+
+}
+
+void checkUserInput(void)
+{
+
+}
+
+void exitRing(void)
+{
+
+}
+
+void *bulletinBoardEditing(void *parm)
+{
+
+}
 
 
 

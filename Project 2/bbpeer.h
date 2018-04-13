@@ -30,16 +30,6 @@ const char FOOTER[] = "</message>\n";
 //Sequence Modes
 #define NO_SEQ -2048
 
-
-
-
-
-int READBIT;
-int WRITEBIT;
-int LISTBIT;
-int EXITBIT;
-
-
 struct message_Header_t{
 	int token;
 	int action;
@@ -53,11 +43,23 @@ struct message_t{
 
 };
 
+//Global variables to use inside bulletinBoardRing()
 struct sockaddr_in NEXT_PEER_ADDR;
 int NEXT_PEER_PORT;
 int HOST_PORT;
 int SOCKET_D;
 char *FILENAME;
+struct message_t MESSAGE;
+
+//Variables for bulletinBoardEditing() thread to communicate with main thread
+int READ_BIT;
+int WRITE_BIT;
+int LIST_BIT;
+int EXIT_BIT;
+
+//bulletinBoardEditing() thread variables
+pthread_t TID;
+pthread_mutex_t PRINT_LOCK;
 
 
 /*
@@ -97,7 +99,7 @@ void getNextPeerFromServer(int serverPort);
 /*
  *
  */
-void getNextPeerFromPeer( int peerPort);
+void getNextPeerFromPeer(int peerPort);
 
 /*
  *
@@ -107,12 +109,32 @@ void bulletinBoardRing(void);
 /*
  *
  */
+void mutexPrint(const char *str);
+
+/*
+ *
+ */
 void determineInitiator(void);
 
+/*
+ *
+ */
+void processNextMessage(void);
 
+/*
+ *
+ */
+void checkUserInput(void);
 
+/*
+ *
+ */
+void exitRing(void);
 
-
+/*
+ *
+ */
+void *bulletinBoardEditing(void *parm);
 
 
 
