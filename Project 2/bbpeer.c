@@ -180,7 +180,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 	}
 	else if(messageText != NULL)
 	{
-		snprintf((*message).messageBody, BODYSIZE, HEADER, "%s\n",  FOOTER, sequenceNumber, messageText);
+		snprintf((*message).messageBody, BODYSIZE, HEADER, sequenceNumber, "%s\n", messageText, FOOTER);
 	}
 }
 
