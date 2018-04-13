@@ -183,7 +183,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 	}
 	else if(messageText != NULL)
 	{
-		sprintf((*message).messageBody, HEADER, sequenceNumber, "%s\n%s", messageText, FOOTER);
+		sprintf((*message).messageBody, "%s", HEADER, sequenceNumber, "%s\n%s", messageText, FOOTER);
 	}
 }
 
