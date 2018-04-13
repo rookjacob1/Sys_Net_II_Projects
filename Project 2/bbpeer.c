@@ -28,8 +28,7 @@ int main(int argc, char *argv[])
 	else
 		getNextPeerFromPeer(&nextPeerAddr, &nextPeerPort, sendPort, hostPort, &sockD);
 
-
-
+	bulletinBoardRing(&nextPeerAddr, nextPeerPort, hostPort, sockD);
 
 	close(sockD);
 	return 0;
@@ -190,7 +189,10 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 			inet_ntoa((*nextPeerAddr).sin_addr), *nextPeerPort);
 }
 
+void bulletinBoardRing(struct sockaddr_in *nextPeerAddr, int nextPeerPort, int hostPort, int socketDescriptor)
+{
 
+}
 
 
 
