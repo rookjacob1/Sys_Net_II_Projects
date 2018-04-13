@@ -91,7 +91,7 @@ void getNextPeerFromPeer(struct sockaddr_in *nextPeerAddr, int *nextPeerPort, in
 /*
  *
  */
-void initMessage(message_t *message, int messageToken, int messageAction, int messageSequenceNumber, char *messageText);
+void initMessage(struct message_t *message, int messageToken, int messageAction, int messageSequenceNumber, char *messageText);
 
 
 
