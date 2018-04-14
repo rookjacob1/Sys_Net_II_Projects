@@ -15,7 +15,10 @@
 //Message Formats
 const char HEADER[] = "<message n=%3d>\n";
 const char FOOTER[] = "</message>\n";
-#define BODYSIZE 256
+#define MESSAGE_SIZE 256
+#define HEADER_SIZE 16
+#define FOOTER_SIZE 12
+#define BODY_SIZE (MESSAGE_SIZE - HEADER_SIZE - FOOTERSIZE)
 
 //Token Modes
 #define PASS_TOKEN 1024
@@ -39,7 +42,7 @@ struct message_Header_t{
 struct message_t{
 
 	struct message_Header_t header;
-	char messageBody[BODYSIZE];
+	char messageBody[MESSAGE_SIZE];
 
 };
 
@@ -57,7 +60,7 @@ int READ_BIT;
 int WRITE_BIT;
 int LIST_BIT;
 int EXIT_BIT;
-char WRITE_MESSAGE[BODYSIZE];
+char WRITE_MESSAGE[MESSAGE_SIZE];
 
 //bulletinBoardEditing() thread variables
 pthread_t TID;

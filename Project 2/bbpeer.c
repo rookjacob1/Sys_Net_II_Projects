@@ -48,7 +48,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 
 	if(messageText != NULL)
 	{
-		snprintf((*message).messageBody, BODYSIZE, "%s", messageText);
+		snprintf((*message).messageBody, MESSAGE_SIZE, "%s", messageText);
 	}
 
 	//printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
@@ -109,7 +109,7 @@ void getNextPeerFromServer(int serverPort)
 	struct sockaddr_in serverAddr;
 	struct sockaddr_in hostAddr;
 
-	char message[BODYSIZE];
+	char message[MESSAGE_SIZE];
 
 	buildSocketAddress(&hostAddr, HOST_PORT);
 	buildSocketAddress(&serverAddr, serverPort);
@@ -147,7 +147,7 @@ void getNextPeerFromPeer(int peerPort)
 	struct message_t peerRequest;
 
 
-	char message[BODYSIZE];
+	char message[MESSAGE_SIZE];
 
 	buildSocketAddress(&hostAddr, HOST_PORT);
 	buildSocketAddress(&peerAddr, peerPort);
@@ -345,9 +345,9 @@ void *bulletinBoardEditing(void *parm)
 
 void userWrite(void)
 {
-	char tmpStr[BODYSIZE];
+	char tmpStr[MESSAGE_SIZE];
 	WRITE_MESSAGE[0] = '\0';
-	memset(&WRITE_MESSAGE[1], ' ', BODYSIZE - 1 );
+	memset(&WRITE_MESSAGE[1], ' ', MESSAGE_SIZE - 1 );
 
 	sprintf(WRITE_MESSAGE, HEADER);
 }
