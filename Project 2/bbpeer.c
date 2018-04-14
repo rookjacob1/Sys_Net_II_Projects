@@ -217,29 +217,43 @@ void determineInitiator(void)
 {
 	int tmpPortNumber;
 	char portNumber[16];
+
 	sprintf(portNumber, "%d", HOST_PORT);
 	initMessage(&OUT_MESSAGE, TOKEN_INIT, NO_ACTION, NO_SEQ, portNumber);
 
 	struct message_t inMessage;
+	struct sockaddr_in peerAddr;
+	socklen_t peerAddrLen;
 
 	printf("Beginning to determine the Initiator. Sending host port number %d to next peer with port number %d\n\n",
-			HOST_PORT, NEXT_PEER_PORT)
+			HOST_PORT, NEXT_PEER_PORT);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 	while(1)
 	{
-		recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, NULL, NULL);
+		printf("Waiting for message from peer\n\n");
+		recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, &peerAddr, &peerAddrLen);
 
 		if(inMessage.header.token == TOKEN_INIT)
 		{
 			tmpPortNumber = atoi(inMessage.messageBody);
 			if(tmpPortNumber < HOST_PORT)
 			{
+				printf("\"%s\" received from peer with port number %d\n",
+						inMessage.messageBody, ntohs(peerAddr.sin_port));
+				printf("Host port number: %d > received port: %d\n", HOST_PORT, tmpPortNumber);
+				printf("Forwarding received port number: %d to the next peer with port number %d\n\n",
+						tmpPortNumber, NEXT_PEER_PORT);
 				sendto(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 			}
 			else if(tmpPortNumber == HOST_PORT)
 			{
-				printf("Initiator!\n\n");
+				printf("\"%s\" received from peer with port number %d\n",
+										inMessage.messageBody, ntohs(peerAddr.sin_port));
+				printf("Host port number: %d = received port: %d\n", HOST_PORT, tmpPortNumber);
+				printf("Host has the lowest port number, therefore is the Initiator!!\n\n");
+
+				printf("Sending notification to next peer to inform the Initiator has been found\n\n");
 				initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, NO_SEQ, portNumber);
 				sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 				initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, 1, NULL);
@@ -248,11 +262,18 @@ void determineInitiator(void)
 			}
 			else
 			{
+				printf("\"%s\" received from peer with port number %d\n",
+												inMessage.messageBody, ntohs(peerAddr.sin_port));
+				printf("Host port number: %d < received port: %d\n", HOST_PORT, tmpPortNumber);
+				printf("Re-sending host port number %d to next peer with port number %d\n\n", HOST_PORT, NEXT_PEER_PORT);
 				sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 			}
 		}
 		else
 		{
+			printf("Received notification that Initiator was found from peer with port number %d\n"
+					"Forwarding notification to next peer with port number %d",
+					ntohs(peerAddr.sin_port), NEXT_PEER_PORT);
 			initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, NO_SEQ, portNumber);
 			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 			break;
