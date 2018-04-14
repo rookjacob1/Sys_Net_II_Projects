@@ -60,6 +60,13 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 	printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
 }
 
+void mutexPrint(const char *str)
+{
+	pthread_mutex_lock(&PRINT_LOCK);
+	printf("%s\n");
+	pthread_mutex_unlock(&PRINT_LOCK);
+}
+
 void validateArgv(int argc, char *argv[], int *sendPort)
 {
 
@@ -189,6 +196,7 @@ void bulletinBoardRing(void)
 
 	determineInitiator();
 
+	pthread_mutex_init(&PRINT_LOCK, NULL);
 	pthread_create(TID, NULL, bulletinBoardEditing, NULL);
 
 	while(EXIT_BIT != 1)
@@ -198,11 +206,6 @@ void bulletinBoardRing(void)
 	}
 
 	exitRing();
-}
-
-void mutexPrint(const char *str)
-{
-
 }
 
 void determineInitiator(void)
