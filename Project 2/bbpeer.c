@@ -348,11 +348,12 @@ void userWrite(void)
 	char tmpStr[MESSAGE_SIZE - HEADER_SIZE + 1];
 
 	mutexPrint("Please enter the message to write to the bulletin board:\n");
+	fflush(stdin);
 	fgets(tmpStr, sizeof(tmpStr) - FOOTER_SIZE, stdin);
 
 	memset(&tmpStr[strlen(tmpStr)], ' ', sizeof(tmpStr) - strlen(tmpStr));
 
-	sprintf(&tmpStr[sizeof(tmpStr) - FOOTER_SIZE], "%s", HEADER);
+	sprintf(&tmpStr[sizeof(tmpStr) - FOOTER_SIZE], "%s", FOOTER);
 
 	sprintf(WRITE_MESSAGE, "%s", tmpStr);
 
