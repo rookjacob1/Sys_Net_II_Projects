@@ -232,7 +232,7 @@ void determineInitiator(void)
 	while(1)
 	{
 		printf("Waiting for message from peer\n\n");
-		recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockadd *)&peerAddr, &peerAddrLen);
+		recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
 
 		if(inMessage.header.token == TOKEN_INIT)
 		{
