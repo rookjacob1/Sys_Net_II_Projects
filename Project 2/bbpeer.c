@@ -42,7 +42,6 @@ void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort)
 
 void initMessage(struct message_t *message, int token, int action, int sequenceNumber, char *messageText)
 {
-	char tmpHeader[32];
 	(*message).header.token = token;
 	(*message).header.action = action;
 	(*message).header.sequenceNumber = sequenceNumber;
@@ -58,7 +57,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 void mutexPrint(const char *str)
 {
 	pthread_mutex_lock(&PRINT_LOCK);
-	printf("%s\n");
+	printf("%s\n", str);
 	pthread_mutex_unlock(&PRINT_LOCK);
 }
 
@@ -193,7 +192,7 @@ void bulletinBoardRing(void)
 	determineInitiator();
 
 	pthread_mutex_init(&PRINT_LOCK, NULL);
-	pthread_create(TID, NULL, bulletinBoardEditing, NULL);
+	pthread_create(&TID, NULL, bulletinBoardEditing, NULL);
 
 	if(HAVE_TOKEN == 1)
 	{
@@ -227,7 +226,7 @@ void determineInitiator(void)
 
 	while(1)
 	{
-		recvfrom(SOCKET_D, *inMessage, sizeof(inMessage), 0, NULL, NULL);
+		recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, NULL, NULL);
 
 		if(inMessage.header.token == TOKEN_INIT)
 		{
@@ -278,7 +277,7 @@ void exitRing(void)
 
 void *bulletinBoardEditing(void *parm)
 {
-
+	return parm;
 }
 
 
