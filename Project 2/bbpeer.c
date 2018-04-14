@@ -350,6 +350,8 @@ void userWrite(void)
 
 	mutexPrint("Please enter the message to write to the bulletin board:\n");
 	fflush(stdin);
+	scanf("\n%c", &tmpStr);
+
 	fgets(tmpStr, sizeof(tmpStr) - FOOTER_SIZE, stdin);
 
 	memset(&tmpStr[strlen(tmpStr)], ' ', sizeof(tmpStr) - strlen(tmpStr));
