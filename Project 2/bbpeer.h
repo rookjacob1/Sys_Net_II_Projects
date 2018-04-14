@@ -57,6 +57,7 @@ int READ_BIT;
 int WRITE_BIT;
 int LIST_BIT;
 int EXIT_BIT;
+char WRITE_MESSAGE[BODYSIZE];
 
 //bulletinBoardEditing() thread variables
 pthread_t TID;

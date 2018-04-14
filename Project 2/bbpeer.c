@@ -345,7 +345,8 @@ void *bulletinBoardEditing(void *parm)
 
 void userWrite(void)
 {
-
+	char tmpStr[BODYSIZE];
+	WRITE_MESSAGE[0] = '\0';
 }
 
 void userRead(void)
