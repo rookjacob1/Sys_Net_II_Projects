@@ -138,6 +138,29 @@ void exitRing(void);
  */
 void *bulletinBoardEditing(void *parm);
 
+/*
+ *
+ */
+void userWrite(void);
+
+/*
+ *
+ */
+void userRead(void);
+
+/*
+ *
+ */
+void userList(void);
+
+/*
+ *
+ */
+void userExit(void);
+
+
+
+
 
 
 #endif /* BBPEER_H_ */
