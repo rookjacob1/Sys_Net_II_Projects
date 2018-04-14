@@ -202,7 +202,7 @@ void bulletinBoardRing(void)
 	while(EXIT_BIT != 1)
 	{
 		processNextMessage();
-		if(HAVE_TOKEN == 1)
+		if(HAVE_TOKEN == 2)
 		{
 			checkUserInput();
 			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
@@ -352,8 +352,11 @@ void userWrite(void)
 
 	memset(&tmpStr[strlen(tmpStr)], ' ', sizeof(tmpStr) - strlen(tmpStr));
 
-	//tmpStr[sizeof(tmpStr) - FOOTER_SIZE] Where to put the HEADER
+	sprintf(&tmpStr[sizeof(tmpStr) - FOOTER_SIZE], "%s", HEADER);
 
+	sprintf(WRITE_MESSAGE, "%s", tmpStr);
+
+	printf("%s\n\n", WRITE_MESSAGE);
 
 }
 
