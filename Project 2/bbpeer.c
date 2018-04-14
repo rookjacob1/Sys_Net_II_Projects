@@ -317,6 +317,7 @@ void *bulletinBoardEditing(void *parm)
 				"\n******************************************************************************************\n\n"
 				"Please enter one of the options above:\n");
 		opt = getchar();
+		fflush(stdin);
 		switch (opt)
 		{
 			case 'w': case 'W':
