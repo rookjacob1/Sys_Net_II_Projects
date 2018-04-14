@@ -316,7 +316,7 @@ void *bulletinBoardEditing(void *parm)
 				"</message>\n"
 				"\n******************************************************************************************\n\n"
 				"Please enter one of the options above:\n");
-		opt = getchar();
+		opt = getc(stdin);
 		fflush(stdin);
 		switch (opt)
 		{
@@ -350,7 +350,7 @@ void userWrite(void)
 
 	mutexPrint("Please enter the message to write to the bulletin board:\n");
 	fflush(stdin);
-	fgets(tmpStr, sizeof(tmpStr) - FOOTER_SIZE, stdin);
+	gets(tmpStr);
 
 	memset(&tmpStr[strlen(tmpStr)], ' ', sizeof(tmpStr) - strlen(tmpStr));
 
