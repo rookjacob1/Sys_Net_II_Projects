@@ -57,7 +57,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 void mutexPrint(const char *str)
 {
 	pthread_mutex_lock(&PRINT_LOCK);
-	printf("%s\n", str);
+	printf("%s", str);
 	pthread_mutex_unlock(&PRINT_LOCK);
 }
 
@@ -198,7 +198,7 @@ void bulletinBoardRing(void)
 	{
 		checkUserInput();
 	}
-/*
+
 	while(EXIT_BIT != 1)
 	{
 		processNextMessage();
@@ -209,7 +209,7 @@ void bulletinBoardRing(void)
 		}
 	}
 
-	exitRing();*/
+	exitRing();
 	pthread_mutex_destroy(&PRINT_LOCK);
 }
 
@@ -300,7 +300,67 @@ void exitRing(void)
 
 void *bulletinBoardEditing(void *parm)
 {
+	char opt;
+	char defaultMessage[64];
+	while(1)
+	{
+		mutexPrint("\n******************************************************************************************\n\n"
+				"Enter w to write to the bulletin board\n"
+				"Enter r to read an entry from the bulletin board\n"
+				"Enter l to list all entries from the bulletin board\n"
+				"Enter e to exit the bulletin board ring\n"
+				"\n"
+				"The message format is as follows:\n"
+				"<message n=sequence Number\n"
+				"<body>\n"
+				"</message>\n"
+				"\n******************************************************************************************\n\n"
+				"Please enter one of the options above:\n");
+		opt = getchar();
+		switch (opt)
+		{
+			case 'w': case 'W':
+				userWrite();
+				break;
+
+			case 'r': case 'R':
+				userRead();
+				break;
+
+			case 'l': case 'L':
+				userList();
+				break;
+
+			case 'e': case 'E':
+				userExit();
+				break;
+
+			default:
+				sprintf(defaultMessage, "%c is not a valid option. No action taken.\n\n", opt);
+				mutexPrint(defaultMessage);
+		}
+	}
 	return parm;
+}
+
+void userWrite(void)
+{
+
+}
+
+void userRead(void)
+{
+
+}
+
+void userList(void)
+{
+
+}
+
+void userExit(void)
+{
+
 }
 
 

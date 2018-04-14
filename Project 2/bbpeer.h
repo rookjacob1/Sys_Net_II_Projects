@@ -113,7 +113,8 @@ void bulletinBoardRing(void);
 void mutexPrint(const char *str);
 
 /*
- *
+ * determineInitiator works properly with print statements.
+However, one of the peers was printing 0 for the port address of the recieved port. Not really a problem but something to try to fix later
  */
 void determineInitiator(void);
 
