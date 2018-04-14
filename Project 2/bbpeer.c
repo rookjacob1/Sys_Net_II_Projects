@@ -61,7 +61,7 @@ void mutexPrint(const char *str)
 	pthread_mutex_unlock(&PRINT_LOCK);
 }
 
-void validateArgv(int argc, char *argv[], int *sendPort)
+ void validateArgv(int argc, char *argv[], int *sendPort)
 {
 
 	if(argc != 5 && argc != 6)
@@ -345,11 +345,16 @@ void *bulletinBoardEditing(void *parm)
 
 void userWrite(void)
 {
-	char tmpStr[MESSAGE_SIZE];
-	WRITE_MESSAGE[0] = '\0';
-	memset(&WRITE_MESSAGE[1], ' ', MESSAGE_SIZE - 1 );
+	char tmpStr[MESSAGE_SIZE - HEADER_SIZE + 1];
 
-	sprintf(WRITE_MESSAGE, HEADER);
+	mutexPrint("Please enter the message to write to the bulletin board:\n");
+	fgets(tmpStr, sizeof(tmpStr) - FOOTER, stdin);
+
+	memset(&tmpStr[strlen(tmpStr)], ' ', sizeof(tmpStr) - strlen(tmpStr));
+
+	//tmpStr[sizeof(tmpStr) - FOOTER_SIZE] Where to put the HEADER
+
+
 }
 
 void userRead(void)

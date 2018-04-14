@@ -42,7 +42,7 @@ struct message_Header_t{
 struct message_t{
 
 	struct message_Header_t header;
-	char messageBody[MESSAGE_SIZE];
+	char messageBody[MESSAGE_SIZE + 1];
 
 };
 
@@ -60,7 +60,7 @@ int READ_BIT;
 int WRITE_BIT;
 int LIST_BIT;
 int EXIT_BIT;
-char WRITE_MESSAGE[MESSAGE_SIZE];
+char WRITE_MESSAGE[MESSAGE_SIZE + 1];
 
 //bulletinBoardEditing() thread variables
 pthread_t TID;
