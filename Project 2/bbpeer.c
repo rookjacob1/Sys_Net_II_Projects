@@ -47,14 +47,9 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 	(*message).header.action = action;
 	(*message).header.sequenceNumber = sequenceNumber;
 
-	if(sequenceNumber == NO_SEQ && messageText != NULL)
+	if(messageText != NULL)
 	{
 		snprintf((*message).messageBody, BODYSIZE, "%s", messageText);
-	}
-	else if(messageText != NULL)
-	{
-		sprintf(tmpHeader, HEADER, sequenceNumber);
-		sprintf((*message).messageBody, tmpHeader, "%s\n%s", messageText, FOOTER);
 	}
 
 	printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
@@ -193,23 +188,75 @@ void bulletinBoardRing(void)
 	WRITE_BIT = 0;
 	LIST_BIT = 0;
 	EXIT_BIT = 0;
+	HAVE_TOKEN = 0;
 
 	determineInitiator();
 
 	pthread_mutex_init(&PRINT_LOCK, NULL);
 	pthread_create(TID, NULL, bulletinBoardEditing, NULL);
 
-	while(EXIT_BIT != 1)
+	if(HAVE_TOKEN == 1)
 	{
-		processNextMessage();
 		checkUserInput();
 	}
 
+	while(EXIT_BIT != 1)
+	{
+		processNextMessage();
+		if(HAVE_TOKEN == 1)
+		{
+			checkUserInput();
+			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
+		}
+	}
+
 	exitRing();
+	pthread_mutex_destroy(&PRINT_LOCK);
 }
 
 void determineInitiator(void)
 {
+	int tmpPortNumber;
+	char portNumber[16];
+	sprintf(portNumber, "%d", HOST_PORT);
+	initMessage(&OUT_MESSAGE, TOKEN_INIT, NO_ACTION, NO_SEQ, portNumber);
+
+	struct message_t inMessage;
+
+	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
+
+	while(1)
+	{
+		recvfrom(SOCKET_D, *inMessage, sizeof(inMessage), 0, NULL, NULL);
+
+		if(inMessage.header.token == TOKEN_INIT)
+		{
+			tmpPortNumber = atoi(inMessage.messageBody);
+			if(tmpPortNumber < HOST_PORT)
+			{
+				sendto(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
+			}
+			else if(tmpPortNumber == HOST_PORT)
+			{
+				printf("Initiator!\n\n");
+				initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, NO_SEQ, portNumber);
+				sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
+				initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, 1, NULL);
+				HAVE_TOKEN = 1;
+				break;
+			}
+			else
+			{
+				sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
+			}
+		}
+		else
+		{
+			initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, NO_SEQ, portNumber);
+			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
+			break;
+		}
+	}
 
 }
 
@@ -221,6 +268,7 @@ void processNextMessage(void)
 void checkUserInput(void)
 {
 
+	initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, OUT_MESSAGE.header.sequenceNumber + 1, NULL);
 }
 
 void exitRing(void)

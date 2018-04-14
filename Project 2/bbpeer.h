@@ -49,7 +49,8 @@ int NEXT_PEER_PORT;
 int HOST_PORT;
 int SOCKET_D;
 char *FILENAME;
-struct message_t MESSAGE;
+struct message_t OUT_MESSAGE;
+int HAVE_TOKEN;
 
 //Variables for bulletinBoardEditing() thread to communicate with main thread
 int READ_BIT;
@@ -75,7 +76,7 @@ void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort);
 /*
  *
  */
-void initMessage(struct message_t *message, int messageToken, int messageAction, int messageSequenceNumber, char *messageText);
+void initMessage(struct message_t *message, int token, int action, int sequenceNumber, char *messageText);
 
 /*
  * @breif	validateArgv	The validateArgv() call checks if the arguments passed to the main
