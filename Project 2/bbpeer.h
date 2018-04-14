@@ -13,7 +13,7 @@
 #include"headerFiles.h"
 
 //Message Formats
-const char HEADER[] = "<message n=%d>\n";
+const char HEADER[] = "<message n=%3d>\n";
 const char FOOTER[] = "</message>\n";
 #define BODYSIZE 256
 

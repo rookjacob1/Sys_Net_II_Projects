@@ -347,6 +347,9 @@ void userWrite(void)
 {
 	char tmpStr[BODYSIZE];
 	WRITE_MESSAGE[0] = '\0';
+	memset(&WRITE_MESSAGE[1], ' ', BODYSIZE - 1 );
+
+	sprintf(WRITE_MESSAGE, HEADER);
 }
 
 void userRead(void)
