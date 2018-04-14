@@ -198,7 +198,7 @@ void bulletinBoardRing(void)
 	{
 		checkUserInput();
 	}
-
+/*
 	while(EXIT_BIT != 1)
 	{
 		processNextMessage();
@@ -209,7 +209,7 @@ void bulletinBoardRing(void)
 		}
 	}
 
-	exitRing();
+	exitRing();*/
 	pthread_mutex_destroy(&PRINT_LOCK);
 }
 
