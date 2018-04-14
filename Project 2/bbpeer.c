@@ -51,7 +51,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 		snprintf((*message).messageBody, BODYSIZE, "%s", messageText);
 	}
 
-	printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
+	//printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
 }
 
 void mutexPrint(const char *str)
