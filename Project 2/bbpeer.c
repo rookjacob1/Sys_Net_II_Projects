@@ -250,7 +250,7 @@ void determineInitiator(void)
 			{
 				printf("\"%s\" received from peer with port number %d\n",
 										inMessage.messageBody, ntohs(peerAddr.sin_port));
-				printf("Host port number: %d = received port: %d\n", HOST_PORT, tmpPortNumber);
+				printf("Host port number: %d = received port: %d\n\n", HOST_PORT, tmpPortNumber);
 				printf("Host has the lowest port number, therefore is the Initiator!!\n\n");
 
 				printf("Sending notification to next peer to inform the Initiator has been found\n\n");
@@ -272,7 +272,7 @@ void determineInitiator(void)
 		else
 		{
 			printf("Received notification that Initiator was found from peer with port number %d\n"
-					"Forwarding notification to next peer with port number %d",
+					"Forwarding notification to next peer with port number %d\n\n",
 					ntohs(peerAddr.sin_port), NEXT_PEER_PORT);
 			initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, NO_SEQ, portNumber);
 			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
