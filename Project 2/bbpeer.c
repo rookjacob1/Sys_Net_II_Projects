@@ -368,7 +368,7 @@ void userWrite(void)
 
 	sprintf(WRITE_MESSAGE, "%s", tmpStr);
 
-	printf("%s\n\n%d\n\n", WRITE_MESSAGE, strlen(WRITE_MESSAGE));
+	printf("%s\n\n%d\n\n", WRITE_MESSAGE, (int)strlen(WRITE_MESSAGE));
 
 }
 
