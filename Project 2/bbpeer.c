@@ -298,10 +298,16 @@ void processNextMessage(void)
 
 	struct message_t inMessage;
 
+	char printStatement[256];
+
 	recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
 
 	if(inMessage.header.token == PASS_TOKEN)
 	{//Can not pass tokens with an action. Pass with current sequence Number though
+		snprintf(printStatement, sizeof(printStatement),
+				"*************************Token received from peer with port %5d*************************\n\n",
+				ntohs(peerAddr.sin_port));
+		mutexPrint(printStatement);
 		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, inMessage.header.sequenceNumber, NULL);
 		HAVE_TOKEN = 1;
 	}//Update sequence Number of OUT_MESSAGE so checkUserInput can know what sequence number BB is at
@@ -309,10 +315,18 @@ void processNextMessage(void)
 	{
 		if(inMessage.header.action == JOIN)
 		{
-			handleJoin();
+			snprintf(printStatement, sizeof(printStatement),
+					"*************************Join request received from peer with port %5d*************************\n\n",
+					ntohs(peerAddr.sin_port));
+			mutexPrint(printStatement);
+			handleJoin(&peerAddr);
 		}
 		else if(inMessage.header.action == EXIT)
 		{
+			snprintf(printStatement, sizeof(printStatement),
+					"*************************Exit notification received from peer with port %5d*************************\n\n",
+					ntohs(peerAddr.sin_port));
+			mutexPrint(printStatement);
 			handleExit();
 		}
 		else
@@ -326,7 +340,7 @@ void processNextMessage(void)
 	}
 }
 
-void handleJoin(void)
+void handleJoin(struct sockaddr_in *joiningPeerAddr)
 {
 
 }
