@@ -316,7 +316,7 @@ void *bulletinBoardEditing(void *parm)
 				"</message>\n"
 				"\n******************************************************************************************\n\n"
 				"Please enter one of the options above:\n");
-		scanf("\n%c", &opt);
+		opt = fgetc(stdin);
 		fflush(stdin);
 		switch (opt)
 		{
