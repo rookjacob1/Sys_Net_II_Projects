@@ -61,7 +61,16 @@ void mutexPrint(const char *str)
 	pthread_mutex_unlock(&PRINT_LOCK);
 }
 
- void validateArgv(int argc, char *argv[], int *sendPort)
+void cleanStdin(void)
+{
+	int c;
+	do
+	{
+		c = getchar();
+	}while(c != '\n' && c != EOF);
+}
+
+void validateArgv(int argc, char *argv[], int *sendPort)
 {
 
 	if(argc != 5 && argc != 6)
@@ -316,9 +325,9 @@ void *bulletinBoardEditing(void *parm)
 				"</message>\n"
 				"\n******************************************************************************************\n\n"
 				"Please enter one of the options above:\n");
-		fflush(stdin);
+		cleanStdin();
 		opt = fgetc(stdin);
-		fflush(stdin);
+		cleanStdin();
 		switch (opt)
 		{
 			case 'w': case 'W':
@@ -350,8 +359,7 @@ void userWrite(void)
 	char tmpStr[MESSAGE_SIZE - HEADER_SIZE + 1];
 
 	mutexPrint("Please enter the message to write to the bulletin board:\n");
-	fflush(stdin);
-	//scanf("%s[^\n]", tmpStr);
+	cleanStdin();
 
 	fgets(tmpStr, sizeof(tmpStr) - FOOTER_SIZE, stdin);
 

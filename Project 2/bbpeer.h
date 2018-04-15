@@ -83,6 +83,16 @@ void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort);
 void initMessage(struct message_t *message, int token, int action, int sequenceNumber, char *messageText);
 
 /*
+ *
+ */
+void mutexPrint(const char *str);
+
+/*
+ *
+ */
+void cleanStdin(void);
+
+/*
  * @breif	validateArgv	The validateArgv() call checks if the arguments passed to the main
  * function are in the correct format and have appropriate values.
  *
