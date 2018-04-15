@@ -293,6 +293,46 @@ void determineInitiator(void)
 
 void processNextMessage(void)
 {
+	struct sockaddr_in peerAddr;
+	socklen_t peerAddrLen;
+
+	struct message_t inMessage;
+
+	recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
+
+	if(inMessage.header.token == PASS_TOKEN)
+	{//Can not pass tokens with an action. Pass with current sequence Number though
+		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, inMessage.header.sequenceNumber, NULL);
+		HAVE_TOKEN = 1;
+	}//Update sequence Number of OUT_MESSAGE so checkUserInput can know what sequence number BB is at
+	else if(inMessage.header.token == NO_TOKEN)
+	{
+		if(inMessage.header.action == JOIN)
+		{
+			handleJoin();
+		}
+		else if(inMessage.header.action == EXIT)
+		{
+			handleExit();
+		}
+		else
+		{
+			return;//Do nothing
+		}
+	}
+	else
+	{
+		return;//Do nothing
+	}
+}
+
+void handleJoin(void)
+{
+
+}
+
+void handleExit(void)
+{
 
 }
 

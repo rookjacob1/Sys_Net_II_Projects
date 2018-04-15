@@ -135,6 +135,16 @@ void processNextMessage(void);
 /*
  *
  */
+void handleJoin(void);
+
+/*
+ *
+ */
+void handleExit(void);
+
+/*
+ *
+ */
 void checkUserInput(void);
 
 /*
