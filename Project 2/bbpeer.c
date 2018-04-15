@@ -218,7 +218,7 @@ void bulletinBoardRing(void)
 		}
 	}
 
-	pthread_join(&TID, NULL);
+	pthread_join(TID, NULL);
 	pthread_mutex_destroy(&PRINT_LOCK);
 }
 
@@ -347,18 +347,22 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
 {
 	char printStatement[256];
 	snprintf(printStatement, sizeof(printStatement), "Peer received with IP address: %s Port address: %d\n",
-			inet_ntoa((*joiningPeerAddr).sin_addr), ntohs((*joiningPeerAddr).sin_port),
-			"Peer's message: %s\n\n", (*receivedMessage).messageBody);
+			inet_ntoa((*joiningPeerAddr).sin_addr), ntohs((*joiningPeerAddr).sin_port));
+	mutexPrint(printStatement);
+
+	snprintf(printStatement, sizeof(printStatement),"Peer's message: %s\n\n", (*receivedMessage).messageBody);
 	mutexPrint(printStatement);
 
 	snprintf(printStatement, sizeof(printStatement), "Sending address of current next peer with port: %d to the joining peer with port %d\n\n",
 			ntohs(NEXT_PEER_ADDR.sin_port), ntohs((*joiningPeerAddr).sin_port));
 	mutexPrint(printStatement);
-	sendto(SOCKET_D, &NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR), 0, (struct sockadd *)joiningPeerAddr, sizeof(struct sockaddr_in));
+
+	sendto(SOCKET_D, &NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR), 0, (struct sockaddr *)joiningPeerAddr, sizeof(struct sockaddr_in));
 
 	snprintf(printStatement, sizeof(printStatement), "Setting new next peer address to joining peer with port: %d\n\n",
 			 ntohs((*joiningPeerAddr).sin_port));
 	mutexPrint(printStatement);
+
 	memcpy(&NEXT_PEER_ADDR, joiningPeerAddr, sizeof(struct sockaddr_in));
 	NEXT_PEER_PORT = ntohs((NEXT_PEER_ADDR).sin_port);
 }
