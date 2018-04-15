@@ -330,7 +330,7 @@ void processNextMessage(void)
 					ntohs(peerAddr.sin_port));
 			mutexPrint(printStatement);
 
-			handleExit();
+			handleExit(&inMessage);
 		}
 		else
 		{
@@ -343,7 +343,7 @@ void processNextMessage(void)
 	}
 }
 
-void handleJoin(struct sockaddr_in *joiningPeerAddr)
+void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedMessage)
 {
 
 }

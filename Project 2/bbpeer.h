@@ -135,7 +135,7 @@ void processNextMessage(void);
 /*
  *
  */
-void handleJoin(struct sockaddr_in *joiningPeerAddr);
+void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedMessage);
 
 /*
  *
