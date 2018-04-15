@@ -361,17 +361,14 @@ void userWrite(void)
 	mutexPrint("Please enter the message to write to the bulletin board:\n");
 
 	fgets(tmpStr, sizeof(tmpStr) - FOOTER_SIZE, stdin);
-	//cleanStdin();
 
-	printf("%s\n", tmpStr);
-
-	memset(&tmpStr[strlen(tmpStr)], ' ', sizeof(tmpStr) - strlen(tmpStr));
+	memset(&tmpStr[strlen(tmpStr) - 1], ' ', sizeof(tmpStr) - strlen(tmpStr));
 
 	sprintf(&tmpStr[sizeof(tmpStr) - FOOTER_SIZE], "%s", FOOTER);
 
 	sprintf(WRITE_MESSAGE, "%s", tmpStr);
 
-	printf("%s\n\n", WRITE_MESSAGE);
+	printf("%s\n\n%d\n\n", WRITE_MESSAGE, strlen(WRITE_MESSAGE));
 
 }
 
