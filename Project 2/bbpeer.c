@@ -369,7 +369,29 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
 
 void handleExit(struct message_t *receivedMessage)
 {
+	int exitingPeerPort;
+	int exitingPeerNextPort;
 
+	char tmpStr[16];
+	char printStatement[256];
+	int tmp;
+
+	tmp = strcspn((*receivedMessage).messageBody, "\n");
+	strncpy(tmpStr, (*receivedMessage).messageBody, tmp);
+	tmpStr[tmp] = '\0';
+	exitingPeerPort = atoi(tmpStr);
+
+	if(exitingPeerPort == NEXT_PEER_PORT)
+	{
+		strcpy(tmpStr, &(*receivedMessage).messageBody[tmp + 1]);
+		exitingPeerNextPort = atoi(tmpStr);
+
+
+	}
+	else
+	{
+		sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+	}
 }
 
 void checkUserInput(void)
