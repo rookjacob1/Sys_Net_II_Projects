@@ -122,11 +122,6 @@ void getNextPeerFromPeer(int peerPort);
 void bulletinBoardRing(void);
 
 /*
- *
- */
-void mutexPrint(const char *str);
-
-/*
  * determineInitiator works properly with print statements.
 However, one of the peers was printing 0 for the port address of the recieved port. Not really a problem but something to try to fix later
  */
@@ -145,7 +140,22 @@ void checkUserInput(void);
 /*
  *
  */
-void exitRing(void);
+void bulletinBoardWrite(void);
+
+/*
+ *
+ */
+void bulletinBoardRead(void);
+
+/*
+ *
+ */
+void bulletinBoardList(void);
+
+/*
+ *
+ */
+void bulletinBoardExit(void);
 
 /*
  *

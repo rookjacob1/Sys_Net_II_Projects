@@ -211,14 +211,14 @@ void bulletinBoardRing(void)
 	while(EXIT_BIT != 1)
 	{
 		processNextMessage();
-		if(HAVE_TOKEN == 2)
+		if(HAVE_TOKEN == 1)
 		{
 			checkUserInput();
 			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
 		}
 	}
 
-	exitRing();
+	pthread_join(&TID, NULL);
 	pthread_mutex_destroy(&PRINT_LOCK);
 }
 
@@ -302,7 +302,22 @@ void checkUserInput(void)
 	initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, OUT_MESSAGE.header.sequenceNumber + 1, NULL);
 }
 
-void exitRing(void)
+void bulletinBoardWrite(void)
+{
+
+}
+
+void bulletinBoardRead(void)
+{
+
+}
+
+void bulletinBoardList(void)
+{
+
+}
+
+void bulletinBoardExit(void)
 {
 
 }
