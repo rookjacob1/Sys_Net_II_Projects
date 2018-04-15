@@ -14,10 +14,10 @@
 
 //Message Formats
 const char HEADER[] = "<message n=%3d>\n";
-const char FOOTER[] = "</message>\n";
+const char FOOTER[] = "\n</message>\n";
 #define MESSAGE_SIZE 256
 #define HEADER_SIZE 16
-#define FOOTER_SIZE 12
+#define FOOTER_SIZE 13
 #define BODY_SIZE (MESSAGE_SIZE - HEADER_SIZE - FOOTERSIZE)
 
 //Token Modes
