@@ -308,6 +308,7 @@ void processNextMessage(void)
 				"*************************Token received from peer with port %5d*************************\n\n",
 				ntohs(peerAddr.sin_port));
 		mutexPrint(printStatement);
+
 		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, inMessage.header.sequenceNumber, NULL);
 		HAVE_TOKEN = 1;
 	}//Update sequence Number of OUT_MESSAGE so checkUserInput can know what sequence number BB is at
@@ -319,6 +320,7 @@ void processNextMessage(void)
 					"*************************Join request received from peer with port %5d*************************\n\n",
 					ntohs(peerAddr.sin_port));
 			mutexPrint(printStatement);
+
 			handleJoin(&peerAddr);
 		}
 		else if(inMessage.header.action == EXIT)
@@ -327,6 +329,7 @@ void processNextMessage(void)
 					"*************************Exit notification received from peer with port %5d*************************\n\n",
 					ntohs(peerAddr.sin_port));
 			mutexPrint(printStatement);
+
 			handleExit();
 		}
 		else
@@ -345,7 +348,7 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr)
 
 }
 
-void handleExit(void)
+void handleExit(struct message_t *receivedMessage)
 {
 
 }

@@ -140,7 +140,7 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr);
 /*
  *
  */
-void handleExit(void);
+void handleExit(struct message_t *receivedMessage);
 
 /*
  *
