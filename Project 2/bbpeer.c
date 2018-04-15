@@ -385,7 +385,14 @@ void handleExit(struct message_t *receivedMessage)
 	{
 		strcpy(tmpStr, &(*receivedMessage).messageBody[tmp + 1]);
 		exitingPeerNextPort = atoi(tmpStr);
+		if(exitingPeerNextPort ==  HOST_PORT)
+		{
 
+		}
+		else
+		{
+
+		}
 
 	}
 	else
@@ -396,8 +403,29 @@ void handleExit(struct message_t *receivedMessage)
 
 void checkUserInput(void)
 {
+	//initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, OUT_MESSAGE.header.sequenceNumber + 1, NULL);
+	if(WRITE_BIT)
+	{
+		bullletinBoardWrite();
+	}
+	else if(READ_BIT)
+	{
+		bulletinBoardRead();
+	}
+	else if(LIST_BIT)
+	{
+		bulletinBoardList();
+	}
+	else if(EXIT_BIT)
+	{
+		bulletinBoardExit();
+	}
+	else
+	{
+		sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+		HAVE_TOKEN = 0;
+	}
 
-	initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, OUT_MESSAGE.header.sequenceNumber + 1, NULL);
 }
 
 void bulletinBoardWrite(void)
