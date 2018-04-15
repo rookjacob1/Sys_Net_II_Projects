@@ -313,6 +313,10 @@ void *bulletinBoardEditing(void *parm)
 	char defaultMessage[64];
 	while(1)
 	{
+		if(READ_BIT || WRITE_BIT || LIST_BIT)
+			continue;
+		if(EXIT_BIT)
+			break;
 		mutexPrint("\n******************************************************************************************\n\n"
 				"Enter w to write to the bulletin board\n"
 				"Enter r to read an entry from the bulletin board\n"
@@ -351,7 +355,8 @@ void *bulletinBoardEditing(void *parm)
 				mutexPrint(defaultMessage);
 		}
 	}
-	return parm;
+	mutexPrint("Bulletin board editing thread terminating\n\n");
+	pthread_exit(NULL);
 }
 
 void userWrite(void)
@@ -370,23 +375,31 @@ void userWrite(void)
 
 	sprintf(WRITE_MESSAGE, "%s", tmpStr);
 
-	printf("%s\n\n%d\n\n", WRITE_MESSAGE, (int)strlen(WRITE_MESSAGE));
-
+	mutexPrint("Setting write bit\n\n");
+	WRITE_BIT = 1;
 }
 
 void userRead(void)
 {
+	char tmpRead[8];
+	printf("Please enter the message to read:\n");
 
+	fgets(tmpRead, sizeof(tmpRead), stdin);
+
+	mutexPrint("Setting read bit\n\n");
+	READ_BIT = atoi(tmpRead);
 }
 
 void userList(void)
 {
-
+	mutexPrint("Setting list bit\n\n");
+	LIST_BIT = 1;
 }
 
 void userExit(void)
 {
-
+	mutexPrint("Setting exit bit\n\n");
+	EXIT_BIT = 1;
 }
 
 
