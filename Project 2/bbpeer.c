@@ -362,7 +362,7 @@ void userWrite(void)
 
 	fgets(tmpStr, sizeof(tmpStr) - FOOTER_SIZE, stdin);
 
-	tmpStr[strcspn(tmpStr, "\n")] = '\0';
+	tmpStr[strcspn(tmpStr, "\n") - 1] = '\0';
 
 	memset(&tmpStr[strlen(tmpStr)], ' ', sizeof(tmpStr) - strlen(tmpStr));
 
