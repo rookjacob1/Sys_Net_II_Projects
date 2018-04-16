@@ -57,7 +57,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 void mutexPrint(const char *str)
 {
 	pthread_mutex_lock(&PRINT_LOCK);
-	printf("%s", str);
+	printf("%s\n", str);
 	pthread_mutex_unlock(&PRINT_LOCK);
 }
 
