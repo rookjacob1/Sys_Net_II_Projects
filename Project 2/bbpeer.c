@@ -422,6 +422,7 @@ void checkUserInput(void)
 	}
 	else
 	{
+		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
 		sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 		HAVE_TOKEN = 0;
 	}
@@ -431,7 +432,10 @@ void checkUserInput(void)
 void bulletinBoardWrite(void)
 {
 	char tmpHeader[HEADER_SIZE + 1];
-	sprintf(tmpHeader, HEADER, )
+	char tmpWriteMessage[MESSAGE_SIZE + 1];
+	sprintf(tmpHeader, HEADER, SEQ_NUM);
+
+	sprintf(tmpWriteMessage, "%s%s", tmpHeader, WRITE_MESSAGE);
 }
 
 void bulletinBoardRead(void)
