@@ -386,22 +386,52 @@ void handleExit(struct message_t *receivedMessage)
 	tmpStr[tmp] = '\0';
 	exitingPeerPort = atoi(tmpStr);
 
+	sprintf(printStatement, "Exiting peer has port %d\n", exitingPeerPort);
+	mutexPrint(printStatement);
+
 	if(exitingPeerPort == NEXT_PEER_PORT)
 	{
+
+
 		strcpy(tmpStr, &(*receivedMessage).messageBody[tmp + 1]);
 		exitingPeerNextPort = atoi(tmpStr);
+
+
 		if(exitingPeerNextPort ==  HOST_PORT)
 		{
+			sprintf(printStatement, "Host's next peer with port %d is the peer that is exiting\n"
+					"Forwarding exit notification to exiting peer to notify that they can exit\n",
+					exitingPeerPort);
 
+			sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+
+				sprintf(printStatement, "Setting host's new next peer address to the exiting peer's next peer with port %d\n",
+					exitingPeerNextPort);
+
+			buildSocketAddress(&NEXT_PEER_ADDR, exitingPeerNextPort);
 		}
 		else
 		{
+			sprintf(printStatement, "Host's next peer with port %d is the peer that is exiting\n"
+					"Forwarding exit notification to exiting peer to notify that they can exit\n",
+					exitingPeerPort);
 
+			sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+
+				sprintf(printStatement, "Setting host's new next peer address to the exiting peer's next peer with port %d\n",
+					exitingPeerNextPort);
+
+			buildSocketAddress(&NEXT_PEER_ADDR, exitingPeerNextPort);
 		}
 
 	}
 	else
 	{
+		sprintf(printStatement, "Host's next peer with port %d is not the exiting peer\n"
+				"Forwarding exit notification to next peer\n",
+				NEXT_PEER_PORT);
+		mutexPrint(printStatement);
+
 		sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	}
 }
