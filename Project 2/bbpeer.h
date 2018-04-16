@@ -131,6 +131,11 @@ void determineInitiator(void);
 /*
  *
  */
+void initRing(void);
+
+/*
+ *
+ */
 void processNextMessage(void);
 
 /*

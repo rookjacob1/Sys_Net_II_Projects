@@ -188,28 +188,10 @@ void getNextPeerFromPeer(int peerPort)
 
 void bulletinBoardRing(void)
 {
-	READ_BIT = 0;
-	WRITE_BIT = 0;
-	LIST_BIT = 0;
-	EXIT_BIT = 0;
-	HAVE_TOKEN = 0;
-
-	FILE *fp;
-
 	determineInitiator();
 
 	pthread_mutex_init(&PRINT_LOCK, NULL);
 	pthread_create(&TID, NULL, bulletinBoardEditing, NULL);
-
-	if(HAVE_TOKEN == 1)
-	{
-		SEQ_NUM = 1;
-		fp = fopen(FILENAME, "w");//If the file already exists, this will
-		if(fp == NULL)
-			error("Error opening file");
-		fclose(fp);
-		checkUserInput();
-	}
 
 	while(EXIT_BIT != 1)
 	{
@@ -240,6 +222,12 @@ void determineInitiator(void)
 			HOST_PORT, NEXT_PEER_PORT);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
+	READ_BIT = 0;
+	WRITE_BIT = 0;
+	LIST_BIT = 0;
+	EXIT_BIT = 0;
+	HAVE_TOKEN = 0;
+
 	while(1)
 	{
 		printf("Waiting for message from peer\n\n");
@@ -267,8 +255,9 @@ void determineInitiator(void)
 				printf("Sending notification to next peer to inform the Initiator has been found\n\n");
 				initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, NO_SEQ, portNumber);
 				sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
-				initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, 1, NULL);
-				HAVE_TOKEN = 1;
+
+				initRing();
+
 				break;
 			}
 			else
@@ -290,6 +279,22 @@ void determineInitiator(void)
 			break;
 		}
 	}
+
+}
+
+void initRing(void)
+{
+	FILE *fp;
+	HAVE_TOKEN = 1;
+	SEQ_NUM = 1;
+
+	fp = fopen(FILENAME, "w");//If the file already exists, this will
+	if(fp == NULL)
+		error("Error opening file");
+	fclose(fp);
+
+	initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, SEQ_NUM, NULL);
+	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 }
 
