@@ -311,7 +311,7 @@ void processNextMessage(void)
 	if(inMessage.header.token == PASS_TOKEN)
 	{//Can not pass tokens with an action. Pass with current sequence Number though
 		snprintf(printStatement, sizeof(printStatement),
-				"*************************Token received from peer with port %5d*************************\n\n",
+				"*************************Token received from peer with port %5d*************************\n",
 				ntohs(peerAddr.sin_port));
 		mutexPrint(printStatement);
 
@@ -323,7 +323,7 @@ void processNextMessage(void)
 		if(inMessage.header.action == JOIN)
 		{
 			snprintf(printStatement, sizeof(printStatement),
-					"*************************Join request received from peer with port %5d*************************\n\n",
+					"*************************Join request received from peer with port %5d*************************\n",
 					ntohs(peerAddr.sin_port));
 			mutexPrint(printStatement);
 
@@ -332,7 +332,7 @@ void processNextMessage(void)
 		else if(inMessage.header.action == EXIT)
 		{
 			snprintf(printStatement, sizeof(printStatement),
-					"*************************Exit notification received from peer with port %5d*************************\n\n",
+					"*************************Exit notification received from peer with port %5d*************************\n",
 					ntohs(peerAddr.sin_port));
 			mutexPrint(printStatement);
 
@@ -352,20 +352,20 @@ void processNextMessage(void)
 void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedMessage)
 {
 	char printStatement[256];
-	snprintf(printStatement, sizeof(printStatement), "Peer received with IP address: %s Port address: %d\n",
+	snprintf(printStatement, sizeof(printStatement), "Peer received with IP address: %s Port address: %d",
 			inet_ntoa((*joiningPeerAddr).sin_addr), ntohs((*joiningPeerAddr).sin_port));
 	mutexPrint(printStatement);
 
-	snprintf(printStatement, sizeof(printStatement),"Peer's message: %s\n\n", (*receivedMessage).messageBody);
+	snprintf(printStatement, sizeof(printStatement),"Peer's message: %s\n", (*receivedMessage).messageBody);
 	mutexPrint(printStatement);
 
-	snprintf(printStatement, sizeof(printStatement), "Sending address of current next peer with port: %d to the joining peer with port %d\n\n",
+	snprintf(printStatement, sizeof(printStatement), "Sending address of current next peer with port: %d to the joining peer with port %d\n",
 			ntohs(NEXT_PEER_ADDR.sin_port), ntohs((*joiningPeerAddr).sin_port));
 	mutexPrint(printStatement);
 
 	sendto(SOCKET_D, &NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR), 0, (struct sockaddr *)joiningPeerAddr, sizeof(struct sockaddr_in));
 
-	snprintf(printStatement, sizeof(printStatement), "Setting new next peer address to joining peer with port: %d\n\n",
+	snprintf(printStatement, sizeof(printStatement), "Setting new next peer address to joining peer with port: %d\n",
 			 ntohs((*joiningPeerAddr).sin_port));
 	mutexPrint(printStatement);
 
@@ -455,7 +455,7 @@ void bulletinBoardWrite(void)
 	}
 	fclose(fp);
 
-	mutexPrint("Wrote the following message to the bulletin board:\n");
+	mutexPrint("Wrote the following message to the bulletin board:");
 	mutexPrint(tmpWriteMessage);
 }
 
@@ -486,7 +486,7 @@ void bulletinBoardRead(void)
 
 		fclose(fp);
 
-		mutexPrint("The message read is:\n");
+		mutexPrint("The message read is:");
 		mutexPrint(tmpReadBuffer);
 	}
 	else
@@ -528,7 +528,7 @@ void *bulletinBoardEditing(void *parm)
 				"<body>\n"
 				"</message>\n"
 				"\n******************************************************************************************\n\n"
-				"Please enter one of the options above:\n");
+				"Please enter one of the options above:");
 
 		opt = fgetc(stdin);
 		cleanStdin();
@@ -551,11 +551,11 @@ void *bulletinBoardEditing(void *parm)
 				break;
 
 			default:
-				sprintf(defaultMessage, "%c is not a valid option. No action taken.\n\n", opt);
+				sprintf(defaultMessage, "%c is not a valid option. No action taken.\n", opt);
 				mutexPrint(defaultMessage);
 		}
 	}
-	mutexPrint("Bulletin board editing thread terminating\n\n");
+	mutexPrint("Bulletin board editing thread terminating\n");
 	pthread_exit(NULL);
 }
 
@@ -563,7 +563,7 @@ void userWrite(void)
 {
 	char tmpStr[MESSAGE_SIZE - HEADER_SIZE + 1];
 
-	mutexPrint("Please enter the message to write to the bulletin board:\n");
+	mutexPrint("Please enter the message to write to the bulletin board:");
 
 	fgets(tmpStr, sizeof(tmpStr) - FOOTER_SIZE, stdin);
 
@@ -575,7 +575,7 @@ void userWrite(void)
 
 	sprintf(WRITE_MESSAGE, "%s", tmpStr);
 
-	mutexPrint("Setting write bit\n\n");
+	mutexPrint("Setting write bit\n");
 	WRITE_BIT = 1;
 }
 
@@ -586,19 +586,19 @@ void userRead(void)
 
 	fgets(tmpRead, sizeof(tmpRead), stdin);
 
-	mutexPrint("Setting read bit\n\n");
+	mutexPrint("Setting read bit\n");
 	READ_BIT = atoi(tmpRead);
 }
 
 void userList(void)
 {
-	mutexPrint("Setting list bit\n\n");
+	mutexPrint("Setting list bit\n");
 	LIST_BIT = 1;
 }
 
 void userExit(void)
 {
-	mutexPrint("Setting exit bit\n\n");
+	mutexPrint("Setting exit bit\n");
 	EXIT_BIT = 1;
 }
 
