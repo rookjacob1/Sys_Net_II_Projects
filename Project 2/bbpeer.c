@@ -216,7 +216,6 @@ void bulletinBoardRing(void)
 		if(HAVE_TOKEN == 1)
 		{
 			checkUserInput();
-			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_PORT, sizeof(NEXT_PEER_PORT));
 		}
 	}
 
@@ -529,6 +528,9 @@ void bulletinBoardRead(void)
 				numMessages, READ_BIT);
 		mutexPrint(tmpReadBuffer);
 	}
+
+	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
+	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	READ_BIT = 0;
 }
 
@@ -574,6 +576,9 @@ void bulletinBoardList(void)
 	{
 		mutexPrint("There has not been any messages written to the bulletin board\n");
 	}
+
+	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
+	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	LIST_BIT = 0;
 }
 
@@ -624,7 +629,7 @@ void bulletinBoardExit(void)
 							"Therefore, it is safe to exit ring.\n");
 					mutexPrint(printStatement);
 
-					initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NO_SEQ, NULL);
+					initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
 
 					sprintf(printStatement, "Passing token to next peer with port %d\n"
 							"Exiting ring and terminating\n", NEXT_PEER_PORT);
@@ -632,6 +637,7 @@ void bulletinBoardExit(void)
 
 					sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
+					return;
 				}
 				else
 				{
