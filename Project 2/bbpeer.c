@@ -203,7 +203,7 @@ void bulletinBoardRing(void)
 
 	if(HAVE_TOKEN == 1)
 	{
-		fp = fopen(FILENAME, "W");//If the file already exists, this will
+		fp = fopen(FILENAME, "w");//If the file already exists, this will
 		if(fp == NULL)
 			error("Error opening file");
 		fclose(fp);
