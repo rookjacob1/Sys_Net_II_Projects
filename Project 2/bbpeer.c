@@ -464,7 +464,7 @@ void bulletinBoardRead(void)
 	FILE *fp;
 	char tmpReadBuffer[MESSAGE_SIZE + 1];
 	tmpReadBuffer[MESSAGE_SIZE] = '\0';
-	int bytesRead;
+	int bytesRead = 0;
 	int numMessages;
 
 	struct stat fileStats;
@@ -499,7 +499,46 @@ void bulletinBoardRead(void)
 
 void bulletinBoardList(void)
 {
+	FILE *fp;
+	char tmpReadBuffer[MESSAGE_SIZE + 1];
+	int bytesRead;
+	int totalBytesRead = 0;
+	int fileSize;
 
+
+	struct stat fileStats;
+
+	if(!stat(FILENAME, &fileStats))
+		error("Error getting information on file");
+	fileSize = fileStats.st_size;
+
+	if(fileSize > 0)
+	{
+		fp = fopen(FILENAME, "r");
+		if(fp == NULL)
+			error("Error opening file");
+
+		mutexPrint("The message read is:");
+
+		while(totalBytesRead < fileSize)
+		{
+			bytesRead = fread(tmpReadBuffer, 1, MESSAGE_SIZE, fp);
+			totalBytesRead += bytesRead;
+
+			tmpReadBuffer[bytesRead] = '\0';
+
+			pthread_mutex_lock(&PRINT_LOCK);
+			printf("%s", tmpReadBuffer);
+			pthread_mutex_unlock(&PRINT_LOCK);
+
+		}
+
+		fclose(fp);
+	}
+	else
+	{
+		mutexPrint("There has not been any messages written to the bulletin board\n");
+	}
 }
 
 void bulletinBoardExit(void)
