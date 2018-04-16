@@ -309,7 +309,7 @@ void processNextMessage(void)
 				ntohs(peerAddr.sin_port));
 		mutexPrint(printStatement);
 
-		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, inMessage.header.sequenceNumber, NULL);
+		SEQ_NUM = inMessage.header.sequenceNumber;
 		HAVE_TOKEN = 1;
 	}//Update sequence Number of OUT_MESSAGE so checkUserInput can know what sequence number BB is at
 	else if(inMessage.header.token == NO_TOKEN)
@@ -430,7 +430,8 @@ void checkUserInput(void)
 
 void bulletinBoardWrite(void)
 {
-
+	char tmpHeader[HEADER_SIZE + 1];
+	sprintf(tmpHeader, HEADER, )
 }
 
 void bulletinBoardRead(void)

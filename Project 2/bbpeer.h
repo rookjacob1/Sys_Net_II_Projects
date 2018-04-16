@@ -54,6 +54,7 @@ int SOCKET_D;
 char *FILENAME;
 struct message_t OUT_MESSAGE;
 int HAVE_TOKEN;
+int SEQ_NUM;
 
 //Variables for bulletinBoardEditing() thread to communicate with main thread
 int READ_BIT;
