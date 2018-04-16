@@ -412,7 +412,7 @@ void checkUserInput(void)
 	//initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, OUT_MESSAGE.header.sequenceNumber + 1, NULL);
 	if(WRITE_BIT)
 	{
-		bullletinBoardWrite();
+		bulletinBoardWrite();
 	}
 	else if(READ_BIT)
 	{
