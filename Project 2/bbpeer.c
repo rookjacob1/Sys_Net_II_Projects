@@ -550,7 +550,7 @@ void bulletinBoardExit(void)
 	char printStatement[256];
 	sprintf(printStatement, "%d\n%d", HOST_PORT, NEXT_PEER_PORT);
 
-	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, printStatement);
+	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, NO_SEQ, printStatement);
 
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
@@ -587,7 +587,7 @@ void bulletinBoardExit(void)
 							"Therefore, it is safe to exit ring.\n");
 					mutexPrint(printStatement);
 
-					initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
+					initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NO_SEQ, NULL);
 
 					sprintf(printStatement, "Passing token to next peer with port %d\n"
 							"Exiting ring and terminating\n", NEXT_PEER_PORT);
