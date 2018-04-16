@@ -463,7 +463,7 @@ void checkUserInput(void)
 	else
 	{
 		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
-		sleep(4);
+		sleep(SLEEP_TIME);
 		sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	}
 	HAVE_TOKEN = 0;

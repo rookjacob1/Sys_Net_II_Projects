@@ -67,6 +67,8 @@ char WRITE_MESSAGE[MESSAGE_SIZE + 1];
 pthread_t TID;
 pthread_mutex_t PRINT_LOCK;
 
+#define SLEEP_TIME 5
+
 
 /*
  *
