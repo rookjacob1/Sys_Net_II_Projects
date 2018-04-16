@@ -198,6 +198,8 @@ void bulletinBoardRing(void)
 	EXIT_BIT = 0;
 	HAVE_TOKEN = 0;
 
+	FILE *fp;
+
 	determineInitiator();
 
 	pthread_mutex_init(&PRINT_LOCK, NULL);
@@ -205,6 +207,10 @@ void bulletinBoardRing(void)
 
 	if(HAVE_TOKEN == 1)
 	{
+		fp = fopen(FILENAME, "W");//If the file already exists, this will
+		if(fp == NULL)
+			error("Error opening file");
+		fclose(fp);
 		checkUserInput();
 	}
 
@@ -433,14 +439,62 @@ void bulletinBoardWrite(void)
 {
 	char tmpHeader[HEADER_SIZE + 1];
 	char tmpWriteMessage[MESSAGE_SIZE + 1];
+	FILE *fp;
+	int bytesWrote = 0;
+
 	sprintf(tmpHeader, HEADER, SEQ_NUM);
 
 	sprintf(tmpWriteMessage, "%s%s", tmpHeader, WRITE_MESSAGE);
+
+	fp = fopen(FILENAME, "a");
+	if (fp == NULL)
+		error("Error opening file");
+	while(bytesWrote < MESSAGE_SIZE)
+	{
+		bytesWrote += fwrite(tmpWriteMessage, 1, MESSAGE_SIZE - bytesWrote, fp);
+	}
+	fclose(fp);
+
+	mutexPrint("Wrote the following message to the bulletin board:\n");
+	mutexPrint(tmpWriteMessage);
 }
 
 void bulletinBoardRead(void)
 {
+	FILE *fp;
+	char tmpReadBuffer[MESSAGE_SIZE + 1];
+	char tmpReadBuffer[MESSAGE_SIZE] = '\0';
+	int bytesRead;
+	int numMessages;
 
+	struct stat fileStats;
+
+	if(!stat(FILENAME, &fileStats))
+		error("Error getting information on file");
+	numMessages = fileStats.st_size / MESSAGE_SIZE;
+
+	if(READ_BIT <= numMessages)
+	{
+		fp = fopen(FILENAME, "r");
+		if(fp == NULL)
+			error("Error opening file");
+
+		while(bytesRead < MESSAGE_SIZE)
+		{
+			bytesRead += fread(tmpReadBuffer, 1, MESSAGE_SIZE - bytesRead, fp);
+		}
+
+		fclose(fp);
+
+		mutexPrint("The message read is:\n");
+		mutexPrint(tmpReadBuffer);
+	}
+	else
+	{
+		sprintf(tmpReadBuffer, "There have only been %d messages wrote, message %d does not exist yet",
+				numMessages, READ_BIT);
+		mutexPrint(tmpReadBuffer);
+	}
 }
 
 void bulletinBoardList(void)
