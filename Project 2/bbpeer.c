@@ -170,8 +170,7 @@ void getNextPeerFromPeer(int peerPort)
 	printf("Socket bound with port number %d\n\n", HOST_PORT);
 
 
-	printf("Please enter a message:\n");
-	fgets(message, sizeof(message), stdin);
+	sprintf(message, "%d", HOST_PORT);
 
 	message[strlen(message) - 1] = '\0';
 	printf("Sending \"%s\" to peer with port %d\n\n", message, peerPort);
@@ -543,6 +542,20 @@ void bulletinBoardList(void)
 
 void bulletinBoardExit(void)
 {
+	struct sockaddr_in peerAddr;
+	socklen_t peerAddrLen;
+
+	struct message_t inMessage;
+
+	char printStatement[256];
+	sprintf(printStatement, "%d\n%d", HOST_PORT, NEXT_PEER_PORT);
+
+	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, printStatement);
+
+	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+
+
+
 
 }
 
