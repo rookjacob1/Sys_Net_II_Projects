@@ -463,7 +463,7 @@ void bulletinBoardRead(void)
 {
 	FILE *fp;
 	char tmpReadBuffer[MESSAGE_SIZE + 1];
-	char tmpReadBuffer[MESSAGE_SIZE] = '\0';
+	tmpReadBuffer[MESSAGE_SIZE] = '\0';
 	int bytesRead;
 	int numMessages;
 
