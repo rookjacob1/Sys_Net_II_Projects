@@ -508,8 +508,8 @@ void bulletinBoardRead(void)
 
 	struct stat fileStats;
 	memset(&fileStats, 0, sizeof(fileStats));
-	printf("%s\n",FILENAME);
-	if(!stat(FILENAME, &fileStats))
+
+	if(stat(FILENAME, &fileStats) != 0)
 		error("Error getting information on file");
 	numMessages = fileStats.st_size / MESSAGE_SIZE;
 
