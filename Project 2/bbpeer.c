@@ -356,26 +356,23 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
 			joiningPeerPort);
 	mutexPrint(printStatement);
 
-	if(joiningPeerPort == ntohs((*joiningPeerAddr).sin_port))
+	if(joiningPeerPort != ntohs((*joiningPeerAddr).sin_port))
 	{
-
-		snprintf(printStatement, sizeof(printStatement), "Sending address of current next peer with port: %d to the joining peer with port %d\n",
-				ntohs(NEXT_PEER_ADDR.sin_port), ntohs((*joiningPeerAddr).sin_port));
-		mutexPrint(printStatement);
-
-		sendto(SOCKET_D, &NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR), 0, (struct sockaddr *)joiningPeerAddr, sizeof(struct sockaddr_in));
-
-		snprintf(printStatement, sizeof(printStatement), "Setting new next peer address to joining peer with port: %d\n",
-				 ntohs((*joiningPeerAddr).sin_port));
-		mutexPrint(printStatement);
-
-		memcpy(&NEXT_PEER_ADDR, joiningPeerAddr, sizeof(struct sockaddr_in));
-		NEXT_PEER_PORT = ntohs((NEXT_PEER_ADDR).sin_port);
+		buildSocketAddress(joiningPeerAddr, joiningPeerPort);
 	}
-	else
-	{
+	snprintf(printStatement, sizeof(printStatement), "Sending address of current next peer with port: %d to the joining peer with port %d\n",
+			ntohs(NEXT_PEER_ADDR.sin_port), ntohs((*joiningPeerAddr).sin_port));
+	mutexPrint(printStatement);
 
-	}
+	sendto(SOCKET_D, &NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR), 0, (struct sockaddr *)joiningPeerAddr, sizeof(struct sockaddr_in));
+
+	snprintf(printStatement, sizeof(printStatement), "Setting new next peer address to joining peer with port: %d\n",
+			 ntohs((*joiningPeerAddr).sin_port));
+	mutexPrint(printStatement);
+
+	memcpy(&NEXT_PEER_ADDR, joiningPeerAddr, sizeof(struct sockaddr_in));
+	NEXT_PEER_PORT = ntohs((NEXT_PEER_ADDR).sin_port);
+
 }
 
 void handleExit(struct message_t *receivedMessage)
