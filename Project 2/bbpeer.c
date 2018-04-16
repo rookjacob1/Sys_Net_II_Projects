@@ -486,6 +486,8 @@ void bulletinBoardWrite(void)
 
 	mutexPrint("Wrote the following message to the bulletin board:");
 	mutexPrint(tmpWriteMessage);
+
+	WRITE_BIT = 0;
 }
 
 void bulletinBoardRead(void)
@@ -524,6 +526,7 @@ void bulletinBoardRead(void)
 				numMessages, READ_BIT);
 		mutexPrint(tmpReadBuffer);
 	}
+	READ_BIT = 0;
 }
 
 void bulletinBoardList(void)
@@ -568,6 +571,7 @@ void bulletinBoardList(void)
 	{
 		mutexPrint("There has not been any messages written to the bulletin board\n");
 	}
+	LIST_BIT = 0;
 }
 
 void bulletinBoardExit(void)
