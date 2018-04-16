@@ -571,7 +571,7 @@ void bulletinBoardExit(void)
 				sprintf(printStatement, "Waiting to exit, therefore forwarding join request to next peer\n");
 				mutexPrint(printStatement);
 
-				sendto(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
+				sendto(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, peerAddrLen);
 
 			}
 			else if(inMessage.header.action == EXIT)
