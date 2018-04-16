@@ -172,9 +172,6 @@ void getNextPeerFromPeer(int peerPort)
 
 	sprintf(message, "%d", HOST_PORT);
 
-	message[strlen(message) - 1] = '\0';
-	printf("Sending \"%s\" to peer with port %d\n\n", message, peerPort);
-
 	initMessage(&peerRequest, NO_TOKEN, JOIN, NO_SEQ, message);
 
 	sendto(SOCKET_D, &peerRequest, sizeof(struct message_t), 0, (struct sockaddr *)&peerAddr, sizeof(struct sockaddr_in));
@@ -356,7 +353,7 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
 			joiningPeerPort);
 	mutexPrint(printStatement);
 
-	if(joiningPeerPort != ntohs((*joiningPeerAddr).sin_port))
+	if(joiningPeerPort != ntohs((*joiningPeerAddr).sin_port))////////NEEED TO CHECK THIS WHEN TESTING
 	{
 		buildSocketAddress(joiningPeerAddr, joiningPeerPort);
 	}
@@ -558,6 +555,64 @@ void bulletinBoardExit(void)
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 
+	while(1)
+	{
+		recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
+
+		if(inMessage.header.token == NO_TOKEN)
+		{
+			if(inMessage.header.action == JOIN)
+			{
+				snprintf(printStatement, sizeof(printStatement),
+						"*************************Join request received from peer with port %5d*************************\n",
+						ntohs(peerAddr.sin_port));
+				mutexPrint(printStatement);
+
+				sprintf(printStatement, "Waiting to exit, therefore forwarding join request to next peer\n");
+				mutexPrint(printStatement);
+
+				sendto(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
+
+			}
+			else if(inMessage.header.action == EXIT)
+			{
+				snprintf(printStatement, sizeof(printStatement),
+						"*************************Exit notification received from peer with port %5d*************************\n",
+						ntohs(peerAddr.sin_port));
+				mutexPrint(printStatement);
+
+				if(!strcmp(OUT_MESSAGE.messageBody, inMessage.messageBody))//Comparing exit notification to the one that was sent
+				{
+					sprintf(printStatement, "Exit notification was the same notification that was sent.\n"
+							"Therefore, it is safe to exit ring.\n");
+					mutexPrint(printStatement);
+
+					initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
+
+					sprintf(printStatement, "Passing token to next peer with port %d\n"
+							"Exiting ring and terminating\n", NEXT_PEER_PORT);
+					mutexPrint(printStatement);
+
+					sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+
+				}
+				else
+				{
+					sprintf(printStatement, "Exit notification was not the same notification that was sent.\n"
+							"Therefore, an error occurred in sending or receiving\n");
+					mutexPrint(printStatement);
+				}
+			}
+			else
+			{
+				return;//Do nothing
+			}
+		}
+		else//If the message is passing a token, that means that there are two tokens which is bad. Discard message.
+		{
+			return;//Do nothing
+		}
+	}
 
 
 }
