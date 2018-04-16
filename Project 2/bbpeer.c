@@ -487,6 +487,9 @@ void bulletinBoardWrite(void)
 	mutexPrint("Wrote the following message to the bulletin board:");
 	mutexPrint(tmpWriteMessage);
 
+	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM + 1, NULL);
+	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+
 	WRITE_BIT = 0;
 }
 
