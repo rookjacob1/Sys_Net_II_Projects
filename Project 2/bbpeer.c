@@ -657,12 +657,12 @@ void bulletinBoardExit(void)
 			}
 			else
 			{
-				return;//Do nothing
+				continue;//Do nothing
 			}
 		}
 		else//If the message is passing a token, that means that there are two tokens which is bad. Discard message.
 		{
-			return;//Do nothing
+			continue;//Do nothing
 		}
 	}
 
