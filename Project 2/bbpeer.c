@@ -607,8 +607,10 @@ void bulletinBoardExit(void)
 
 	char printStatement[256];
 
-	sprintf(printStatement, "Starting exiting process, sending next peer with port %d exit notification\n", NEXT_PEER_PORT);
+	sprintf(printStatement, "Starting exiting process, sendingexit notification to next peer with port %d\n", NEXT_PEER_PORT);
 	mutexPrint(printStatement);
+
+	sprintf(printStatement, "%d\n%d", HOST_PORT, NEXT_PEER_PORT);
 
 	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, NO_SEQ, printStatement);
 
