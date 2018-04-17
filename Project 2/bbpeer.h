@@ -30,8 +30,7 @@ const char FOOTER[] = "\n</message>\n";
 #define JOIN 2049
 #define EXIT 2050
 
-//Sequence Modes
-#define NO_SEQ -2048
+
 
 struct message_Header_t{
 	int token;
@@ -53,7 +52,7 @@ int SOCKET_D;
 char *FILENAME;
 struct message_t OUT_MESSAGE;
 int HAVE_TOKEN;
-int SEQ_NUM;
+
 
 //Variables for bulletinBoardEditing() thread to communicate with main thread
 int READ_BIT;

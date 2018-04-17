@@ -54,7 +54,7 @@ void initMessage(struct message_t *message, int token, int action, char *message
 		snprintf((*message).messageBody, MESSAGE_SIZE, "%s", messageText);
 	}
 
-	//printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
+	//printf("%d\t%d\t\n%s\n\n",(*message).header.token,(*message).header.action, (*message).messageBody);
 }
 
 void mutexPrint(const char *str)
@@ -175,7 +175,7 @@ void getNextPeerFromPeer(int peerPort)
 
 	sprintf(message, "%d", HOST_PORT);
 
-	initMessage(&peerRequest, NO_TOKEN, JOIN, NO_SEQ, message);
+	initMessage(&peerRequest, NO_TOKEN, JOIN, message);
 
 	sendto(SOCKET_D, &peerRequest, sizeof(struct message_t), 0, (struct sockaddr *)&peerAddr, sizeof(struct sockaddr_in));
 
@@ -217,7 +217,7 @@ void determineInitiator(void)
 	char portNumber[16];
 
 	sprintf(portNumber, "%d", HOST_PORT);
-	initMessage(&OUT_MESSAGE, TOKEN_INIT, NO_ACTION, NO_SEQ, portNumber);
+	initMessage(&OUT_MESSAGE, TOKEN_INIT, NO_ACTION, portNumber);
 
 	struct message_t inMessage;
 	struct sockaddr_in peerAddr;
@@ -261,7 +261,7 @@ void determineInitiator(void)
 				printf("Host has the lowest port number, therefore is the Initiator!!\n\n");
 
 				printf("Sending notification to next peer to inform the Initiator has been found\n\n");
-				initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, NO_SEQ, portNumber);
+				initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, portNumber);
 				sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 				initRing();
@@ -282,7 +282,7 @@ void determineInitiator(void)
 			printf("Received notification that Initiator was found from peer with port number %d\n"
 					"Forwarding notification to next peer with port number %d\n\n",
 					ntohs(peerAddr.sin_port), NEXT_PEER_PORT);
-			initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, NO_SEQ, portNumber);
+			initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, portNumber);
 			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 			break;
 		}
@@ -294,14 +294,13 @@ void initRing(void)
 {
 	FILE *fp;
 	HAVE_TOKEN = 1;
-	SEQ_NUM = 1;
 
 	fp = fopen(FILENAME, "w");//If the file already exists, this will
 	if(fp == NULL)
 		error("Error opening file");
 	fclose(fp);
 
-	initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, SEQ_NUM, NULL);
+	initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 }
@@ -329,7 +328,6 @@ void processNextMessage(void)
 				ntohs(peerAddr.sin_port));
 		mutexPrint(printStatement);
 
-		SEQ_NUM = inMessage.header.sequenceNumber;
 		HAVE_TOKEN = 1;
 	}//Update sequence Number of OUT_MESSAGE so checkUserInput can know what sequence number BB is at
 	else if(inMessage.header.token == NO_TOKEN)
@@ -355,10 +353,10 @@ void processNextMessage(void)
 		else
 		{
 			sprintf(printStatement, "Message Info:\n"
-					"Sender's port%d\n"
-					"Token Value%d\tAction Value%d\tSequence Number%d\n"
-					"Message%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
-					(inMessage).header.sequenceNumber, (inMessage).messageBody);
+					"Sender's port %d\n"
+					"Token Value %d\tAction Value %d\n"
+					"Message %s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
+					(inMessage).messageBody);
 			mutexPrint(printStatement);
 			return;//Do nothing
 		}
@@ -366,10 +364,10 @@ void processNextMessage(void)
 	else
 	{
 		sprintf(printStatement, "Message Info:\n"
-				"Sender's port%d\n"
-				"Token Value%d\tAction Value%d\tSequence Number%d\n"
-				"Message%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
-				(inMessage).header.sequenceNumber, (inMessage).messageBody);
+				"Sender's port %d\n"
+				"Token Value %d\tAction Value %d\n"
+				"Message %s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
+				(inMessage).messageBody);
 		mutexPrint(printStatement);
 		return;//Do nothing
 	}
@@ -489,7 +487,7 @@ void checkUserInput(void)
 	}
 	else
 	{
-		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
+		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
 		sleep(SLEEP_TIME);
 		sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	}
@@ -534,11 +532,10 @@ void bulletinBoardWrite(void)
 	mutexPrint("Wrote the following message to the bulletin board:");
 	mutexPrint(tmpWriteMessage);
 
-	SEQ_NUM++;
 
 	sprintf(tmpWriteMessage, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
 	mutexPrint(tmpWriteMessage);
-	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
+	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 	WRITE_BIT = 0;
@@ -578,7 +575,7 @@ void bulletinBoardRead(void)
 	sprintf(tmpReadBuffer, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
 	mutexPrint(tmpReadBuffer);
 
-	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
+	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	READ_BIT = 0;
 }
@@ -622,7 +619,7 @@ void bulletinBoardList(void)
 	sprintf(tmpReadBuffer, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
 	mutexPrint(tmpReadBuffer);
 
-	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
+	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	LIST_BIT = 0;
 }
@@ -643,7 +640,7 @@ void bulletinBoardExit(void)
 
 	sprintf(printStatement, "%d\n%d", HOST_PORT, NEXT_PEER_PORT);
 
-	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, NO_SEQ, printStatement);
+	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, printStatement);
 
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
@@ -686,7 +683,7 @@ void bulletinBoardExit(void)
 							"Therefore, it is safe to exit ring.\n");
 					mutexPrint(printStatement);
 
-					initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
+					initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
 
 					sprintf(printStatement, "Sending token to next peer with port number %d\n"
 							"Exiting ring and terminating\n", NEXT_PEER_PORT);
@@ -707,16 +704,16 @@ void bulletinBoardExit(void)
 			else
 			{
 
-				sprintf(printStatement, "%d\n%d\t%d\t%d\n%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
-						(inMessage).header.sequenceNumber, (inMessage).messageBody);
+				sprintf(printStatement, "%d\n%d\t%d\n%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
+						(inMessage).messageBody);
 				mutexPrint(printStatement);
 				continue;//Do nothing
 			}
 		}
 		else//If the message is passing a token, that means that there are two tokens which is bad. Discard message.
 		{
-			sprintf(printStatement, "%d\n%d\t%d\t%d\n%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
-									(inMessage).header.sequenceNumber, (inMessage).messageBody);
+			sprintf(printStatement, "%d\n%d\t%d\n%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
+									(inMessage).messageBody);
 			mutexPrint(printStatement);
 			continue;//Do nothing
 		}
