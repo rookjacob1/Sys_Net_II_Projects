@@ -685,6 +685,7 @@ void *bulletinBoardEditing(void *parm)
 			continue;
 		if(EXIT_BIT)
 			break;
+		sleep(SLEEP_TIME);
 		mutexPrint("\n******************************************************************************************\n\n"
 				"Enter w to write to the bulletin board\n"
 				"Enter r to read an entry from the bulletin board\n"
