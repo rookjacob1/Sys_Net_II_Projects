@@ -224,6 +224,9 @@ void determineInitiator(void)
 	struct sockaddr_in peerAddr;
 	socklen_t peerAddrLen;
 
+	memset(&inMessage, 0, sizeof(struct message_t));
+	memset(&peerAddr, 0 , sizeof(struct sockaddr_in));
+
 	printf("Beginning to determine the Initiator. Sending host port number %d to next peer with port number %d\n\n",
 			HOST_PORT, NEXT_PEER_PORT);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
@@ -306,10 +309,12 @@ void initRing(void)
 
 void processNextMessage(void)
 {
+	struct message_t inMessage;
 	struct sockaddr_in peerAddr;
 	socklen_t peerAddrLen;
 
-	struct message_t inMessage;
+	memset(&inMessage, 0, sizeof(struct message_t));
+	memset(&peerAddr, 0 , sizeof(struct sockaddr_in));
 
 	char printStatement[256];
 
@@ -363,6 +368,7 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
 {
 	int joiningPeerPort = atoi((*receivedMessage).messageBody);
 	char printStatement[256];
+
 	snprintf(printStatement, sizeof(printStatement), "Peer wanting to join has port address: %d",
 			joiningPeerPort);
 	mutexPrint(printStatement);
@@ -603,10 +609,12 @@ void bulletinBoardList(void)
 
 void bulletinBoardExit(void)
 {
+	struct message_t inMessage;
 	struct sockaddr_in peerAddr;
 	socklen_t peerAddrLen;
 
-	struct message_t inMessage;
+	memset(&inMessage, 0, sizeof(struct message_t));
+	memset(&peerAddr, 0 , sizeof(struct sockaddr_in));
 
 	char printStatement[256];
 
