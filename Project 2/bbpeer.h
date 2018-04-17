@@ -36,7 +36,6 @@ const char FOOTER[] = "\n</message>\n";
 struct message_Header_t{
 	int token;
 	int action;
-	int sequenceNumber;
 };
 
 struct message_t{
@@ -83,7 +82,7 @@ void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort);
 /*
  *
  */
-void initMessage(struct message_t *message, int token, int action, int sequenceNumber, char *messageText);
+void initMessage(struct message_t *message, int token, int action, char *messageText);
 
 /*
  *

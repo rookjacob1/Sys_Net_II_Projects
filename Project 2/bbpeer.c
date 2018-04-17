@@ -44,11 +44,10 @@ void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort)
 	(*socketAddress).sin_port = htons(socketPort);
 }
 
-void initMessage(struct message_t *message, int token, int action, int sequenceNumber, char *messageText)
+void initMessage(struct message_t *message, int token, int action, char *messageText)
 {
 	(*message).header.token = token;
 	(*message).header.action = action;
-	(*message).header.sequenceNumber = sequenceNumber;
 
 	if(messageText != NULL)
 	{
