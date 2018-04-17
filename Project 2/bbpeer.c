@@ -524,6 +524,9 @@ void bulletinBoardWrite(void)
 	mutexPrint(tmpWriteMessage);
 
 	SEQ_NUM++;
+
+	sprintf(tmpWriteMessage, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
+	mutexPrint(tmpWriteMessage);
 	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
@@ -560,6 +563,9 @@ void bulletinBoardRead(void)
 				numMessages, READ_BIT);
 		mutexPrint(tmpReadBuffer);
 	}
+
+	sprintf(tmpReadBuffer, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
+	mutexPrint(tmpReadBuffer);
 
 	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
@@ -601,6 +607,9 @@ void bulletinBoardList(void)
 	{
 		mutexPrint("There has not been any messages written to the bulletin board\n");
 	}
+
+	sprintf(tmpReadBuffer, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
+	mutexPrint(tmpReadBuffer);
 
 	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
@@ -668,7 +677,7 @@ void bulletinBoardExit(void)
 
 					initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, SEQ_NUM, NULL);
 
-					sprintf(printStatement, "Passing token to next peer with port %d\n"
+					sprintf(printStatement, "Sending token to next peer with port number %d\n"
 							"Exiting ring and terminating\n", NEXT_PEER_PORT);
 					mutexPrint(printStatement);
 
@@ -686,14 +695,17 @@ void bulletinBoardExit(void)
 			}
 			else
 			{
-				sprintf(printStatement, "%d\t%d\t%d\n%s\n\n",(inMessage).header.token,(inMessage).header.action, (inMessage).header.sequenceNumber, (inMessage).messageBody);
+
+				sprintf(printStatement, "%d\n%d\t%d\t%d\n%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
+						(inMessage).header.sequenceNumber, (inMessage).messageBody);
 				mutexPrint(printStatement);
 				continue;//Do nothing
 			}
 		}
 		else//If the message is passing a token, that means that there are two tokens which is bad. Discard message.
 		{
-			sprintf(printStatement, "%d\t%d\t%d\n%s\n\n",(inMessage).header.token,(inMessage).header.action, (inMessage).header.sequenceNumber, (inMessage).messageBody);
+			sprintf(printStatement, "%d\n%d\t%d\t%d\n%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
+									(inMessage).header.sequenceNumber, (inMessage).messageBody);
 			mutexPrint(printStatement);
 			continue;//Do nothing
 		}
