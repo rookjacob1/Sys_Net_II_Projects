@@ -1,5 +1,27 @@
 /*
- * @file bbpeer.c
+ * @file bbpeer.c			This file contains all of the function definitions of the functions used in the bulletin
+ * board ring peer program. Description of what the individual functions do and their purpose can be found in the
+ * bbpeer.h file. This file only contains the code and a basic overlay of what the bulletin board peer program
+ * does.
+ *
+ * The bbpeer program simulates a bulletin board that the peers can write and read from. In order to write or read
+ * from the bulletin board, a peer must have a token. This token is passed among the peers to allow all peers to have
+ * the chance to use the bulletin board.
+ *
+ * The bulletin board is actually a shared file between the peers. When the peers read or write to the bulletin board,
+ * they are reading or writing to that file that they specified. This program requires that all of the peers to be
+ * located on the same host machine, host to host communication is not supported. Because of this, the passing of the
+ * actual file between peers is not needed. All of the peers share the same local file.
+ *
+ * Peers are allowed to join or exit at any time. When a peer wants to join, it sends one of the peers in the ring
+ * a join request and that peer sends the joining peer it's next peer and sets it's own next peer to the joining
+ * peer. A peer that wants to leave sends an exit notification to the next peer. Peers can only exit when they have the
+ * token to prevent problems when more than one peer want to exit at one time. When a peer receives a notification that
+ * a peer wants to leave the ring, the peer checks to see if the peer that is wanting to exit is their next peer in the
+ * ring. If the peer that is leaving is the next peer, then the exiting peer's next peer is set as the new next peer of
+ * the peer that received the exit notification. The peer then sends the exiting peer the same exit notification to
+ * notify the exiting peer that they can now exit the ring. If the peer that is exiting the ring is not the current
+ * peer's next peer, then the peer simply forwards the exit notification to its next peer.
  *
  * @author Jacob Rook
  * @date 04/17/2018
