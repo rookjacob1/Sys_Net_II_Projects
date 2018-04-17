@@ -421,6 +421,7 @@ void handleExit(struct message_t *receivedMessage)
 					exitingPeerNextPort);
 
 			buildSocketAddress(&NEXT_PEER_ADDR, exitingPeerNextPort);
+			NEXT_PEER_PORT = exitingPeerNextPort;
 		}
 		else
 		{
@@ -434,6 +435,8 @@ void handleExit(struct message_t *receivedMessage)
 					exitingPeerNextPort);
 
 			buildSocketAddress(&NEXT_PEER_ADDR, exitingPeerNextPort);
+			NEXT_PEER_PORT = exitingPeerNextPort;
+
 		}
 
 	}
@@ -615,6 +618,9 @@ void bulletinBoardExit(void)
 	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, NO_SEQ, printStatement);
 
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+
+	sprintf(printStatement, "%s\n\nWas sent to peer with port number %d", OUT_MESSAGE.messageBody, NEXT_PEER_ADDR);
+	mutexPrint(printStatement);
 
 
 	while(1)
