@@ -619,7 +619,7 @@ void bulletinBoardExit(void)
 
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
-	sprintf(printStatement, "%s\n\nWas sent to peer with port number %d", OUT_MESSAGE.messageBody, NEXT_PEER_ADDR);
+	sprintf(printStatement, "%s\n\nWas sent to peer with port number %d", OUT_MESSAGE.messageBody, NEXT_PEER_PORT);
 	mutexPrint(printStatement);
 
 
