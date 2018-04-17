@@ -494,7 +494,7 @@ void bulletinBoardWrite(void)
 	char tmpWriteMessage[MESSAGE_SIZE + 1];
 	FILE *fp;
 	int bytesWrote = 0;
-	int sequenceNumber = getFileSize() / WRITE_MESSAGE + 1;
+	int sequenceNumber = getFileSize() / MESSAGE_SIZE + 1;
 
 	sprintf(tmpHeader, HEADER, sequenceNumber);
 
