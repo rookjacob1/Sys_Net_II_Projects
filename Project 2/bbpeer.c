@@ -551,8 +551,9 @@ void bulletinBoardList(void)
 
 
 	struct stat fileStats;
+	memset(&fileStats, 0, sizeof(fileStats));
 
-	if(!stat(FILENAME, &fileStats))
+	if(stat(FILENAME, &fileStats) != 0)
 		error("Error getting information on file");
 	fileSize = fileStats.st_size;
 
