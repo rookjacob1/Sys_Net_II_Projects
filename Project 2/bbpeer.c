@@ -315,6 +315,9 @@ void processNextMessage(void)
 
 	recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
 
+	sprintf(printStatement, "Processing next message from %d",ntohs(peerAddr.sin_port));
+	mutexPrint(printStatement);
+
 	if(inMessage.header.token == PASS_TOKEN)
 	{//Can not pass tokens with an action. Pass with current sequence Number though
 		snprintf(printStatement, sizeof(printStatement),
@@ -401,7 +404,6 @@ void handleExit(struct message_t *receivedMessage)
 
 	if(exitingPeerPort == NEXT_PEER_PORT)
 	{
-
 
 		strcpy(tmpStr, &(*receivedMessage).messageBody[tmp + 1]);
 		exitingPeerNextPort = atoi(tmpStr);
@@ -604,7 +606,9 @@ void bulletinBoardExit(void)
 	struct message_t inMessage;
 
 	char printStatement[256];
-	sprintf(printStatement, "%d\n%d", HOST_PORT, NEXT_PEER_PORT);
+
+	sprintf(printStatement, "Starting exiting process, sending next peer with port %d exit notification\n", NEXT_PEER_PORT);
+	mutexPrint(printStatement);
 
 	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, NO_SEQ, printStatement);
 
@@ -613,6 +617,9 @@ void bulletinBoardExit(void)
 
 	while(1)
 	{
+		sprintf(printStatement, "Waiting to receive exiting notification\n");
+		mutexPrint(printStatement);
+
 		recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
 
 		if(inMessage.header.token == NO_TOKEN)
@@ -685,7 +692,6 @@ void *bulletinBoardEditing(void *parm)
 			continue;
 		if(EXIT_BIT)
 			break;
-		sleep(SLEEP_TIME);
 		mutexPrint("\n******************************************************************************************\n\n"
 				"Enter w to write to the bulletin board\n"
 				"Enter r to read an entry from the bulletin board\n"
