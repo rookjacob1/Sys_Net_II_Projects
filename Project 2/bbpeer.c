@@ -355,11 +355,23 @@ void processNextMessage(void)
 		}
 		else
 		{
+			sprintf(printStatement, "Message Info:\n"
+					"Sender's port%d\n"
+					"Token Value%d\tAction Value%d\tSequence Number%d\n"
+					"Message%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
+					(inMessage).header.sequenceNumber, (inMessage).messageBody);
+			mutexPrint(printStatement);
 			return;//Do nothing
 		}
 	}
 	else
 	{
+		sprintf(printStatement, "Message Info:\n"
+				"Sender's port%d\n"
+				"Token Value%d\tAction Value%d\tSequence Number%d\n"
+				"Message%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
+				(inMessage).header.sequenceNumber, (inMessage).messageBody);
+		mutexPrint(printStatement);
 		return;//Do nothing
 	}
 }
