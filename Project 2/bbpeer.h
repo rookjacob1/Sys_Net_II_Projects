@@ -158,6 +158,11 @@ void checkUserInput(void);
 /*
  *
  */
+int getFileSize(void);
+
+/*
+ *
+ */
 void bulletinBoardWrite(void);
 
 /*

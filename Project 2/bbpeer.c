@@ -474,6 +474,20 @@ void checkUserInput(void)
 	HAVE_TOKEN = 0;
 }
 
+int getFileSize(void)
+{
+	int fileSize;
+
+	struct stat fileStats;
+	memset(&fileStats, 0, sizeof(fileStats));
+
+	if(stat(FILENAME, &fileStats) != 0)
+		error("Error getting information on file");
+	fileSize = fileStats.st_size;
+
+	return fileSize;
+}
+
 void bulletinBoardWrite(void)
 {
 	char tmpHeader[HEADER_SIZE + 1];
@@ -510,14 +524,7 @@ void bulletinBoardRead(void)
 	char tmpReadBuffer[MESSAGE_SIZE + 1];
 	tmpReadBuffer[MESSAGE_SIZE] = '\0';
 	int bytesRead = 0;
-	int numMessages;
-
-	struct stat fileStats;
-	memset(&fileStats, 0, sizeof(fileStats));
-
-	if(stat(FILENAME, &fileStats) != 0)
-		error("Error getting information on file");
-	numMessages = fileStats.st_size / MESSAGE_SIZE;
+	int numMessages = getFileSize() / MESSAGE_SIZE;
 
 	if(READ_BIT <= numMessages)
 	{
@@ -553,7 +560,7 @@ void bulletinBoardList(void)
 	char tmpReadBuffer[MESSAGE_SIZE + 1];
 	int bytesRead;
 	int totalBytesRead = 0;
-	int fileSize;
+	int fileSize =
 
 
 	struct stat fileStats;
