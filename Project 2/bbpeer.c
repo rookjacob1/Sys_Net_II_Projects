@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
 
 	bulletinBoardRing();
 
-	close(SOCKET_D);
 	return 0;
 }
 
@@ -193,7 +192,7 @@ void bulletinBoardRing(void)
 	pthread_mutex_init(&PRINT_LOCK, NULL);
 	pthread_create(&TID, NULL, bulletinBoardEditing, NULL);
 
-	while(EXIT_BIT != 1)
+	while(EXIT_BIT != EXIT)
 	{
 		processNextMessage();
 		if(HAVE_TOKEN == 1)
@@ -204,6 +203,7 @@ void bulletinBoardRing(void)
 
 	pthread_join(TID, NULL);
 	pthread_mutex_destroy(&PRINT_LOCK);
+	close(SOCKET_D);
 }
 
 void determineInitiator(void)
@@ -644,6 +644,7 @@ void bulletinBoardExit(void)
 
 					sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
+					EXIT_BIT = EXIT;
 					return;
 				}
 				else
