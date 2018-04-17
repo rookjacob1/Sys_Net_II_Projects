@@ -55,7 +55,7 @@ void initMessage(struct message_t *message, int token, int action, int sequenceN
 		snprintf((*message).messageBody, MESSAGE_SIZE, "%s", messageText);
 	}
 
-	printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
+	//printf("%d\t%d\t%d\n%s\n\n",(*message).header.token,(*message).header.action, (*message).header.sequenceNumber, (*message).messageBody);
 }
 
 void mutexPrint(const char *str)
@@ -494,8 +494,9 @@ void bulletinBoardWrite(void)
 	char tmpWriteMessage[MESSAGE_SIZE + 1];
 	FILE *fp;
 	int bytesWrote = 0;
+	int sequenceNumber = getFileSize / WRITE_MESSAGE + 1;
 
-	sprintf(tmpHeader, HEADER, SEQ_NUM);
+	sprintf(tmpHeader, HEADER, sequenceNumber);
 
 	sprintf(tmpWriteMessage, "%s%s", tmpHeader, WRITE_MESSAGE);
 
@@ -560,15 +561,7 @@ void bulletinBoardList(void)
 	char tmpReadBuffer[MESSAGE_SIZE + 1];
 	int bytesRead;
 	int totalBytesRead = 0;
-	int fileSize =
-
-
-	struct stat fileStats;
-	memset(&fileStats, 0, sizeof(fileStats));
-
-	if(stat(FILENAME, &fileStats) != 0)
-		error("Error getting information on file");
-	fileSize = fileStats.st_size;
+	int fileSize = getFileSize();
 
 	if(fileSize > 0)
 	{
