@@ -372,9 +372,8 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
 			 ntohs((*joiningPeerAddr).sin_port));
 	mutexPrint(printStatement);
 
-	memcpy(&NEXT_PEER_ADDR, joiningPeerAddr, sizeof(struct sockaddr_in));
-	NEXT_PEER_PORT = ntohs((NEXT_PEER_ADDR).sin_port);
-
+	NEXT_PEER_PORT = ntohs((*joiningPeerAddr).sin_port);
+	buildSocketAddress(&NEXT_PEER_ADDR, NEXT_PEER_PORT);
 }
 
 void handleExit(struct message_t *receivedMessage)
