@@ -10,9 +10,9 @@
  * sent their next peers, the server shuts down and does not aid the peers anymore.
  *
  * @author Jacob Rook
- * @date 02/10/2018
+ * @date 04/17/2018
  * @info Course COP 4635
- * Project 1
+ * Project 2
  */
 
 #include"bbserver.h"

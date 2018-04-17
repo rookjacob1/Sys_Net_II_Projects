@@ -1,10 +1,10 @@
 /*
- * @file headerFiles.h
+ * @file headerFiles.h			This file contains most of commonly used header files
  *
  * @author Jacob Rook
- * @date 02/10/2018
+ * @date 04/17/2018
  * @info Course COP 4635
- * Project 1
+ * Project 2
  */
 
 #ifndef HEADERFILES_H_
