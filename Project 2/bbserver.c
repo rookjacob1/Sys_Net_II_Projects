@@ -1,5 +1,13 @@
 /*
- * @file bbserver.c
+ * @file bbserver.c			This file contains all of the function definitions for the bulletin board server program.
+ * Description what the individual functions do and their purpose can be found in the bbserver.h file. This file only
+ * contains the code for the functions.
+ *
+ * The bbserver program listens for peers, using UDP datagrams, trying to connect with other peers to create a ring to
+ * share a common file to read and write to. When the server is started, the user will specify how many peers must be
+ * contact the server before the server creates the ring. Once the number of received peers meet the allotted number,
+ * the server wil create the ring by sending the individual peers their next member in the ring. Once the peers are
+ * sent their next peers, the server shuts down and does not aid the peers anymore.
  *
  * @author Jacob Rook
  * @date 02/10/2018
@@ -12,13 +20,13 @@
 int main(int argc, char *argv[])
 {
 	//Declare Variables
-	int sockD;
-	int serverPort;
-	int numberHosts;
+	int sockD;				//Socket Descriptor
+	int serverPort;			//Server Port Number
+	int numberHosts;		//Number of peers to accept to make the ring
 
 
-	struct sockaddr_in serverAddr;
-	struct sockaddr_in *peerAddrs;
+	struct sockaddr_in serverAddr;			//Server socket address
+	struct sockaddr_in *peerAddrs;			//Array of peer addresses to store the joining peers
 
 	validateArgv(argc, argv, &serverPort, &numberHosts);
 
@@ -32,8 +40,8 @@ int main(int argc, char *argv[])
 
 	printf("Ring created. Server Terminating.\n\n");
 
-	free(peerAddrs);
-	close(sockD);
+	free(peerAddrs);			//freeing allocated memory
+	close(sockD);				//Closing socket
 
 	return 0;
 }
