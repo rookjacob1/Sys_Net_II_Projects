@@ -16,11 +16,16 @@ int main(int argc, char *argv[])
 	validateArgv(argc, argv, &sendPort);
 
 	if(argc == 6)
+	{
 		getNextPeerFromServer(sendPort);
+		bulletinBoardRing(1);
+	}
 	else
+	{
 		getNextPeerFromPeer(sendPort);
+		bulletinBoardRing(0);
+	}
 
-	bulletinBoardRing();
 
 	return 0;
 }
@@ -185,9 +190,10 @@ void getNextPeerFromPeer(int peerPort)
 			inet_ntoa((NEXT_PEER_ADDR).sin_addr), NEXT_PEER_PORT);
 }
 
-void bulletinBoardRing(void)
+void bulletinBoardRing(int init)
 {
-	determineInitiator();
+	if(init)
+		determineInitiator();
 
 	pthread_mutex_init(&PRINT_LOCK, NULL);
 	pthread_create(&TID, NULL, bulletinBoardEditing, NULL);
