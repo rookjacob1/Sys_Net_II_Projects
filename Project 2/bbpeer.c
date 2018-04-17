@@ -672,11 +672,15 @@ void bulletinBoardExit(void)
 			}
 			else
 			{
+				sprintf(printStatement, "%d\t%d\t%d\n%s\n\n",(inMessage).header.token,(inMessage).header.action, (inMessage).header.sequenceNumber, (inMessage).messageBody);
+				mutexPrint(printStatement);
 				continue;//Do nothing
 			}
 		}
 		else//If the message is passing a token, that means that there are two tokens which is bad. Discard message.
 		{
+			sprintf(printStatement, "%d\t%d\t%d\n%s\n\n",(inMessage).header.token,(inMessage).header.action, (inMessage).header.sequenceNumber, (inMessage).messageBody);
+			mutexPrint(printStatement);
 			continue;//Do nothing
 		}
 	}
