@@ -251,12 +251,26 @@ void cleanStdin(void);
 void validateArgv(int argc, char *argv[], int *sendPort);
 
 /*
+ *	@brief	getNextPeerFromServer	The getNextPeerFromServer() function takes the port number that is passed to the function
+ *	and contacts the process with that port, assuming that the process is the server. The user is asked to enter a message to
+ *	send to the server and sends the server the message. The function while then wait for the server to respond with the socket
+ *	address of it's next peer in the ring. The function stores the socket address of the next peer to the NEXT_PEER_ADDR scope
+ *	global variable and converts the socket address's port to an integer and stores it into the NEXT_PEER_PORT variable.
  *
+ *	@param	serverPort				Integer value of the server's port number
  */
 void getNextPeerFromServer(int serverPort);
 
 /*
+ *	@brief	getNextPeerFromPeer		The getNextPeerFromPeer() function takes the port number that is passed to the function and
+ *	contacts the process with that port, assuming that the process is a peer in an already initialized ring. The function creates
+ *	a message_t structure to send to the peer consisting of a string of the host's port number given by HOST_PORT to be stored in
+ *	the messageBody and sets the action variable in the message_Header_t structure to indicate that the peer is wanting to join the
+ *	peer. After the message is sent to the existing peer, the joining peer waits for a response with the address of it's next peer
+ *	in the ring. When the address is received, it is stored in the socket address of the next peer to the NEXT_PEER_ADDR scope
+ *	global variable and converts the socket address's port to an integer and stores it into the NEXT_PEER_PORT variable.
  *
+ *	@param	peerPort				Integer value of the existing peer's port number
  */
 void getNextPeerFromPeer(int peerPort);
 //END SET UP FUNCTIONS

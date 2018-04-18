@@ -144,30 +144,33 @@ void validateArgv(int argc, char *argv[], int *sendPort)
 
 void getNextPeerFromServer(int serverPort)
 {
-	struct sockaddr_in serverAddr;
-	struct sockaddr_in hostAddr;
+	struct sockaddr_in serverAddr;			//Socket address to store the server's socket address
+	struct sockaddr_in hostAddr;			//Socket address to store the host's socket address
 
-	char message[MESSAGE_SIZE];
+	char message[MESSAGE_SIZE];				//Message to send to the server
 
-	buildSocketAddress(&hostAddr, HOST_PORT);
-	buildSocketAddress(&serverAddr, serverPort);
+	buildSocketAddress(&hostAddr, HOST_PORT);		//Building host's socket address to use for binding the port to the socket
+	buildSocketAddress(&serverAddr, serverPort);	//Building server's socket address to use for sending the peer request message
 
+	//Creating socket
 	if ((SOCKET_D = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
 		error("Error creating socket\n");
 
+	//Binding socket to the created socket address
 	if((bind(SOCKET_D, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
 		error("Error binding socket\n");
 
 	printf("Socket bound with port number %d\n\n", HOST_PORT);
 
-
+	//Getting message to send to the server from the user
 	printf("Please enter a message:\n");
 	fgets(message, sizeof(message), stdin);
 
-	message[strlen(message) - 1] = '\0';
+	message[strlen(message) - 1] = '\0';			//Getting rid of the extra '\n'
 	printf("Sending \"%s\" to server\n\n", message);
 	sendto(SOCKET_D, message, strlen(message) + 1, 0, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in));
 
+	//Receiving and storing the next peer's address in NEXT_PEER_ADDR
 	recvfrom(SOCKET_D, &NEXT_PEER_ADDR, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
 	NEXT_PEER_PORT = ntohs((NEXT_PEER_ADDR).sin_port);
@@ -180,8 +183,8 @@ void getNextPeerFromServer(int serverPort)
 
 void getNextPeerFromPeer(int peerPort)
 {
-	struct sockaddr_in peerAddr;
-	struct sockaddr_in hostAddr;
+	struct sockaddr_in peerAddr;				//Socket address to store the existing peer's socket address
+	struct sockaddr_in hostAddr;				//Socket address to store the host's socket address
 	struct message_t peerRequest;
 
 
