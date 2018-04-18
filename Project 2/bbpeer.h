@@ -310,8 +310,16 @@ void bulletinBoardRing(int init);
 
 //RING INITIATION FUNCTIONS
 /*
- * determineInitiator works properly with print statements.
-However, one of the peers was printing 0 for the port address of the received port. Not really a problem but something to try to fix later
+ * 	@brief	setermineInitiator		The determineInitiator() function determines the initiator of the ring based on which peer has
+ * 	the smallest port number. The peers send messages with the token variable set to TOKEN_INIT while the initiation process is
+ * 	going. As long as the peer continues to receive messages with the token set to TOKEN_INIT the peer assumes that the initiation
+ * 	process is still going.
+ *
+ * 	When a peer receives a message with the token variable set to TOKEN_INIT, the peer checks the messsageBody variable for the
+ * 	value of the port number that was passed to the peer. If the port number that was passed to the peer is less than the host's port
+ * 	number then the host knows that it is not the initiator because there is a peer with a port number less than its own. Therefore, the
+ * 	peer forwards the message with the smaller port number to the next peer. If the host receives a message with a port number that is greater,
+ * 	then the host resends it's port number to the next
  */
 void determineInitiator(void);
 

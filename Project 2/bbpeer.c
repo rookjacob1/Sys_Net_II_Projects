@@ -246,23 +246,26 @@ void bulletinBoardRing(int init)
 
 void determineInitiator(void)
 {
-	int tmpPortNumber;
-	char portNumber[16];
+	int tmpPortNumber;						//Variable to store the integer value of a peer's port number
+	char portNumber[16];					//Array to store the string of the integer value of a peer's port number
 
-	sprintf(portNumber, "%d", HOST_PORT);
-	initMessage(&OUT_MESSAGE, TOKEN_INIT, NO_ACTION, portNumber);
-
-	struct message_t inMessage;
-	struct sockaddr_in peerAddr;
-	socklen_t peerAddrLen;
+	struct message_t inMessage;				//Message structure to store the incoming messages
+	struct sockaddr_in peerAddr;			//Socket Address structure to store the socket address of the peer sending the message
+	socklen_t peerAddrLen;					//Length of socket address
 
 	memset(&inMessage, 0, sizeof(struct message_t));
 	memset(&peerAddr, 0 , sizeof(struct sockaddr_in));
 
+	//Initializing message with TOKEN_INIT mode set and the messageBody set to the integer value of the host's port number
+	sprintf(portNumber, "%d", HOST_PORT);
+	initMessage(&OUT_MESSAGE, TOKEN_INIT, NO_ACTION, portNumber);
+
+	//Sending host port number to the next peer in the ring
 	printf("Beginning to determine the Initiator. Sending host port number %d to next peer with port number %d\n\n",
 			HOST_PORT, NEXT_PEER_PORT);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
+	//Initializing main variables used in the bulletin board ring program
 	READ_BIT = 0;
 	WRITE_BIT = 0;
 	LIST_BIT = 0;
@@ -271,22 +274,24 @@ void determineInitiator(void)
 
 	while(1)
 	{
+		//Receiving message from peer
 		printf("Waiting for message from peer\n\n");
 		recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
 
-		if(inMessage.header.token == TOKEN_INIT)
+		if(inMessage.header.token == TOKEN_INIT)//Ring is still in the initiation process
 		{
 			tmpPortNumber = atoi(inMessage.messageBody);
-			if(tmpPortNumber < HOST_PORT)
+			if(tmpPortNumber < HOST_PORT)//The port received is less than the host port, therefore forward received message to next peer
 			{
 				printf("\"%s\" received from peer with port number %d\n",
 						inMessage.messageBody, ntohs(peerAddr.sin_port));
 				printf("Host port number: %d > received port: %d\n", HOST_PORT, tmpPortNumber);
 				printf("Forwarding received port number: %d to the next peer with port number %d\n\n",
 						tmpPortNumber, NEXT_PEER_PORT);
+
 				sendto(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 			}
-			else if(tmpPortNumber == HOST_PORT)
+			else if(tmpPortNumber == HOST_PORT)//The port received is the same as the host's port number, must mean that this peer is the initiator
 			{
 				printf("\"%s\" received from peer with port number %d\n",
 										inMessage.messageBody, ntohs(peerAddr.sin_port));
@@ -294,27 +299,32 @@ void determineInitiator(void)
 				printf("Host has the lowest port number, therefore is the Initiator!!\n\n");
 
 				printf("Sending notification to next peer to inform the Initiator has been found\n\n");
+
+				//Sending out a notification that the initiator has been found by sending a NO_TOKEN for token
 				initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, portNumber);
 				sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
+				//Initialize the ring
 				initRing();
 
 				break;
 			}
-			else
+			else//The port received is greater than the host port, therefore re-sending host's port number
 			{
 				printf("\"%s\" received from peer with port number %d\n",
 												inMessage.messageBody, ntohs(peerAddr.sin_port));
 				printf("Host port number: %d < received port: %d\n", HOST_PORT, tmpPortNumber);
 				printf("Re-sending host port number %d to next peer with port number %d\n\n", HOST_PORT, NEXT_PEER_PORT);
+
 				sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 			}
 		}
-		else
+		else//The initiation process has ended, i.e. the initiation has been found
 		{
 			printf("Received notification that Initiator was found from peer with port number %d\n"
 					"Forwarding notification to next peer with port number %d\n\n",
 					ntohs(peerAddr.sin_port), NEXT_PEER_PORT);
+
 			initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, portNumber);
 			sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 			break;
