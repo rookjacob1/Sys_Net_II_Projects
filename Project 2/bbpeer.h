@@ -318,8 +318,13 @@ void bulletinBoardRing(int init);
  * 	When a peer receives a message with the token variable set to TOKEN_INIT, the peer checks the messsageBody variable for the
  * 	value of the port number that was passed to the peer. If the port number that was passed to the peer is less than the host's port
  * 	number then the host knows that it is not the initiator because there is a peer with a port number less than its own. Therefore, the
- * 	peer forwards the message with the smaller port number to the next peer. If the host receives a message with a port number that is greater,
- * 	then the host resends it's port number to the next
+ * 	peer forwards the message with the smaller port number to the next peer.
+ *
+ * 	If the host receives a message with a port number that is greater, then the host resends it's port number to the next peer in the
+ * 	ring. If the host receives a message that has the same port number as, it knows that it must be the peer with the smallest port
+ * 	number because all of the other peers must must have resent the host's port number because it was smaller than the rest.
+ *
+ * 	The initiator peer then sends a message to the next peer with the token variable set to NO_TOKEN to
  */
 void determineInitiator(void);
 
