@@ -131,8 +131,17 @@ pthread_mutex_t PRINT_LOCK;
 #define SLEEP_TIME 10
 
 
+
+
+//SUPLEMENTARY FUNCTIONS
 /*
+ *	Generic functions that help multiple functions.
+ */
+
+/*
+ *	@brief	error		The error() function produces an error message using perror() then terminates the program.
  *
+ *	@param	msg			Message to display as the error message
  */
 void error(const char *msg);
 
@@ -155,6 +164,14 @@ void mutexPrint(const char *str);
  *
  */
 void cleanStdin(void);
+//END SUPLEMENTARY FUNCTIONS
+
+
+
+//SET UP FUNCTIONS
+/*
+ * 	Functions that help start the ring.
+ */
 
 /*
  * @breif	validateArgv	The validateArgv() call checks if the arguments passed to the main
@@ -179,6 +196,16 @@ void getNextPeerFromServer(int serverPort);
  *
  */
 void getNextPeerFromPeer(int peerPort);
+//END SET UP FUNCTIONS
+
+
+
+//BULLETIN BOARD RING FUNCTIONS
+/*
+ *	These functions are used to handle the operation of the ring structure between all of the peers. At this
+ * 	point the peers have been sent their next member in the ring, and are ready to start the ring.
+ *
+ */
 
 /*
  *
@@ -240,6 +267,14 @@ void bulletinBoardList(void);
  *
  */
 void bulletinBoardExit(void);
+//END BULLETIN BOARD RING FUNCTIONS
+
+
+
+//BULLETINBOARDEDITING() THREAD FUNCTIONS
+/*
+ *	These functions are for the bulletinBoardEditing(), that handles the users input.
+ */
 
 /*
  *
@@ -265,6 +300,7 @@ void userList(void);
  *
  */
 void userExit(void);
+//END BULLETINBOARDEDITING() THREAD FUNCTIONS
 
 
 
