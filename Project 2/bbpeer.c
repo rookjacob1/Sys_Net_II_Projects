@@ -190,24 +190,29 @@ void getNextPeerFromPeer(int peerPort)
 
 	char message[MESSAGE_SIZE];
 
-	buildSocketAddress(&hostAddr, HOST_PORT);
-	buildSocketAddress(&peerAddr, peerPort);
+	buildSocketAddress(&hostAddr, HOST_PORT);		//Building host's socket address to use for binding the port to the socket
+	buildSocketAddress(&peerAddr, peerPort);		//Building existing peer's socket address used to send to peer
 
+	//Building socket
 	if ((SOCKET_D = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
 		error("Error creating socket\n");
 
+	//Binding socket address to the host's socket address
 	if((bind(SOCKET_D, (struct sockaddr *)&hostAddr, sizeof(hostAddr))) <0)
 		error("Error binding socket\n");
 
 	printf("Socket bound with port number %d\n\n", HOST_PORT);
 
-
+	//Creating message with the integer value of the host's port number to send to existing peer
 	sprintf(message, "%d", HOST_PORT);
 
+	//Initializing message_t structure to send to the existing peer
 	initMessage(&peerRequest, NO_TOKEN, JOIN, message);
 
+	//Sending the message to the existing peer
 	sendto(SOCKET_D, &peerRequest, sizeof(struct message_t), 0, (struct sockaddr *)&peerAddr, sizeof(struct sockaddr_in));
 
+	//Receiving and storing the next peer's address in the NEXT_PEER_ADDR variable
 	recvfrom(SOCKET_D, &NEXT_PEER_ADDR, sizeof(struct sockaddr_in), 0 , NULL, NULL);
 
 	NEXT_PEER_PORT = ntohs((NEXT_PEER_ADDR).sin_port);
@@ -220,11 +225,11 @@ void getNextPeerFromPeer(int peerPort)
 
 void bulletinBoardRing(int init)
 {
-	if(init)
+	if(init)//If the initiator need to be found
 		determineInitiator();
 
-	pthread_mutex_init(&PRINT_LOCK, NULL);
-	pthread_create(&TID, NULL, bulletinBoardEditing, NULL);
+	pthread_mutex_init(&PRINT_LOCK, NULL);						//Initialize the mutex print lock
+	pthread_create(&TID, NULL, bulletinBoardEditing, NULL);		//Start the bulletinBoardEditing() thread
 
 	while(EXIT_BIT != EXIT)
 	{
@@ -235,9 +240,8 @@ void bulletinBoardRing(int init)
 		}
 	}
 
-	pthread_join(TID, NULL);
-	pthread_mutex_destroy(&PRINT_LOCK);
-	close(SOCKET_D);
+	pthread_join(TID, NULL);									//Wait for bulletinBoardEditing() thread to terminate
+	pthread_mutex_destroy(&PRINT_LOCK);							//Destroy the mutex print lock
 }
 
 void determineInitiator(void)
@@ -721,6 +725,7 @@ void bulletinBoardExit(void)
 					sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 					EXIT_BIT = EXIT;
+					close(SOCKET_D);
 					return;
 				}
 				else

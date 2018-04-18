@@ -285,7 +285,24 @@ void getNextPeerFromPeer(int peerPort);
  */
 
 /*
+ *	@brief	bulletinBoardRing		The bulletinBoardRing() function handles the operations of the bulletin board ring
+ *	structure. Whenever this function is called, it is assumed that all of the peers in the ring have their associated
+ *	next peer in the ring to send messages that is stored in the NEXT_PEER_ADDR scope global variable. The function starts
+ *	by determining the initiator of the ring, if the initiator has not already been found. If a peer is joining an existing
+ *	ring, the peer should pass the function a value of 0, to indicate that it does not need to find an initiator. If the
+ *	peer is apart of the ring that was just created, the peer needs to pass the function a 1, to indicate that the initiator
+ *	needs to be found. Description on how the initiator is found can be found below in the Ring Initiation Functions section.
  *
+ *	Once the initiator is determined, the bulletinBoardEditing thread is started and the ring starts the normal ring operations
+ *	of passing messages between each other. The	normal ring operation is to received a message from a peer, process it, check to
+ *	see if the current peer has the token, if so the current peer checks to see if the user has given any commands and handles
+ *	the commands if there are commands. After the commands or no commands have been handled the current peer passes the token to
+ *	the next peer in the ring. Then, waits for a new message to repeat the process. This process continues until the peer want to
+ *	exit.
+ *
+ *	More details on how the ring operates can be found in the Peer to Peer Communication Handling Functions section and User Command
+ *	Handling Functions section. More details on how the bulletinBoardEditing() thread works can be found in the bulletinBoardEditing()
+ *	Thread Functions section.
  */
 void bulletinBoardRing(int init);
 
@@ -294,7 +311,7 @@ void bulletinBoardRing(int init);
 //RING INITIATION FUNCTIONS
 /*
  * determineInitiator works properly with print statements.
-However, one of the peers was printing 0 for the port address of the recieved port. Not really a problem but something to try to fix later
+However, one of the peers was printing 0 for the port address of the received port. Not really a problem but something to try to fix later
  */
 void determineInitiator(void);
 
