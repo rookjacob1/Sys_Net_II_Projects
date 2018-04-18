@@ -70,7 +70,6 @@ struct message_t{
 #define NO_ACTION 2048					//Indication that there is no action to be taken
 #define JOIN 2049						//Indication that a peer is wishing to join the ring
 #define EXIT 2050						//Indication that a peer is wishing to exit the ring
-
 //END Valid Peer Message Header Values
 
 
@@ -87,6 +86,8 @@ int SOCKET_D;									//Integer of the socket descriptor
 char *FILENAME;									//Pointer to the filename argument passed by the user
 struct message_t OUT_MESSAGE;					//Peer to peer message variable for sending messages to other peers
 int HAVE_TOKEN;									//Variable to indicate that the peer has the token
+//END Scope global variables used inside bulletinBoardRing()
+
 
 
 //Variables for bulletinBoardEditing() thread
@@ -101,19 +102,29 @@ int HAVE_TOKEN;									//Variable to indicate that the peer has the token
  * given command bit variable to 0.
  *
  * READ:
- * When the user wants to read from the bulletin board file, the bulletinBoardEditing() function asks which message
+ * When the user wants to read from the bulletin board file, the bulletinBoardEditing() thread asks which message
  * the user would like to read and stores that message index into the READ_BIT variable. The next time the main thread
  * checks to see if the user has input a command, the main thread will see that the READ_BIT variable is non-zero and
  * will use the value of the READ_BIT to read the specified message.
  *
  * WRITE:
- * When the user wants to write to the bulletin board file, the bulletingBoardEditing() function reads the message that
+ * When the user wants to write to the bulletin board file, the bulletingBoardEditing() thread reads the message that
  * the user wants to write to the file and stores that message with the FOOTER string appended to the end of the message
  * in the WRITE_MESSAGE array, then sets the WRITE_BIT to 1. The next time the main thread checks to see if the user has
  * input a command, the main thread will see that the WRITE_BIT variable is non-zero and will handle the write command.
  *
  * LIST:
- * When the user wants to list a
+ * When the user wants to list all of the messages that have been written to the bulletin board file, the bulletinBoardEditing()
+ * thread sets the LIST_BIT to a value of 1 to notify the main thread that the user wants to read all of the message from the
+ * bulletin board file. When the main thread has printed out all of the messages that have been written to the bulletin board
+ * file, the main thread will set the LIST_BIT to zero, to let the bulletinBoardEditing() thread can allow the user to make
+ * another command.
+ *
+ * EXIT:
+ * When the user wants to exit the ring, the bulletinBoardEditing thread sets the EXIT_BIT variable to a value of 1, then
+ * terminates. When the main thread sees that the EXIT_BIT has been set to 1, the main thread handles the peer exiting the
+ * ring. Once it is safe for the peer to exit, the main thread sets the EXIT_BIT equal to the value of the action mode
+ * for EXIT to break it's self out of the continuous loop of handling messages.
  *
  */
 int READ_BIT;									//Variable to
@@ -133,7 +144,7 @@ pthread_mutex_t PRINT_LOCK;
 
 
 
-//SUPLEMENTARY FUNCTIONS
+//SUPPLEMENTARY FUNCTIONS
 /*
  *	Generic functions that help multiple functions.
  */
@@ -202,8 +213,8 @@ void getNextPeerFromPeer(int peerPort);
 
 //BULLETIN BOARD RING FUNCTIONS
 /*
- *	These functions are used to handle the operation of the ring structure between all of the peers. At this
- * 	point the peers have been sent their next member in the ring, and are ready to start the ring.
+ *	These functions are used to handle the operation of the ring structure between all of the peers on the main
+ *	thread. At this	point the peers have been sent their next member in the ring, and are ready to start the ring.
  *
  */
 
@@ -212,6 +223,9 @@ void getNextPeerFromPeer(int peerPort);
  */
 void bulletinBoardRing(int init);
 
+
+
+//RING INITIATION FUNCTIONS
 /*
  * determineInitiator works properly with print statements.
 However, one of the peers was printing 0 for the port address of the recieved port. Not really a problem but something to try to fix later
@@ -222,7 +236,11 @@ void determineInitiator(void);
  *
  */
 void initRing(void);
+//END RING INITIATION FUNCTIONS
 
+
+
+//PEER TO PEER COMMUNICATION HANDLING FUNCTIONS
 /*
  *
  */
@@ -237,6 +255,14 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
  *
  */
 void handleExit(struct message_t *receivedMessage);
+//END PEER TO PEER COMMUNICATION HANDLING FUNCTIONS
+
+
+
+//USER COMMAND HANDLING FUNCTIONS
+/*
+ *
+ */
 
 /*
  *
@@ -267,6 +293,7 @@ void bulletinBoardList(void);
  *
  */
 void bulletinBoardExit(void);
+//END USER COMMAND HANDLING FUNCTIONS
 //END BULLETIN BOARD RING FUNCTIONS
 
 
