@@ -12,31 +12,34 @@
 
 #include"headerFiles.h"
 
-//Message Formats
-const char HEADER[] = "<message n=%3d>\n";
-const char FOOTER[] = "\n</message>\n";
-#define MESSAGE_SIZE 256
-#define HEADER_SIZE 16
-#define FOOTER_SIZE 13
-#define BODY_SIZE (MESSAGE_SIZE - HEADER_SIZE - FOOTERSIZE)
+//Bulletin Board Message Formating Information
+/*
+ * These constant variables are used in the formating of the messages written to the shared file between the
+ * peers. The messages written to the file are of fixed size (MESSAGE_SIZE). The format of the messages written
+ * to the file follow the following format:
+ *
+ * <message n=number>
+ * <message body>
+ * </message>
+ *
+ */
 
-//Token Modes
-#define PASS_TOKEN 1024
-#define NO_TOKEN 1025
-#define TOKEN_INIT 1026
+const char HEADER[] = "<message n=%3d>\n";			//Format of the headers of messages posted to the bulletin board
+const char FOOTER[] = "\n</message>\n";				//Format of the footers of messages posted to the bulletin board
+#define MESSAGE_SIZE 256							//Size of the messages posted to the bulletin board
+#define HEADER_SIZE 16								//Size of the bulletin board headers
+#define FOOTER_SIZE 13								//Size of the bulletin board footers
+#define BODY_SIZE (MESSAGE_SIZE - HEADER_SIZE - FOOTERSIZE)		//Size of the bulletin board body
 
-//Action Modes
-#define NO_ACTION 2048
-#define JOIN 2049
-#define EXIT 2050
+//END Bulletin Board Message Formating Information
 
-
-
+//Peer Message Header Structure
 struct message_Header_t{
 	int token;
 	int action;
 };
 
+//Peer Message Structure
 struct message_t{
 
 	struct message_Header_t header;
@@ -44,18 +47,76 @@ struct message_t{
 
 };
 
-//Global variables to use inside bulletinBoardRing()
-struct sockaddr_in NEXT_PEER_ADDR;
-int NEXT_PEER_PORT;
-int HOST_PORT;
-int SOCKET_D;
-char *FILENAME;
-struct message_t OUT_MESSAGE;
-int HAVE_TOKEN;
+//Valid Peer Message Header Values
+/*
+ * 	The message header values are used to communicate among the peers in the ring. Communicate is based on passing of
+ * 	the token and actions that other peers need to take. When a message is sent the token and action value of the header
+ * 	is set as one of the token and action modes shown below. The description of the token and action modes can be found
+ * 	below.
+ *
+ * 	There are a couple of rules for sending message among the peers, the rules are as follows:
+ *
+ * 	RULES:
+ * 	Tokens can not be passed with actions.
+ * 	Messages with invalid modes are discarded.
+ */
+
+//Token Modes
+#define PASS_TOKEN 1024					//Indication that the token is being passed
+#define NO_TOKEN 1025					//Indication that the token is not being passed
+#define TOKEN_INIT 1026					//Indication that the initiation process is occurring
+
+//Action Modes
+#define NO_ACTION 2048					//Indication that there is no action to be taken
+#define JOIN 2049						//Indication that a peer is wishing to join the ring
+#define EXIT 2050						//Indication that a peer is wishing to exit the ring
+
+//END Valid Peer Message Header Values
 
 
-//Variables for bulletinBoardEditing() thread to communicate with main thread
-int READ_BIT;
+
+//Scope global variables used inside bulletinBoardRing()
+/*
+ * These variable are global to the bbpeer files to avoid passing many arguments between functions. Short descriptions
+ * of what the variables are used for are given below.
+ */
+struct sockaddr_in NEXT_PEER_ADDR;				//Socket address of the next peer in the ring to send messages to
+int NEXT_PEER_PORT;								//Integer port number of the next peer in the ring to send messages to
+int HOST_PORT;									//Integer host port number
+int SOCKET_D;									//Integer of the socket descriptor
+char *FILENAME;									//Pointer to the filename argument passed by the user
+struct message_t OUT_MESSAGE;					//Peer to peer message variable for sending messages to other peers
+int HAVE_TOKEN;									//Variable to indicate that the peer has the token
+
+
+//Variables for bulletinBoardEditing() thread
+
+/*
+ * These variables are used for the bulletinBoardEditing() thread to communicate with the main thread. When these
+ * variables are not 0, the main thread knows that the user has input a command. The user can make four commands:
+ * read, write, list, and exit.
+ *
+ * The bulletinBoardEditing() thread only allows the user to place one command at a time. The bulletinBoardEditing()
+ * thread will allow the user to input another command when the main thread handles the last command and sets the
+ * given command bit variable to 0.
+ *
+ * READ:
+ * When the user wants to read from the bulletin board file, the bulletinBoardEditing() function asks which message
+ * the user would like to read and stores that message index into the READ_BIT variable. The next time the main thread
+ * checks to see if the user has input a command, the main thread will see that the READ_BIT variable is non-zero and
+ * will use the value of the READ_BIT to read the specified message.
+ *
+ * WRITE:
+ * When the user wants to write to the bulletin board file, the bulletingBoardEditing() function reads the message that
+ * the user wants to write to the file and stores that message with the FOOTER string appended to the end of the message
+ * in the WRITE_MESSAGE array, then sets the WRITE_BIT to 1. The next time the main thread checks to see if the user has
+ * input a command, the main thread will see that the WRITE_BIT variable is non-zero and will handle the write command.
+ *
+ * LIST:
+ * When the user wants to list a
+ *
+ */
+int READ_BIT;									//Variable to
 int WRITE_BIT;
 int LIST_BIT;
 int EXIT_BIT;
@@ -64,6 +125,8 @@ char WRITE_MESSAGE[MESSAGE_SIZE + 1];
 //bulletinBoardEditing() thread variables
 pthread_t TID;
 pthread_mutex_t PRINT_LOCK;
+
+//END Variables for bulletinBoardEditing() thread
 
 #define SLEEP_TIME 10
 
