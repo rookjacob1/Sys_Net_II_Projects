@@ -30,14 +30,17 @@ const char FOOTER[] = "\n</message>\n";				//Format of the footers of messages p
 #define HEADER_SIZE 16								//Size of the bulletin board headers
 #define FOOTER_SIZE 13								//Size of the bulletin board footers
 #define BODY_SIZE (MESSAGE_SIZE - HEADER_SIZE - FOOTERSIZE)		//Size of the bulletin board body
-
 //END Bulletin Board Message Formating Information
+
+
 
 //Peer Message Header Structure
 struct message_Header_t{
 	int token;
 	int action;
 };
+
+
 
 //Peer Message Structure
 struct message_t{
@@ -46,6 +49,8 @@ struct message_t{
 	char messageBody[MESSAGE_SIZE + 1];
 
 };
+
+
 
 //Valid Peer Message Header Values
 /*
@@ -136,10 +141,11 @@ char WRITE_MESSAGE[MESSAGE_SIZE + 1];
 //bulletinBoardEditing() thread variables
 pthread_t TID;
 pthread_mutex_t PRINT_LOCK;
-
 //END Variables for bulletinBoardEditing() thread
 
-#define SLEEP_TIME 10
+
+
+#define SLEEP_TIME 5
 
 
 
