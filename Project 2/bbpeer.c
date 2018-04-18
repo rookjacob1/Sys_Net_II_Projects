@@ -98,40 +98,44 @@ void cleanStdin(void)
 void validateArgv(int argc, char *argv[], int *sendPort)
 {
 
-	if(argc != 5 && argc != 6)
+	if(argc != 5 && argc != 6)//Need to have either 5 or 6 arguments, otherwise the command line entry is incorrect
 	{
 		error("Invalid Number of Parameters. \n"
 				"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 	}
-	if(argc == 6)
+	if(argc == 6)//If there are 6 arguments, suppose to be in following form: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>
 	{
-		if( strcmp(argv[1], "-new"))
+		if( strcmp(argv[1], "-new"))//Making sure -new is spelled right and is in correct place
 		{
 			error("Invalid Parameter Format. \n"
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
 		}
-		if(strcmp(argv[2], "localhost"))
+		if(strcmp(argv[2], "localhost"))//Program only handles peers on the same host machine, if something other than localhost is given, program terminates
 			error("Program does not support nonlocal message passing\n"
 					"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
+
+		//Storing the arguments in the appropriate variables
 		*sendPort = atoi(argv[3]);
 		HOST_PORT = atoi(argv[4]);
 		FILENAME = argv[5];
 	}
-	else
+	else//5 arguments given, suppose to be in following form: bbpeer localhost <portNum> <hostPort> <filenameBulletinBoard>
 	{
-		if(strcmp(argv[1], "localhost"))
+		if(strcmp(argv[1], "localhost"))//Program only handles peers on the same host machine, if something other than localhost is given, program terminates
 					error("Program does not support nonlocal message passing\n"
 							"Parameter Format: bbpeer [-new] localhost <portNum> <hostPort> <filenameBulletinBoard>\n");
+
+		//Storing the arguments in the appropriate variables
 		*sendPort = atoi(argv[2]);
 		HOST_PORT = atoi(argv[3]);
 		FILENAME = argv[4];
 	}
-	if(*sendPort < 60000 || *sendPort > 60099)
+	if(*sendPort < 60000 || *sendPort > 60099)//UWF SSH servers only allow ports 60,000 to 60,099 to be used
 	{
 		error("Invalid Port Number.\n"
 				"Port Number must be between 60,000 and 60,099\n");
 	}
-	if(HOST_PORT < 60000 || HOST_PORT > 60099)
+	if(HOST_PORT < 60000 || HOST_PORT > 60099)//UWF SSH servers only allow ports 60,000 to 60,099 to be used
 	{
 		error("Invalid Host Port Number.\n"
 				"Host Port Number must be between 60,000 and 60,099\n");
