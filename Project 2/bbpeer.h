@@ -227,7 +227,8 @@ void initMessage(struct message_t *message, int token, int action, char *message
 void mutexPrint(const char *str);
 
 /*
- *
+ *	@brief	cleanStdin				The cleanStdin() function clears the stdin buffer. In the bulletinBoardEditing() thread,
+ *	there was a problem of reading the users input because the buffer was not clear.
  */
 void cleanStdin(void);
 //END SUPLEMENTARY FUNCTIONS
