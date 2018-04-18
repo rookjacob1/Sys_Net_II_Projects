@@ -34,7 +34,18 @@ const char FOOTER[] = "\n</message>\n";				//Format of the footers of messages p
 
 
 
-//Peer Message Header Structure
+
+/*
+ * 	@brief	message_Header_t	This structure is used to be able to notify the receiving peer what type of peer to peer
+ * 	message is being sent. The valid values that the token and action variables can be set to are shown below with a
+ * 	brief description.
+ *
+ * 	@var	token				Variable to indicate if the token is being passed, initialized, or not passed. Corresponding
+ * 	token modes can be found below.
+ *
+ * 	@var	action				Variable to indicate the action that the message is requesting. Corresponding action modes
+ * 	can be found below.
+ */
 struct message_Header_t{
 	int token;
 	int action;
@@ -43,6 +54,19 @@ struct message_Header_t{
 
 
 //Peer Message Structure
+/*
+ * 	Contains the message header and the body of the message. The body of the message stores any data the peers
+ * 	want to transfer from one peer to the next.
+ */
+/*
+ * 	@brief	message_t			This structure is the structure that is passed amongst the peers. The peers send and receive
+ * 	this structure to communicate with the other peers.
+ *
+ * 	@var	header				The header variable is used to identify or notify what the message that is being received or
+ * 	sent is about.
+ *
+ * 	@var	messageBody			The messageBody variable is used to send data from one peer to the next.
+ */
 struct message_t{
 
 	struct message_Header_t header;
@@ -132,19 +156,24 @@ int HAVE_TOKEN;									//Variable to indicate that the peer has the token
  * for EXIT to break it's self out of the continuous loop of handling messages.
  *
  */
-int READ_BIT;									//Variable to
-int WRITE_BIT;
-int LIST_BIT;
-int EXIT_BIT;
-char WRITE_MESSAGE[MESSAGE_SIZE + 1];
+int READ_BIT;									//Variable to indicate that the user wants to read one entry from the bulletin board file
+int WRITE_BIT;									//Variable to indicate that the user wants to write to the bulletin board file
+int LIST_BIT;									//Variable to indicate that the user wants to read all entries from the bulletin board file
+int EXIT_BIT;									//Variable to indicate that the user wants to exit the ring
+char WRITE_MESSAGE[MESSAGE_SIZE + 1];			//Array to store the message the user wants to write to the bulletin board file
 
-//bulletinBoardEditing() thread variables
-pthread_t TID;
-pthread_mutex_t PRINT_LOCK;
+//bulletinBoardEditing() thread control variables
+pthread_t TID;									//Variable to store the thread ID of the bulletinBoardEditing() thread
+pthread_mutex_t PRINT_LOCK;						//Mutex Lock used for printing to stdout
+//END bulletinBoardEditing() thread control variables
 //END Variables for bulletinBoardEditing() thread
 
 
-
+/*
+ * 	SLEEP_TIME is used to slow down the passing of the token to prevent the printing of the received token message from
+ * 	crowding the stdout. When a peer receives the token and the user does not have a command, the peer sleeps for however
+ * 	many seconds SLEEP_TIME is set to.
+ */
 #define SLEEP_TIME 5
 
 
@@ -163,17 +192,37 @@ pthread_mutex_t PRINT_LOCK;
 void error(const char *msg);
 
 /*
+ *	@brief	buildSocketAddress		The buildSocketAddress() function builds a socket address to the given port and
+ *	stores the address to the location that is passed to the function. Since this implementation only handles peers
+ *	that are on the same machine, the socket address is bound to the loopback IP address.
  *
+ *	@param	socketAddress			This is the pointer to the location where the new socket address is to be stored.
+ *
+ *	@param	socketPort				This is the integer value of the port of the peer that the socket address is for.
  */
 void buildSocketAddress(struct sockaddr_in *socketAddress, int socketPort);
 
 /*
+ *	@brief	initMessage				The initMessage() function initializes a peer to peer message structure with the
+ *	given parameters.
  *
+ *	@param	message					This points to the location of where the message is going to be stored.
+ *
+ *	@param	token					This is the value to store in the token variable of the message_Header_t structure
+ *
+ *	@param	action					This is the value to store in the action variable of the message_Header_t structure
+ *
+ *	@param	messageText				This is the string of data to store in the messageBody variable of the message_t structure
  */
 void initMessage(struct message_t *message, int token, int action, char *messageText);
 
 /*
+ *	@brief	mutexPrint				The mutexPrint() function is used to prevent the print statements of the main and
+ *	bulletinBoardEditing() thread from colliding when they want to print at the same time. The function will lock the
+ *	print mutex lock then print the string that was passed to the function with a newline attached at the end, then
+ *	release the lock.
  *
+ *	@param	str						The string to be printed to stdout
  */
 void mutexPrint(const char *str);
 

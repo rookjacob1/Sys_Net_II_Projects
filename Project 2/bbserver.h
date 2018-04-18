@@ -80,7 +80,7 @@ void createBindSocket(struct sockaddr_in *serverAddr, int *serverPort, int *sock
  *
  *	@param	numberOfPeers		This variable tells the function how many peers to accept before ending
  *
- *	@param	socketDescriptor	This variabel tells the function which socket to use
+ *	@param	socketDescriptor	This variable tells the function which socket to use
  */
 void acceptPeers(struct sockaddr_in *peerAddresses, int numberOfPeers, int socketDescriptor);
 
