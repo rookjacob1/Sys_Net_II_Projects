@@ -4,8 +4,6 @@
 *.settings/
 *.gpj
 *.exe
-*.o
+*.o*.ini
 /RemoteSystemsTempFiles
 /desktop.ini
-
-/*.ini
