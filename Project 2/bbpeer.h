@@ -324,7 +324,14 @@ void bulletinBoardRing(int init);
  * 	ring. If the host receives a message that has the same port number as, it knows that it must be the peer with the smallest port
  * 	number because all of the other peers must must have resent the host's port number because it was smaller than the rest.
  *
- * 	The initiator peer then sends a message to the next peer with the token variable set to NO_TOKEN to
+ * 	The initiator peer then sends a message to the next peer with the token variable set to NO_TOKEN to notify that peer that the
+ * 	initiator has been determined. When the next peer receives the message with the token variable set to NO_TOKEN, that peer
+ * 	will send a message to it's next peer in the ring to notify that peer that the initiator has been determined. This will continue
+ * 	until all peers in the ring know that the initiator has been found.
+ *
+ * 	The initiator peer will then initiate the ring by calling the initRing() function which creates the bulletin board file and
+ * 	sends out the first token to it's next peer in the ring. After this, the function ends and the normal operations of the
+ * 	ring can begin.
  */
 void determineInitiator(void);
 

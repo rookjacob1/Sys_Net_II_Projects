@@ -336,7 +336,6 @@ void determineInitiator(void)
 void initRing(void)
 {
 	FILE *fp;
-	HAVE_TOKEN = 1;
 
 	fp = fopen(FILENAME, "w");//If the file already exists, this will
 	if(fp == NULL)
