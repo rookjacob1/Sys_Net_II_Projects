@@ -337,11 +337,12 @@ void initRing(void)
 {
 	FILE *fp;
 
-	fp = fopen(FILENAME, "w");//If the file already exists, this will
+	fp = fopen(FILENAME, "w");//If the file already exists, this will overwrite the file with a blank file
 	if(fp == NULL)
 		error("Error opening file");
 	fclose(fp);
 
+	//Sending out the first token in the ring
 	initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
@@ -349,32 +350,33 @@ void initRing(void)
 
 void processNextMessage(void)
 {
-	struct message_t inMessage;
-	struct sockaddr_in peerAddr;
+	struct message_t inMessage;							//Message variable to store the incoming messages
+	struct sockaddr_in peerAddr;						//Socket address variable to store the socket address of the sending peer
 	socklen_t peerAddrLen;
 
 	memset(&inMessage, 0, sizeof(struct message_t));
 	memset(&peerAddr, 0 , sizeof(struct sockaddr_in));
 
-	char printStatement[256];
+	char printStatement[256];							//String to store print statements to send to mutexPrint()
 
+	//Receiving message from peer
 	recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
 
 	sprintf(printStatement, "Processing next message from %d",ntohs(peerAddr.sin_port));
 	mutexPrint(printStatement);
 
-	if(inMessage.header.token == PASS_TOKEN)
-	{//Can not pass tokens with an action. Pass with current sequence Number though
+	if(inMessage.header.token == PASS_TOKEN)//Receiving the token, no actions should be given
+	{
 		snprintf(printStatement, sizeof(printStatement),
 				"*************************Token received from peer with port %5d*************************\n",
 				ntohs(peerAddr.sin_port));
 		mutexPrint(printStatement);
 
 		HAVE_TOKEN = 1;
-	}//Update sequence Number of OUT_MESSAGE so checkUserInput can know what sequence number BB is at
-	else if(inMessage.header.token == NO_TOKEN)
+	}
+	else if(inMessage.header.token == NO_TOKEN)//Token is not being passed, therefore may be an action message
 	{
-		if(inMessage.header.action == JOIN)
+		if(inMessage.header.action == JOIN)//A peer wants to join the ring
 		{
 			snprintf(printStatement, sizeof(printStatement),
 					"*************************Join request received from peer with port %5d*************************\n",
@@ -383,7 +385,7 @@ void processNextMessage(void)
 
 			handleJoin(&peerAddr, &inMessage);
 		}
-		else if(inMessage.header.action == EXIT)
+		else if(inMessage.header.action == EXIT)//A peer wants to exit the ring
 		{
 			snprintf(printStatement, sizeof(printStatement),
 					"*************************Exit notification received from peer with port %5d*************************\n",
@@ -392,7 +394,7 @@ void processNextMessage(void)
 
 			handleExit(&inMessage);
 		}
-		else
+		else//The only actions that the peers support are joining and exiting, therefore if they are anything else, they are ignored
 		{
 			sprintf(printStatement, "Message Info:\n"
 					"Sender's port %d\n"
@@ -403,7 +405,7 @@ void processNextMessage(void)
 			return;//Do nothing
 		}
 	}
-	else
+	else//The message received had the token set to TOKEN_INIT or an invalid value, so discard the message
 	{
 		sprintf(printStatement, "Message Info:\n"
 				"Sender's port %d\n"
@@ -417,7 +419,7 @@ void processNextMessage(void)
 
 void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedMessage)
 {
-	int joiningPeerPort = atoi((*receivedMessage).messageBody);
+	int joiningPeerPort = atoi((*receivedMessage).messageBody);			//Converting the port number in the message to an integer
 	char printStatement[256];
 
 	snprintf(printStatement, sizeof(printStatement), "Peer wanting to join has port address: %d",

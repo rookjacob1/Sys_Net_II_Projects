@@ -336,7 +336,8 @@ void bulletinBoardRing(int init);
 void determineInitiator(void);
 
 /*
- *
+ *	@brief	initRing		The initiator found in the determineInitiator() function calls this function to initiate the ring
+ *	by creating the shared file and sending out the first token.
  */
 void initRing(void);
 //END RING INITIATION FUNCTIONS
@@ -345,11 +346,34 @@ void initRing(void);
 
 //PEER TO PEER COMMUNICATION HANDLING FUNCTIONS
 /*
- *
+ *	@brief	processNextMessage		The processNextMessage() function waits until a message is received, then handles the
+ *	message. The only messages that require the host's action are when another peer is joining or exiting. So, if a join or
+ *	exit message is received the host calls the handleJoin() or handleExit() function respectively. The only other message
+ *	that is of concern to the host is if the token is being passed to the host, in which case the function will set the
+ *	HAVE_TOKEN bit to 1 to indicate that a token has been received and other functions handle what to do with the token.
+ *	If the host receives a message that is not a join request, exit request, or a passing of the token message the host will
+ *	simply ignore the message.
  */
 void processNextMessage(void);
 
 /*
+ *	@brief	handleJoin			The handleJoin() function take the message of the joining peer and the socket address of the
+ *	peer that sent the message. Due to the fact that the peer sending the join request may not be the peer that is joining,
+ *	the host must check to see if the peer that sent the join request is the actual peer that is joining.
+ *
+ *	Peers wishing to join the ring must include their port number in the message body of the join request message. This is because
+ *	the peer that receives the join request may or may not be the one to handle the join request. The join request may be forwarded
+ *	to the next peer to handle the request. Therefore, when a host receives a join request, the peer must compare the port number
+ *	in the join request message with the port address of the socket address of the peer that sent the join request.
+ *
+ *	If the port numbers are the same, the function uses the socket address of the peer that sent the join request. If the port
+ *	numbers are not the same, a new socket address is created and stored in the location where the socket address of the peer
+ *	who forwarded the join request was stored and is used to communicate with the joining peer.
+ *
+ *
+ *
+ *	This is done by comparing
+ *	the port address of the socket address that was passed to the function with the port address in the message that was received.
  *
  */
 void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedMessage);
