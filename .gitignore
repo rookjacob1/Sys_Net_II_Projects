@@ -6,3 +6,6 @@
 *.exe
 *.o
 /RemoteSystemsTempFiles
+/desktop.ini
+
+/*.ini
