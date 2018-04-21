@@ -415,12 +415,16 @@ void handleExit(struct message_t *receivedMessage);
 void checkUserInput(void);
 
 /*
- *
+ *	@brief	getFileSize			The getFileSize() function returns the size of the file with the name that is stored in the
+ *	FILENAME variable.
  */
 int getFileSize(void);
 
 /*
- *
+ *	@brief	bulletinBoardWrite		The bulletinBoardWrite() writes a message to the bulletin board file by concatenating the
+ *	HEADER format with the string stored in WRITE_MESSAGE, then appending the bulletin board file with that newly concatenated
+ *	string. The string in the WRITE_MESSAGE variable comes from the bulletinBoardEditing() thread when the user inputs the message
+ *	that they would like to write to the bulletin board file.
  */
 void bulletinBoardWrite(void);
 
