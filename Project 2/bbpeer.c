@@ -580,12 +580,13 @@ void bulletinBoardRead(void)
 	int bytesRead = 0;
 	int numMessages = getFileSize() / MESSAGE_SIZE;
 
-	if(READ_BIT <= numMessages)
+	if(READ_BIT <= numMessages)//Making sure the message that wants to be read is within the written messages
 	{
 		fp = fopen(FILENAME, "r");
 		if(fp == NULL)
 			error("Error opening file");
 
+		//Reading from the bulletin board file
 		while(bytesRead < MESSAGE_SIZE)
 		{
 			bytesRead += fread(tmpReadBuffer, 1, MESSAGE_SIZE - bytesRead, fp);
@@ -593,10 +594,11 @@ void bulletinBoardRead(void)
 
 		fclose(fp);
 
+		//Printing the message
 		mutexPrint("The message read is:");
 		mutexPrint(tmpReadBuffer);
 	}
-	else
+	else//
 	{
 		sprintf(tmpReadBuffer, "There have only been %d messages wrote, message %d does not exist yet",
 				numMessages, READ_BIT);

@@ -429,17 +429,22 @@ int getFileSize(void);
 void bulletinBoardWrite(void);
 
 /*
- *	@brief
+ *	@brief	bulletinBoardRead		The bulletinBoardRead() function attempts to read the message specified by the user. The user's
+ *	message choice is stored in the READ_BIT, so the function checks to see if the message the user wants to read is in the valid range
+ *	of written messages. If so, the function prints out that specific message and then passes on the token to the next peer. If the
+ *	message that the user wants to read is not in the valid range, an error message is printed then the token is passed.
  */
 void bulletinBoardRead(void);
 
 /*
- *
+ *	@brief	bulletinBoardList		The bulletinBoardList() function lists all of the messages that have been written to the bulletin
+ *	board file. If no messages have been written to the bulletin board file, an error message is printed then the token is passed to
+ *	the next peer.
  */
 void bulletinBoardList(void);
 
 /*
- *
+ *	@brief	bulletinBoardExit		The bulletinBoardExit() function
  */
 void bulletinBoardExit(void);
 //END USER COMMAND HANDLING FUNCTIONS
