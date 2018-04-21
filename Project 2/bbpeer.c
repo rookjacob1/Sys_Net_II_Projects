@@ -448,13 +448,14 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
 
 void handleExit(struct message_t *receivedMessage)
 {
-	int exitingPeerPort;
-	int exitingPeerNextPort;
+	int exitingPeerPort;			//Integer variable to store the exiting peer's port number
+	int exitingPeerNextPort;		//Integer variable to store the exiting peer's next peer's port number
 
-	char tmpStr[16];
-	char printStatement[256];
+	char tmpStr[16];				//String to read the port numbers from the message
+	char printStatement[256];		//String used to print messages to the stdout
 	int tmp;
 
+	//Reading the exiting peer's port number
 	tmp = strcspn((*receivedMessage).messageBody, "\n");
 	strncpy(tmpStr, (*receivedMessage).messageBody, tmp);
 	tmpStr[tmp] = '\0';
@@ -465,7 +466,7 @@ void handleExit(struct message_t *receivedMessage)
 
 	if(exitingPeerPort == NEXT_PEER_PORT)
 	{
-
+		//Reading the exiting peer's next peer's port number
 		strcpy(tmpStr, &(*receivedMessage).messageBody[tmp + 1]);
 		exitingPeerNextPort = atoi(tmpStr);
 
@@ -473,16 +474,15 @@ void handleExit(struct message_t *receivedMessage)
 				"Forwarding exit notification to exiting peer to notify that they can exit\n",
 				exitingPeerPort);
 
+		//Forwarding the exiting peer's message to the exiting peer to notify that it is safe to exit
 		sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 			sprintf(printStatement, "Setting host's new next peer address to the exiting peer's next peer with port %d\n",
 				exitingPeerNextPort);
 
+		//Resetting the host's current next peer in the ring
 		buildSocketAddress(&NEXT_PEER_ADDR, exitingPeerNextPort);
 		NEXT_PEER_PORT = exitingPeerNextPort;
-
-
-
 	}
 	else
 	{
@@ -491,6 +491,7 @@ void handleExit(struct message_t *receivedMessage)
 				NEXT_PEER_PORT);
 		mutexPrint(printStatement);
 
+		//Forwarding the exit message
 		sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	}
 }
