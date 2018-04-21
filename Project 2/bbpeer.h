@@ -470,7 +470,16 @@ void bulletinBoardExit(void);
  */
 
 /*
+ *	@brief	bulletinBoardEditing		The bulletinBoardEditing() thread is used to receive the users input without making
+ *	the other peers in the ring to wait for the other user's input. The bulletinBoardEditing() thread communicates to the
+ *	main thread using the variables shown in the Variables for the bulletinBoardEditing() thread section at the top of the
+ *	file. Description of how the variables are used can be found in that section.
  *
+ *	The bulletinBoardEditing() thread continuously display a menu of options that the user can choose from and takes in the
+ *	user's choice and calls the specific function to handle that option. When the user makes one of the valid choices, one
+ *	of the bulletinBoardEditing() variables used to communicate with the main thread will be set. As long as one of those
+ *	variables are set, the thread will not ask the user for input. The thread will wait for the main thread to handle the
+ *	user's request to start asking the user for another option.
  */
 void *bulletinBoardEditing(void *parm);
 
