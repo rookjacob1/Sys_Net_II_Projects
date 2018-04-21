@@ -586,6 +586,8 @@ void bulletinBoardRead(void)
 		if(fp == NULL)
 			error("Error opening file");
 
+		fseek(fp, READ_BIT * MESSAGE_SIZE, SEEK_SET);
+
 		//Reading from the bulletin board file
 		while(bytesRead < MESSAGE_SIZE)
 		{
