@@ -470,35 +470,20 @@ void handleExit(struct message_t *receivedMessage)
 		exitingPeerNextPort = atoi(tmpStr);
 
 
-		if(exitingPeerNextPort ==  HOST_PORT)
-		{
-			sprintf(printStatement, "Host's next peer with port %d is the peer that is exiting\n"
-					"Forwarding exit notification to exiting peer to notify that they can exit\n",
-					exitingPeerPort);
 
-			sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+		sprintf(printStatement, "Host's next peer with port %d is the peer that is exiting\n"
+				"Forwarding exit notification to exiting peer to notify that they can exit\n",
+				exitingPeerPort);
 
-				sprintf(printStatement, "Setting host's new next peer address to the exiting peer's next peer with port %d\n",
-					exitingPeerNextPort);
+		sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
-			buildSocketAddress(&NEXT_PEER_ADDR, exitingPeerNextPort);
-			NEXT_PEER_PORT = exitingPeerNextPort;
-		}
-		else
-		{
-			sprintf(printStatement, "Host's next peer with port %d is the peer that is exiting\n"
-					"Forwarding exit notification to exiting peer to notify that they can exit\n",
-					exitingPeerPort);
+			sprintf(printStatement, "Setting host's new next peer address to the exiting peer's next peer with port %d\n",
+				exitingPeerNextPort);
 
-			sendto(SOCKET_D, receivedMessage, sizeof(*receivedMessage), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
+		buildSocketAddress(&NEXT_PEER_ADDR, exitingPeerNextPort);
+		NEXT_PEER_PORT = exitingPeerNextPort;
 
-				sprintf(printStatement, "Setting host's new next peer address to the exiting peer's next peer with port %d\n",
-					exitingPeerNextPort);
 
-			buildSocketAddress(&NEXT_PEER_ADDR, exitingPeerNextPort);
-			NEXT_PEER_PORT = exitingPeerNextPort;
-
-		}
 
 	}
 	else
