@@ -498,7 +498,6 @@ void handleExit(struct message_t *receivedMessage)
 
 void checkUserInput(void)
 {
-	//initMessage(&OUT_MESSAGE, PASS_TOKEN , NO_ACTION, OUT_MESSAGE.header.sequenceNumber + 1, NULL);
 	if(WRITE_BIT)
 	{
 		bulletinBoardWrite();
@@ -518,7 +517,7 @@ void checkUserInput(void)
 	else
 	{
 		initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
-		sleep(SLEEP_TIME);
+		sleep(SLEEP_TIME);					//Wait before sending the token
 		sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	}
 	HAVE_TOKEN = 0;

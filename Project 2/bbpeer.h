@@ -403,11 +403,14 @@ void handleExit(struct message_t *receivedMessage);
 
 //USER COMMAND HANDLING FUNCTIONS
 /*
- *
+ *	These functions fulfill the user's commands.
  */
 
 /*
- *
+ *	@brief	checkUserInput		The checkUserInput() function checks to see if any of user input variables have been set. If
+ *	one of the variables have been set, the function calls the corresponding function to handle that action. If none of the
+ *	user input variables have been set, the function waits the SLEEP_TIME amount of time before sending the token to the next
+ *	peer.
  */
 void checkUserInput(void);
 
