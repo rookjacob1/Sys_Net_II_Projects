@@ -429,7 +429,7 @@ int getFileSize(void);
 void bulletinBoardWrite(void);
 
 /*
- *
+ *	@brief
  */
 void bulletinBoardRead(void);
 

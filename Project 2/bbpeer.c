@@ -539,20 +539,22 @@ int getFileSize(void)
 
 void bulletinBoardWrite(void)
 {
-	char tmpHeader[HEADER_SIZE + 1];
-	char tmpWriteMessage[MESSAGE_SIZE + 1];
+	char tmpHeader[HEADER_SIZE + 1];			//Temporary place to store the header of the message
+	char tmpWriteMessage[MESSAGE_SIZE + 1];		//Temporary place to store the whole message to be written to the bulletin board file
 	FILE *fp;
 	int bytesWrote = 0;
-	int sequenceNumber = getFileSize() / MESSAGE_SIZE + 1;
+	int sequenceNumber = getFileSize() / MESSAGE_SIZE + 1;			//Sequence Number is based on how large the file is
 
+	//Making Header
 	sprintf(tmpHeader, HEADER, sequenceNumber);
 
+	//Concatenating the header with the message body and footer
 	sprintf(tmpWriteMessage, "%s%s", tmpHeader, WRITE_MESSAGE);
 
 	fp = fopen(FILENAME, "a");
 	if (fp == NULL)
 		error("Error opening file");
-	while(bytesWrote < MESSAGE_SIZE)
+	while(bytesWrote < MESSAGE_SIZE)	//Writing the message to the bulletin board file
 	{
 		bytesWrote += fwrite(tmpWriteMessage, 1, MESSAGE_SIZE - bytesWrote, fp);
 	}
@@ -561,7 +563,7 @@ void bulletinBoardWrite(void)
 	mutexPrint("Wrote the following message to the bulletin board:");
 	mutexPrint(tmpWriteMessage);
 
-
+	//Sending of the token to the next peer
 	sprintf(tmpWriteMessage, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
 	mutexPrint(tmpWriteMessage);
 	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
