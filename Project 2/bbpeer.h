@@ -370,16 +370,18 @@ void processNextMessage(void);
  *	numbers are not the same, a new socket address is created and stored in the location where the socket address of the peer
  *	who forwarded the join request was stored and is used to communicate with the joining peer.
  *
+ *	The host will send the address of the host's current next peer in the ring to the joining peer to let them know their next
+ *	peer in the ring, then the host will set their NEXT_PEER_ADDR to the address of the joining peer to complete the joining
+ *	process.
  *
+ *	@param	joiningPeerAddr		Pointer to the location where the socket address of the joining peer is stored
  *
- *	This is done by comparing
- *	the port address of the socket address that was passed to the function with the port address in the message that was received.
- *
+ *	@param	receivedMessage		Pointer to the location where the message of the joining peer is stored
  */
 void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedMessage);
 
 /*
- *
+ *	@brief	handleExit
  */
 void handleExit(struct message_t *receivedMessage);
 //END PEER TO PEER COMMUNICATION HANDLING FUNCTIONS

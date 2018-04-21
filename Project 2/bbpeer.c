@@ -426,20 +426,22 @@ void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedM
 			joiningPeerPort);
 	mutexPrint(printStatement);
 
-	if(joiningPeerPort != ntohs((*joiningPeerAddr).sin_port))////////NEEED TO CHECK THIS WHEN TESTING
+	if(joiningPeerPort != ntohs((*joiningPeerAddr).sin_port))//Checking to see if the peer that is joining is the one that sent the message
 	{
-		buildSocketAddress(joiningPeerAddr, joiningPeerPort);
+		buildSocketAddress(joiningPeerAddr, joiningPeerPort);//If not, create a new socket address
 	}
 	snprintf(printStatement, sizeof(printStatement), "Sending address of current next peer with port: %d to the joining peer with port %d\n",
 			ntohs(NEXT_PEER_ADDR.sin_port), ntohs((*joiningPeerAddr).sin_port));
 	mutexPrint(printStatement);
 
+	//Send address of current next peer in the ring to the joining peer
 	sendto(SOCKET_D, &NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR), 0, (struct sockaddr *)joiningPeerAddr, sizeof(struct sockaddr_in));
 
 	snprintf(printStatement, sizeof(printStatement), "Setting new next peer address to joining peer with port: %d\n",
 			 ntohs((*joiningPeerAddr).sin_port));
 	mutexPrint(printStatement);
 
+	//Set next peer address to the joining peer's address
 	NEXT_PEER_PORT = ntohs((*joiningPeerAddr).sin_port);
 	buildSocketAddress(&NEXT_PEER_ADDR, NEXT_PEER_PORT);
 }
