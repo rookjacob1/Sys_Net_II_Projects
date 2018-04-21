@@ -444,7 +444,19 @@ void bulletinBoardRead(void);
 void bulletinBoardList(void);
 
 /*
- *	@brief	bulletinBoardExit		The bulletinBoardExit() function
+ *	@brief	bulletinBoardExit		The bulletinBoardExit() function makes sure that the host can exit without disrupting the
+ *	flow of the ring. This is done by sending an exit notification to the next peer in the ring with the port number of the
+ *	host and the port number of the host's next peer. The peers that receive this exit notification will forward it around the
+ *	ring, checking to see if the host that is exiting is the peer's next peer in the ring. Once the exiting peer's predecessor
+ *	receives the exit notification, the peer will forward the exit notification to the exiting peer and will adjust their next
+ *	peer to be the exiting peer's next peer.
+ *
+ *	When the exiting peer receives the exit notification, the host will make sure the exit notification is the same as the one
+ *	that it sent, then it will set the EXIT_BIT to EXIT to let the upper level functions know that it is safe to terminate.
+ *
+ *	While the exiting peer is waiting to exit, the host will still have to handle messages received. The only messages that can
+ *	be received at this moment would be join and exit messages because the host can not be receiving a token because the host is
+ *	the one in possession of the token and all other possibilities of messages would be bad messages that need to be discarded.
  */
 void bulletinBoardExit(void);
 //END USER COMMAND HANDLING FUNCTIONS

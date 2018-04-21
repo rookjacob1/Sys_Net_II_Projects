@@ -598,7 +598,7 @@ void bulletinBoardRead(void)
 		mutexPrint("The message read is:");
 		mutexPrint(tmpReadBuffer);
 	}
-	else//
+	else//Message wanting to read has not been written yet
 	{
 		sprintf(tmpReadBuffer, "There have only been %d messages wrote, message %d does not exist yet",
 				numMessages, READ_BIT);
@@ -608,6 +608,7 @@ void bulletinBoardRead(void)
 	sprintf(tmpReadBuffer, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
 	mutexPrint(tmpReadBuffer);
 
+	//Sending the token to the next peer
 	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	READ_BIT = 0;
@@ -629,6 +630,7 @@ void bulletinBoardList(void)
 
 		mutexPrint("The message read is:");
 
+		//Reading and printing the file until the end of the file is reached
 		while(totalBytesRead < fileSize)
 		{
 			bytesRead = fread(tmpReadBuffer, 1, MESSAGE_SIZE, fp);
@@ -652,6 +654,7 @@ void bulletinBoardList(void)
 	sprintf(tmpReadBuffer, "Sending token to next peer with port number %d", NEXT_PEER_PORT);
 	mutexPrint(tmpReadBuffer);
 
+	//Passing token to the next peer in ring
 	initMessage(&OUT_MESSAGE, PASS_TOKEN, NO_ACTION, NULL);
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 	LIST_BIT = 0;
@@ -659,8 +662,8 @@ void bulletinBoardList(void)
 
 void bulletinBoardExit(void)
 {
-	struct message_t inMessage;
-	struct sockaddr_in peerAddr;
+	struct message_t inMessage;					//Variable to store the received messages
+	struct sockaddr_in peerAddr;				//Variable to store the socket address of the senders
 	socklen_t peerAddrLen;
 
 	memset(&inMessage, 0, sizeof(struct message_t));
@@ -668,20 +671,21 @@ void bulletinBoardExit(void)
 
 	char printStatement[256];
 
-	sprintf(printStatement, "Starting exiting process, sendingexit notification to next peer with port %d\n", NEXT_PEER_PORT);
+	sprintf(printStatement, "Starting exiting process, sending exit notification to next peer with port %d\n", NEXT_PEER_PORT);
 	mutexPrint(printStatement);
 
+	//Creating exit notification with the host's port number and the host's next peer's port number
 	sprintf(printStatement, "%d\n%d", HOST_PORT, NEXT_PEER_PORT);
-
 	initMessage(&OUT_MESSAGE, NO_TOKEN, EXIT, printStatement);
 
+	//Sending exit notifications
 	sendto(SOCKET_D, &OUT_MESSAGE, sizeof(OUT_MESSAGE), 0, (struct sockaddr *)&NEXT_PEER_ADDR, sizeof(NEXT_PEER_ADDR));
 
 	sprintf(printStatement, "%s\n\nWas sent to peer with port number %d", OUT_MESSAGE.messageBody, NEXT_PEER_PORT);
 	mutexPrint(printStatement);
 
 
-	while(1)
+	while(1)//Continuing to receive and handle messages until the host's exit notification is received
 	{
 		sprintf(printStatement, "Waiting to receive exiting notification\n");
 		mutexPrint(printStatement);
@@ -690,7 +694,7 @@ void bulletinBoardExit(void)
 
 		if(inMessage.header.token == NO_TOKEN)
 		{
-			if(inMessage.header.action == JOIN)
+			if(inMessage.header.action == JOIN)//Join request
 			{
 				snprintf(printStatement, sizeof(printStatement),
 						"*************************Join request received from peer with port %5d*************************\n",
@@ -700,10 +704,11 @@ void bulletinBoardExit(void)
 				sprintf(printStatement, "Waiting to exit, therefore forwarding join request to next peer\n");
 				mutexPrint(printStatement);
 
+				//Forwarding the join request to the next peer
 				sendto(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, peerAddrLen);
 
 			}
-			else if(inMessage.header.action == EXIT)
+			else if(inMessage.header.action == EXIT)//Exit notification
 			{
 				snprintf(printStatement, sizeof(printStatement),
 						"*************************Exit notification received from peer with port %5d*************************\n",
@@ -711,7 +716,7 @@ void bulletinBoardExit(void)
 				mutexPrint(printStatement);
 
 				if(!strcmp(OUT_MESSAGE.messageBody, inMessage.messageBody))//Comparing exit notification to the one that was sent
-				{
+				{//If the exit notification is the same then it is safe to exit
 					sprintf(printStatement, "Exit notification was the same notification that was sent.\n"
 							"Therefore, it is safe to exit ring.\n");
 					mutexPrint(printStatement);
@@ -729,14 +734,14 @@ void bulletinBoardExit(void)
 					return;
 				}
 				else
-				{
+				{//Else it is not safe to exit yet, continue to wait for the exit notifiaction that this host sent
 					sprintf(printStatement, "Exit notification was not the same notification that was sent.\n"
 							"Therefore, an error occurred in sending or receiving\n");
 					mutexPrint(printStatement);
 				}
 			}
 			else
-			{
+			{//Either NO_ACTION or invalid value, so no action needs to be taken
 
 				sprintf(printStatement, "%d\n%d\t%d\n%s\n\n",ntohs(peerAddr.sin_port), (inMessage).header.token,(inMessage).header.action,
 						(inMessage).messageBody);
