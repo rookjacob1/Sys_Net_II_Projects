@@ -819,14 +819,17 @@ void userWrite(void)
 
 	mutexPrint("Please enter the message to write to the bulletin board:");
 
+	//Getting the users message
 	fgets(tmpStr, sizeof(tmpStr) - FOOTER_SIZE, stdin);
-
 	tmpStr[strcspn(tmpStr, "\n")] = '\0';
 
+	//Making the rest of the message spaces
 	memset(&tmpStr[strlen(tmpStr)], ' ', sizeof(tmpStr) - strlen(tmpStr));
 
+	//Adding the FOOTER
 	sprintf(&tmpStr[sizeof(tmpStr) - FOOTER_SIZE], "%s", FOOTER);
 
+	//Writing the message to the WRITE_MESSAGE variable for the main thread to use
 	sprintf(WRITE_MESSAGE, "%s", tmpStr);
 
 	mutexPrint("Setting write bit\n");

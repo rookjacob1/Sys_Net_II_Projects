@@ -480,26 +480,33 @@ void bulletinBoardExit(void);
  *	of the bulletinBoardEditing() variables used to communicate with the main thread will be set. As long as one of those
  *	variables are set, the thread will not ask the user for input. The thread will wait for the main thread to handle the
  *	user's request to start asking the user for another option.
+ *
+ *	@param	parm						Void
  */
 void *bulletinBoardEditing(void *parm);
 
 /*
- *
+ *	@brief	userWrite			The userWrite() function will prompt the user to enter the message they would like to write
+ *	to the bulletin board file and store that message in the WRITE_MESSAGE variable with the FOOTER string appended to the
+ *	end.
  */
 void userWrite(void);
 
 /*
- *
+ *	@brief	userRead			The userRead() function will prompt the user to enter the message that the user would like
+ *	to read from the bulletin board file and store that value into the READ_BIT variable for the main thread to use.
  */
 void userRead(void);
 
 /*
- *
+ *	@brief	userList			The userList() function just sets the LIST_BIT for the main thread to see that the user
+ *	wants to list all of the messages of the bulletin board file
  */
 void userList(void);
 
 /*
- *
+ *	@brief	userExit			The userExit() function will set the EXIT_BIT for the main thread to see that the user
+ *	wants to exit the ring.
  */
 void userExit(void);
 //END BULLETINBOARDEDITING() THREAD FUNCTIONS
