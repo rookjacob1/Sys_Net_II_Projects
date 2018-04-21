@@ -381,7 +381,20 @@ void processNextMessage(void);
 void handleJoin(struct sockaddr_in *joiningPeerAddr, struct message_t *receivedMessage);
 
 /*
- *	@brief	handleExit
+ *	@brief	handleExit			When a peer wants to exit the ring, the exiting peer will send an exit message with their port
+ *	number and their next peer's port number. The handleExit() function will check to see if the host's current next peer in
+ *	the ring is the peer that is exiting by comparing the port number in the message with the port number of the current next
+ *	peer in the ring.
+ *
+ *	If the port numbers are not the same, the host will just forward the message to the next peer. If the port numbers are the
+ *	same, then the host will forward the exit message to the peer that is exiting to notify the exiting peer that it is safe to
+ *	exit. Then, the host will read the port number of the exiting peer's next peer in the ring and set the host's NEXT_PEER_ADDR
+ *	to the socket address of the exiting peer's next peer in the ring.
+ *
+ *	The function does not check to see if the host will be the last host in the ring or not because the function will work
+ *	regardless. The host will just be sending messages to it's self.
+ *
+ *	@param	receivedMessage		Pointer to the location where the message of the exiting peer is stored
  */
 void handleExit(struct message_t *receivedMessage);
 //END PEER TO PEER COMMUNICATION HANDLING FUNCTIONS

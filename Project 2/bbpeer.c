@@ -469,8 +469,6 @@ void handleExit(struct message_t *receivedMessage)
 		strcpy(tmpStr, &(*receivedMessage).messageBody[tmp + 1]);
 		exitingPeerNextPort = atoi(tmpStr);
 
-
-
 		sprintf(printStatement, "Host's next peer with port %d is the peer that is exiting\n"
 				"Forwarding exit notification to exiting peer to notify that they can exit\n",
 				exitingPeerPort);
