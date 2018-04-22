@@ -87,7 +87,7 @@ struct message_t{
  *
  * 	RULES:
  * 	Tokens can not be passed with actions.
- * 	Messages with invalid modes are discarded.
+ * 	Messages received with invalid modes are discarded.
  */
 
 //Token Modes
@@ -320,9 +320,9 @@ void bulletinBoardRing(int init);
  * 	number then the host knows that it is not the initiator because there is a peer with a port number less than its own. Therefore, the
  * 	peer forwards the message with the smaller port number to the next peer.
  *
- * 	If the host receives a message with a port number that is greater, then the host resends it's port number to the next peer in the
- * 	ring. If the host receives a message that has the same port number as, it knows that it must be the peer with the smallest port
- * 	number because all of the other peers must must have resent the host's port number because it was smaller than the rest.
+ * 	If the host receives a message with a port number that is greater, then the host ignores the message. If the host receives a message
+ * 	that has the same port number as, it knows that it must be the peer with the smallest port number because all of the other peers must
+ * 	must have resent the host's port number because it was smaller than the rest.
  *
  * 	The initiator peer then sends a message to the next peer with the token variable set to NO_TOKEN to notify that peer that the
  * 	initiator has been determined. When the next peer receives the message with the token variable set to NO_TOKEN, that peer
