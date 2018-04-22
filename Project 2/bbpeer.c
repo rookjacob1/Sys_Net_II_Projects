@@ -298,7 +298,7 @@ void determineInitiator(void)
 				printf("Host port number: %d = received port: %d\n\n", HOST_PORT, tmpPortNumber);
 				printf("Host has the lowest port number, therefore is the Initiator!!\n\n");
 
-				printf("Sending notification to next peer to inform the Initiator has been found\n\n");
+				printf("Sending notification to inform to next peer the Initiator has been found\n\n");
 
 				//Sending out a notification that the initiator has been found by sending a NO_TOKEN for token
 				initMessage(&OUT_MESSAGE, NO_TOKEN , NO_ACTION, portNumber);
