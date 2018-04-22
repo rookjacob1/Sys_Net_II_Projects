@@ -351,6 +351,7 @@ void processNextMessage(void)
 	struct message_t inMessage;							//Message variable to store the incoming messages
 	struct sockaddr_in peerAddr;						//Socket address variable to store the socket address of the sending peer
 	socklen_t peerAddrLen;
+	int peerPort;
 
 	memset(&inMessage, 0, sizeof(struct message_t));
 	memset(&peerAddr, 0 , sizeof(struct sockaddr_in));
@@ -360,14 +361,15 @@ void processNextMessage(void)
 	//Receiving message from peer
 	recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
 
-	sprintf(printStatement, "Processing next message from %d",ntohs(peerAddr.sin_port));
+	peerPort = ntohs(peerAddr.sin_port);
+	sprintf(printStatement, "Processing next message from %d",peerPort);
 	mutexPrint(printStatement);
 
 	if(inMessage.header.token == PASS_TOKEN)//Receiving the token, no actions should be given
 	{
 		snprintf(printStatement, sizeof(printStatement),
 				"*************************Token received from peer with port %5d*************************\n",
-				ntohs(peerAddr.sin_port));
+				peerPort);
 		mutexPrint(printStatement);
 
 		HAVE_TOKEN = 1;
