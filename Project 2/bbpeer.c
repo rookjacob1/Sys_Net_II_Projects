@@ -361,7 +361,7 @@ void processNextMessage(void)
 	//Receiving message from peer
 	recvfrom(SOCKET_D, &inMessage, sizeof(inMessage), 0, (struct sockaddr *)&peerAddr, &peerAddrLen);
 
-	peerPort = (int)ntohl(peerAddr.sin_port);
+	peerPort = (int) ntohs(peerAddr.sin_port);
 	sprintf(printStatement, "Processing next message from %d",peerPort);
 	mutexPrint(printStatement);
 
