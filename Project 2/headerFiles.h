@@ -13,7 +13,6 @@
 #include<arpa/inet.h>
 #include<errno.h>
 #include<fcntl.h>
-#include <machine/endian.h>
 #include<netdb.h>
 #include<netinet/in.h>
 #include<pthread.h>
