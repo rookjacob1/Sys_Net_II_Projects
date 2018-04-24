@@ -174,7 +174,7 @@ pthread_mutex_t PRINT_LOCK;						//Mutex Lock used for printing to stdout
  * 	crowding the stdout. When a peer receives the token and the user does not have a command, the peer sleeps for however
  * 	many seconds SLEEP_TIME is set to.
  */
-#define SLEEP_TIME 15
+#define SLEEP_TIME 5
 
 
 
